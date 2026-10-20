@@ -3,7 +3,7 @@ site_description: Design, API reference, and task-based user manual for CMNE Wor
 repo_url: https://github.com/mattbriggs/Coupled-Modal-Narrative-Engine
 repo_name: mattbriggs/Coupled-Modal-Narrative-Engine
 docs_dir: site
-site_dir: docsß
+site_dir: docs
 use_directory_urls: false
 strict: true
 
