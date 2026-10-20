@@ -30,6 +30,8 @@ Use [SRS-033 Implementation Status](SRS-033-Implementation-Status.md) as the dat
 
 The actual source layout is `src/cmne/`, `src/cmne_sidecar/`, `app/src/`, `app/src-tauri/`, `scripts/`, and `tests/`. Project data use JSON and NDJSON, not the proposed YAML layout. The CLI uses `argparse`, not Typer. The run completes synchronously; the live-progress sequence and cancellation state machine in §5 are future design. The `T-` rows in §8 still need task-by-task evidence before they can be marked done.
 
+**2026-10-20 update:** The seeded sample now produces roughly 800 words per condition with an offline authored expansion and a 700–1100-word contract for newly created samples. The current suite has 20 Python tests. Model-backed realization, full grounding, evaluation, and the remaining release gates are still open.
+
 ---
 
 ## 0. Assumptions and open questions

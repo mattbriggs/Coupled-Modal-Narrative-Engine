@@ -48,6 +48,8 @@ npm run tauri -- dev
 
 The first launch opens the bundled Mara and Len sample in `~/Documents/CMNE/Mara and Len`. It includes separate C0–C3 branches that share S01–S07 and diverge through fact, belief, modal, and conceptual changes. **Run C0–C3** runs all four with the offline realizer. To create another project, use the project menu. To edit canon, select a story event and choose **Fork from here**. The new branch contains editable copies of that event and its suffix. To add an event or discourse act, open the appropriate lens, choose **Add**, fill in the inspector, connect references, then **Seal draft**.
 
+The seeded C0–C3 sample now assembles a distinct 700–1,100-word passage for each condition from authored offline prose. It does not call a language model. After rebuilding, run the scene again to replace a previously saved short passage; existing sealed events and discourse remain intact. An edited discourse cue is used as written. Other projects realize their own discourse text, so their passage length depends on what the author supplies.
+
 The workbench provides a seven-lens graph, a keyboard-accessible outline, a story and discourse scrubber, a strain chart, trace details, branch comparison, deterministic realization, and Markdown report export. It saves projects locally and makes no model API calls.
 
 Keyboard shortcuts: `Alt+1` through `Alt+7` switch lenses, `Alt+O` toggles the outline, `Ctrl/Cmd+K` adds a node, `C` starts a connection from the selected node, `Ctrl/Cmd+Z` and `Ctrl/Cmd+Shift+Z` undo and redo draft edits, and `Ctrl/Cmd+Enter` seals a draft.
@@ -80,6 +82,18 @@ python -m unittest discover -s tests -v
 ```
 
 The tests cover deterministic replay, invariant rejection without history mutation, fork isolation, draft seal, project locking, protocol handshake, and a run's separation from canon.
+
+## Documentation
+
+The [MkDocs source](./site/index.md) contains the task-based user manual, implementation design, and API reference. Install the documentation dependencies in the same virtual environment:
+
+```sh
+source .venv/bin/activate
+python -m pip install -e '.[docs]'
+mkdocs serve
+```
+
+Open the local address printed by MkDocs to read the Material site. To create static HTML instead, run `mkdocs build --strict`. Markdown source is in `site/`; the generated HTML target is `doc/` and is ignored by Git. The diagrams use Mermaid fences in the Markdown source.
 
 ## Project files
 

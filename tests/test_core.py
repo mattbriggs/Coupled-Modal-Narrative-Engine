@@ -1,8 +1,10 @@
+import re
 import tempfile
 import unittest
+from copy import deepcopy
 from pathlib import Path
 
-from cmne.core import CmneError, digest, replay, validate_contract
+from cmne.core import CmneError, build_packet, digest, replay, template_realize, validate_contract
 from cmne.project import Project
 from cmne_sidecar.server import Dispatcher, handle
 
@@ -43,7 +45,10 @@ class ProjectTests(unittest.TestCase):
         for condition, branch in branches.items():
             self.assertEqual([e["event_id"] for e in self.project.events(branch, "story")[:7]], prefix)
             self.assertEqual(len(self.project.events(branch, "discourse")), 7)
-            self.assertEqual(self.project.run(branch)["conditions"], [condition])
+            run = self.project.run(branch)
+            self.assertEqual(run["conditions"], [condition])
+            self.assertEqual(run["status"], "passed", run["findings"])
+            self.assertTrue(700 <= len(re.findall(r"\b[\w'-]+\b", run["prose"])) <= 1100)
         c0 = self.project.projection(branches["C0"])["projections"]["actor_a"]
         c1 = self.project.projection(branches["C1"])["projections"]["actor_a"]
         c2 = self.project.projection(branches["C2"])["projections"]["actor_a"]
@@ -128,9 +133,26 @@ class ProjectTests(unittest.TestCase):
         self.assertEqual(run["status"], "passed")
         self.assertIn("chair rocked once", run["prose"])
         self.assertEqual([e["event_id"] for e in self.project.events("main", "story")], before)
-        self.assertEqual(run["packet_hash"], digest({k: v for k, v in __import__("cmne.core", fromlist=["build_packet"]).build_packet(
+        self.assertEqual(run["packet_hash"], digest({k: v for k, v in build_packet(
             self.project.fixture, self.project.contract, self.project.events("main", "story"),
             self.project.events("main", "discourse")).items() if k != "packet_hash"}))
+
+    def test_sample_expansion_preserves_author_edited_discourse(self):
+        packet = build_packet(self.project.fixture, self.project.contract,
+                              self.project.events("main", "story"), self.project.events("main", "discourse"))
+        packet["acts"][0]["text"] = "My own opening sentence."
+        prose = template_realize(packet)
+        self.assertTrue(prose.startswith("My own opening sentence."))
+        self.assertIn("He had said he would be late.", prose)
+
+    def test_sample_expansion_does_not_reuse_prose_after_canon_changes(self):
+        story = deepcopy(self.project.events("main", "story"))
+        story[0]["payload"]["description"] = "The chair was never repaired."
+        packet = build_packet(self.project.fixture, self.project.contract,
+                              story, self.project.events("main", "discourse"))
+        self.assertFalse(packet["sample_expansion"])
+        self.assertEqual(template_realize(packet).split("\n\n")[0],
+                         "After Len left, the chair rocked once. Mara watched it come to rest.")
 
     def test_empty_project_run_reports_repair_first(self):
         other = Project.create(Path(self.temp.name) / "empty", "Empty")

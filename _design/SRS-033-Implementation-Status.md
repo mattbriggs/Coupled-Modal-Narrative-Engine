@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Date | 2026-10-19 |
+| Date | 2026-10-20 |
 | Scope | Current repository implementation, compared with the SRS-033 v0.2 design baseline |
 | Status | Working local foundation; full research release is incomplete |
 
@@ -16,7 +16,7 @@ This is the implementation record for the design package. The SRS requirements, 
 | Distribution | `scripts/prepare_sidecar.py` makes a development wrapper or PyInstaller executable for Tauri `externalBin`; an unsigned macOS `.app` bundle has been built. | Windows/Linux packages, signing, installation, and a packaged GUI smoke test have not been verified. |
 | Project and kernel | `src/cmne/core.py`, `formula.py`, and `project.py` validate basic fixture, contract, story, and discourse data; evaluate a bounded closed formula AST; write hashed NDJSON streams; replay into six named projections; and save local JSON packets and runs. Event IDs and projection hashes use canonical JSON and SHA-256. | The six projections and belief/modal/conceptual transitions are narrow implementations of the design. There is no full formal semantics, schema up-casting, Pydantic contract layer, provenance graph, or cross-platform hash-vector gate. |
 | Authoring | Seven lenses (Fixture, Story, Discourse, Mind, Provenance, Motif, Pipeline), SVG graph, inspector, outline/table view, connection validation, story/discourse drafts, preview/seal, fork from sealed events, basic branch comparison, scrubber, strain chart, and trace details. Drafts persist on disk and can be recovered; undo/redo is in memory (50 steps). | Fixture/Mind/Motif are chiefly views, not complete graph editors. No palette drag/drop, saved manual layout, minimap, semantic zoom, full overlay set, visual graph diff, or complete keyboard/table parity. |
-| Sample and runs | `src/cmne/sample.py` seeds Mara and Len with story events S01–S10, discourse acts D01–D07, and C0–C3 branches sharing S01–S07. A synchronous `run.start` can run one branch or all four. Each condition yields a distinct offline template passage. Seven stages per run are recorded; the Pipeline lens shows the completed result. Markdown report export is available. | No model API adapter, record/replay cassette, call budget, live progress, cancelable worker, blinded study, response import, or statistical analysis. The sample contract permits 0–1100 words, so it does not enforce the SRS's 700–1100-word experiment. |
+| Sample and runs | `src/cmne/sample.py` seeds Mara and Len with story events S01–S10, discourse acts D01–D07, and C0–C3 branches sharing S01–S07. A synchronous `run.start` can run one branch or all four. Each seeded condition now selects authored offline prose of roughly 800 words; new sample contracts require 700–1100 words. Seven stages per run are recorded; the Pipeline lens shows the completed result. Markdown report export is available. | The sample prose is deterministic authored expansion, not model-generated prose. Existing sample projects retain their stored contract (including an older 0-word minimum) until edited, though rerunning them uses the longer realizer. No model API adapter, record/replay cassette, call budget, live progress, cancelable worker, blinded study, response import, or statistical analysis. |
 | Checks | The realizer checker tests word bounds, selected forbidden assertions, and missing required story/discourse material. Basic discourse and observation validation occurs before seal. | It does not perform the SRS's full private-cognition, unresolved-question, figurative-language, voice, or span-level grounding checks. A passing run is not proof of literary or study validity. |
 
 ## Current architecture and files
@@ -44,11 +44,13 @@ The sidecar currently exposes project creation/open/close/get, fixture and contr
 
 The app performs the run synchronously. The pipeline display reflects the saved result after `run.start` returns. `run.cancel` reports that no asynchronous run is active. A basic `branch.compare` result names divergence and projection differences; it is not the designed diff overlay.
 
+The v2 offline realizer expands only the unchanged Mara/Len seed. It does not rewrite sealed story or discourse events. If canon changes, it falls back to authored discourse text rather than reusing sample prose that could contradict the edited branch. Previously saved short runs remain in the project; rerun and export again to get the longer passage.
+
 ## Verification record
 
 | Check | Result | Scope |
 |---|---|---|
-| `PYTHONPATH=src python3 -m unittest discover -s tests -v` | 18 tests passed | Replay/hash consistency, preconditions, rejection without history mutation, branch isolation, draft seal, writer lock, protocol handshake, sample C0–C3 run, and formula behavior. These are selected checks, not an AC-01–AC-42 or GAC-01–GAC-22 gate run. |
+| `PYTHONPATH=src python3 -m unittest discover -s tests -v` | 20 tests passed | Replay/hash consistency, preconditions, rejection without history mutation, branch isolation, draft seal, writer lock, protocol handshake, 700–1100-word C0–C3 sample passages, preservation of edited discourse, fallback after canon change, and formula behavior. These are selected checks, not an AC-01–AC-42 or GAC-01–GAC-22 gate run. |
 | `cd app && npm run build` | Passed | TypeScript check and Vite production build. |
 | `cd app/src-tauri && cargo check` | Passed | Rust type/build check. |
 | `cd app && npm run tauri -- build --bundles app` | Passed on macOS | Unsigned `.app` assembled with target-named bundled sidecar. |

@@ -27,6 +27,8 @@ The delivered foundation covers local JSON projects, hashed NDJSON story/discour
 
 The full revision operators, provenance graph, model adapter/record-replay pipeline, comprehensive grounding and voice checks, blinded evaluation, and most release gates remain to implement. The diagrams and schema examples in §§6–8 show the target architecture where they differ from the code. A basic automated suite, frontend build, Rust check, unsigned macOS bundle, and bundled-sidecar smoke have passed; the complete acceptance suite, packaged GUI, accessibility, cross-platform, and study checks have not been verified.
 
+**2026-10-20 update:** The seeded Mara/Len offline realizer now yields roughly 800 words for each C0–C3 condition. New sample contracts require 700–1100 words. Older saved projects retain their contract file and short run records, but rerunning uses the expanded prose without changing canon. This meets the sample passage-length check; it does not complete the literary evaluation or full grounding requirements.
+
 ---
 
 ## 1. Introduction

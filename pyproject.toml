@@ -11,6 +11,7 @@ dependencies = []
 
 [project.optional-dependencies]
 bundle = ["pyinstaller>=6"]
+docs = ["mkdocs>=1.6,<2", "mkdocs-material>=9,<10"]
 
 [project.scripts]
 cmne = "cmne.cli:main"

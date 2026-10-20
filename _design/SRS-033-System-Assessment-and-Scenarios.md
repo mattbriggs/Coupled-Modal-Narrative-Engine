@@ -26,6 +26,8 @@
 
 The current run is synchronous and its Pipeline lens shows the saved result. The sequence and state diagrams that show a worker, live progress, cancellation, cassettes, or model API are proposed architecture. The project files are JSON/NDJSON rather than the YAML-oriented layout pictured in some diagrams. The sample's contract allows 0–1100 words, so the 700–1100-word study bound has not been reached.
 
+**2026-10-20 update:** New Mara/Len samples now enforce 700–1100 words, and the offline realizer assembles roughly 800 words for each condition. Existing saved samples keep their old contract file but produce the longer passage when rerun. The blinded study and response scenarios remain unimplemented.
+
 ---
 
 ## 1. Who the system is for

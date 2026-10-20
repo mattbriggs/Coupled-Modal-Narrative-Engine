@@ -169,8 +169,8 @@ venv.bak/
 # Rope project settings
 .ropeproject
 
-# mkdocs/Zensical documentation
-/site
+# Generated MkDocs HTML (Markdown sources live in /site)
+/doc/
 
 # mypy
 .mypy_cache/

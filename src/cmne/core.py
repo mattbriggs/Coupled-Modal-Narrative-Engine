@@ -14,6 +14,7 @@ from typing import Any
 
 SCHEMA_VERSION = 1
 REDUCER_VERSION = 1
+REALIZER_VERSION = 2
 LENSES = ("fixture", "story", "discourse", "mind", "provenance", "motif", "pipeline")
 STAGES = ("Validate", "Replay", "Revise", "Plan", "Packet", "Realize", "Check")
 
@@ -285,6 +286,7 @@ def replay(fixture: dict, contract: dict, story: list[dict], discourse: list[dic
 
 
 def build_packet(fixture: dict, contract: dict, story: list[dict], discourse: list[dict]) -> dict:
+    from .sample import supports_expanded_sample
     projection = replay(fixture, contract, story, discourse)["projections"]
     by_id = {e["event_id"]: e for e in story}
     acts = []
@@ -293,7 +295,9 @@ def build_packet(fixture: dict, contract: dict, story: list[dict], discourse: li
         acts.append({"id": event["event_id"], "title": p["title"], "mode": p["mode"],
                      "text": p.get("text", ""), "reveal": p["reveal"], "withhold": p["withhold"],
                      "story": [by_id[ref]["payload"] for ref in p["story_refs"]]})
-    packet = {"acts": acts, "grounded_story_facts": projection["environment"]["facts"],
+    packet = {"acts": acts, "fixture_id": fixture.get("id"), "realizer_version": REALIZER_VERSION,
+              "sample_expansion": supports_expanded_sample(fixture, story) if fixture.get("id") == "mara-len" else False,
+              "grounded_story_facts": projection["environment"]["facts"],
               "style": projection["prose_style"], "reader": projection["reader"],
               "forbidden_assertions": contract["forbidden_story_conditions"],
               "unresolved_questions": contract["questions_that_must_remain_open"],
@@ -304,6 +308,12 @@ def build_packet(fixture: dict, contract: dict, story: list[dict], discourse: li
 def template_realize(packet: dict) -> str:
     chunks = []
     for act in packet["acts"]:
+        if packet.get("sample_expansion"):
+            from .sample import expanded_sample_text
+            expanded = expanded_sample_text(act["title"], act["text"])
+            if expanded:
+                chunks.append(expanded)
+                continue
         if act["text"].strip():
             chunks.append(act["text"].strip())
         elif act["story"]:

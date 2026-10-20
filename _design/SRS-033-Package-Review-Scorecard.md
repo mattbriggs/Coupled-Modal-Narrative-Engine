@@ -8,16 +8,16 @@
 | Reviews | SRS-033 v0.2, SRS-033-A, SRS-033-V, IMPL-033 v0.2 |
 | Reviewer stance | Literary critic and senior Python engineer, one reader holding both hats |
 
-### How to read this scorecard now (2026-10-19)
+### How to read this scorecard now (2026-10-20)
 
 The 51/100 and 100/100 figures, heat map, and radar chart compare two **versions of the written design**. They have not been rescored against the running application. The source has since gained a Tauri/React desktop shell, Python sidecar/kernel, and Mara/Len sample. The evidence and gaps are recorded in [SRS-033 Implementation Status](SRS-033-Implementation-Status.md). Statements below about cassettes, Pydantic, `import-linter`, generated schemas, complete GUI behavior, and study verification describe the design's coverage of those topics, not shipped features.
 
 | Evidence from the current implementation | Result | What it does not establish |
 |---|---|---|
-| 18 Python unit tests | Passed | Full AC-01–AC-42, property and mutation gates, or literary validity. |
+| 20 Python unit tests | Passed | Full AC-01–AC-42, property and mutation gates, or literary validity. |
 | TypeScript/Vite build and Rust `cargo check` | Passed | GUI end-to-end, accessibility, and performance goals. |
 | Unsigned macOS `.app` build and bundled-sidecar smoke | Passed | Signed release, packaged GUI interaction, or Windows/Linux support. |
-| Four offline condition runs | Distinct deterministic passages; 28 stage records passed in a bundled-sidecar smoke | Model-backed generation, full grounding, blinded study, or the SRS 700–1100-word lower bound. |
+| Four offline condition runs | Distinct deterministic passages of roughly 800 words; 28 stage records passed in an earlier bundled-sidecar smoke | Model-backed generation, full grounding, blinded study, or literary validity. |
 
 The implementation score is **not assigned**. Section 7's independent evidence-based rescoring remains open. Do not interpret a 10 in the original table as an implementation pass.
 

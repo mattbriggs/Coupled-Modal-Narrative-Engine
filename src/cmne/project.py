@@ -569,7 +569,7 @@ class Project:
                "branch_id": branch, "conditions": conditions, "packet_hash": packet["packet_hash"],
                "prose": prose, "findings": findings, "stages": stages,
                "projection_hashes": self.projection(branch)["hashes"],
-               "status": "failed" if findings else "passed", "realizer": "deterministic-template"}
+               "status": "failed" if findings else "passed", "realizer": "deterministic-template-v2"}
         write_json(contained(self.root, "runs", f"{run['run_id']}.json"), run)
         write_json(contained(self.root, "packets", f"{packet['packet_hash']}.json"), packet)
         return run
