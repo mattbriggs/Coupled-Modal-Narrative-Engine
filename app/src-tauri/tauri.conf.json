@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "CMNE Workbench",
+  "version": "0.1.0",
+  "identifier": "press.finalstate.cmne",
+  "build": {
+    "beforeDevCommand": "python3 ../scripts/prepare_sidecar.py --dev && npm run dev",
+    "devUrl": "http://127.0.0.1:1420",
+    "beforeBuildCommand": "python3 ../scripts/prepare_sidecar.py --bundle && npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [{"title": "CMNE · Narrative Workbench", "width": 1500, "height": 940, "minWidth": 1000, "minHeight": 680}],
+    "security": {"csp": "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' ipc: http://ipc.localhost"}
+  },
+  "bundle": {"active": true, "targets": "all", "icon": ["icons/icon.png", "icons/icon.icns", "icons/icon.ico"], "externalBin": ["binaries/cmne-sidecar"]}
+}

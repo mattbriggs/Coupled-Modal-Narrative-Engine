@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cmne"
+version = "0.1.0"
+description = "Coupled Modal Narrative Engine workbench kernel and sidecar"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+bundle = ["pyinstaller>=6"]
+
+[project.scripts]
+cmne = "cmne.cli:main"
+cmne-sidecar = "cmne_sidecar.server:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

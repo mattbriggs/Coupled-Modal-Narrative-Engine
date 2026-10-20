@@ -1,5 +1,8 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+node_modules/
+app/src-tauri/binaries/
+app/src-tauri/sidecar-dist/
 *.py[codz]
 *$py.class
 

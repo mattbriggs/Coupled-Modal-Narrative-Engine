@@ -1,0 +1,132 @@
+"""Bundled Mara and Len experiment seed."""
+
+FIXTURE = {
+    "id": "mara-len", "version": 1, "name": "The chair and the bowl",
+    "actors": [
+        {"id": "mara", "name": "Mara", "goals": ["understand Len's leaving"],
+         "conceptual_model": {"version": 1, "concepts": ["care", "repair"]}},
+        {"id": "len", "name": "Len", "goals": ["leave without explanation"],
+         "conceptual_model": {"version": 1, "concepts": ["care", "avoidance"]}},
+    ],
+    "entities": [
+        {"id": "kitchen", "name": "Kitchen", "kind": "place"},
+        {"id": "chair", "name": "Rocking chair", "kind": "object", "motif": True},
+        {"id": "bowl", "name": "Blue bowl", "kind": "object", "motif": True},
+        {"id": "note", "name": "Folded note", "kind": "object"},
+        {"id": "bag", "name": "Travel bag", "kind": "object"},
+    ],
+    "initial_facts": ["Mara and Len share the kitchen"],
+    "style": {"focalizer": "mara", "distance": "close", "rhythm": "restrained",
+              "explanation_ceiling": "low"},
+}
+
+CONTRACT = {
+    "id": "bounded-epiphany", "version": 1,
+    "required_story_conditions": ["Len leaves", "Mara finds the note"],
+    "forbidden_story_conditions": ["Len's exact motive is known"],
+    "facts_that_must_be_clear": ["Len leaves"],
+    "questions_that_must_remain_open": ["Was the repair care or avoidance?"],
+    "prose_bounds": {"min_words": 0, "max_words": 1100},
+    "strain_threshold_bp": 6500,
+}
+
+STORY = [
+    {"title": "Len repairs the chair", "kind": "action", "actor_ids": ["len"], "entity_ids": ["chair"],
+     "description": "Len tightened the chair's loose joint before Mara came home.",
+     "world_facts": ["Len repairs the chair"], "strain_bp": 700},
+    {"title": "Len replaces the bowl", "kind": "action", "actor_ids": ["len"], "entity_ids": ["bowl"],
+     "description": "He set the chipped bowl back in its usual place.",
+     "world_facts": ["Len replaces the bowl"], "strain_bp": 900},
+    {"title": "Len writes a note", "kind": "action", "actor_ids": ["len"], "entity_ids": ["note"],
+     "description": "The note remained folded beneath the bowl.",
+     "world_facts": ["Len writes a note"], "strain_bp": 1300},
+    {"title": "Len gives an ordinary reason", "kind": "utterance", "actor_ids": ["len"], "observed_by": ["mara"],
+     "description": "He told Mara he would be late.", "world_facts": ["Len gives an ordinary reason"],
+     "interpretations": [{"observer_id": "mara", "model_version": 1, "claim": "The repairs are care", "confidence_bp": 7800}],
+     "strain_bp": 1400},
+    {"title": "Len leaves; the chair rocks", "kind": "action", "actor_ids": ["len"], "entity_ids": ["chair", "bag"],
+     "observed_by": ["mara"], "description": "After Len left, the chair rocked once in the empty kitchen.",
+     "world_facts": ["Len leaves"], "strain_bp": 2600},
+    {"title": "Mara finds the note", "kind": "observation", "actor_ids": ["mara"], "observed_by": ["mara"],
+     "access_path": "perception", "entity_ids": ["note", "bowl"],
+     "description": "Mara lifted the bowl and found the folded note.",
+     "world_facts": ["Mara finds the note"], "strain_bp": 4200},
+    {"title": "The note names deferred departures", "kind": "observation", "actor_ids": ["mara"],
+     "observed_by": ["mara"], "access_path": "perception", "entity_ids": ["note"],
+     "description": "The note listed dates when Len had almost left before.",
+     "world_facts": ["The note lists deferred departures"], "strain_bp": 7400},
+    {"title": "Mara remembers the repairs", "kind": "recollection", "actor_ids": ["mara"],
+     "observed_by": ["mara"], "entity_ids": ["chair", "bowl"],
+     "description": "The mended chair and the replaced bowl returned to Mara as two possible explanations.",
+     "strain_bp": 8200},
+    {"title": "Mara cannot choose one meaning", "kind": "crisis", "actor_ids": ["mara"],
+     "description": "Neither meaning canceled the other.", "strain_bp": 8800,
+     "conceptual_revision": {"observer_id": "mara", "concepts": ["care", "avoidance"],
+                             "migration_map": {"care": ["care", "avoidance"]},
+                             "unresolved_terms": ["care", "avoidance"]},
+     "interpretations": [
+         {"observer_id": "mara", "model_version": 2, "claim": "The chair repair could be care or avoidance",
+          "status": "suspended", "confidence_bp": 5000, "target_story_sequences": [1]},
+         {"observer_id": "mara", "model_version": 2, "claim": "The bowl replacement could be care or avoidance",
+          "status": "suspended", "confidence_bp": 5000, "target_story_sequences": [2]},
+     ]},
+    {"title": "Mara moves the bowl", "kind": "action", "actor_ids": ["mara"], "entity_ids": ["bowl"],
+     "description": "Mara placed the bowl somewhere it had never stood before.",
+     "world_facts": ["Mara moves the bowl"], "strain_bp": 6000},
+]
+
+DISCOURSE = [
+    {"title": "The rocking chair", "mode": "scene", "story_index": 4,
+     "text": "After Len left, the chair rocked once. Mara watched it come to rest.", "cue": ["something has changed"]},
+    {"title": "The routine reason", "mode": "scene", "story_index": 3,
+     "text": "He had said he would be late. She had believed him, as she had believed the small repairs.",
+     "withhold": ["The note lists deferred departures"]},
+    {"title": "The partial note", "mode": "scene", "story_index": 5,
+     "text": "Under the bowl, a folded note waited. Mara opened it at the kitchen table."},
+    {"title": "The repaired chair", "mode": "memory", "story_index": 0,
+     "text": "She remembered the chair's loose joint, and how quietly Len had fixed it."},
+    {"title": "The replaced bowl", "mode": "memory", "story_index": 1,
+     "text": "Then the bowl: the chipped rim turned toward the wall, as always."},
+    {"title": "Two meanings held", "mode": "pause", "story_index": 8,
+     "text": "She could call it care. She could call it practice for leaving. The bowl stayed between her hands."},
+    {"title": "The bowl elsewhere", "mode": "scene", "story_index": 9,
+     "text": "Mara moved the bowl to the other side of the table."},
+]
+
+CONDITION_SUFFIXES = {
+    "C0": [
+        {"title": "Mara reads the final line", "kind": "observation", "actor_ids": ["mara"],
+         "observed_by": ["mara"], "access_path": "perception", "entity_ids": ["note"],
+         "description": "At the bottom, Len had written that he had signed a lease across town.",
+         "world_facts": ["Len signed a lease across town"], "strain_bp": 6100},
+        {"title": "Mara accepts the new fact", "kind": "decision", "actor_ids": ["mara"],
+         "description": "The note settled the question of where Len would go, though it explained little else.",
+         "strain_bp": 4800},
+        STORY[9],
+    ],
+    "C1": [
+        STORY[7],
+        {"title": "Mara revises one belief", "kind": "revision", "actor_ids": ["mara"],
+         "description": "She no longer took the repairs as proof that Len meant to stay.",
+         "belief_revision": {"observer_id": "mara", "claim": "The repairs are care",
+                             "status": "rejected", "confidence_bp": 2700, "evidence_story_sequence": 7},
+         "strain_bp": 6400},
+        STORY[9],
+    ],
+    "C2": [
+        STORY[7],
+        {"title": "Mara admits another possibility", "kind": "revision", "actor_ids": ["mara"],
+         "description": "A repair could belong to someone who meant to leave, as well as someone who meant to stay.",
+         "modal_revision": {"observer_id": "mara", "add_scenarios": ["care and departure coexist"],
+                            "allow_rivals": True},
+         "strain_bp": 7200},
+        STORY[9],
+    ],
+}
+
+CONDITION_PAUSES = {
+    "C0": "The last line gave her an address and a date. Mara set the note down and looked at the bowl.",
+    "C1": "She had mistaken the repairs for a promise. It was a smaller correction than she expected, and still it hurt.",
+    "C2": "He could have cared and planned to leave. The two possibilities remained beside each other on the table.",
+    "C3": DISCOURSE[5]["text"],
+}
