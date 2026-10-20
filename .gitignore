@@ -170,7 +170,7 @@ venv.bak/
 .ropeproject
 
 # Generated MkDocs HTML (Markdown sources live in /site)
-/doc/
+# /doc/
 
 # mypy
 .mypy_cache/
