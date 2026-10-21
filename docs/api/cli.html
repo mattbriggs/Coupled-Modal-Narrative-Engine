@@ -622,6 +622,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../manual/evaluate-study.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prepare a blinded evaluation — S-07 to S-09
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../manual/constructs.html" class="md-nav__link">
         
   
@@ -898,6 +926,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design/code-review.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software code review
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1116,6 +1172,34 @@
   
   
     <li class="md-nav__item">
+      <a href="error-catalog.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="tauri.html" class="md-nav__link">
         
   
@@ -1183,39 +1267,110 @@
 
 
 <h1 id="command-line-interface">Command-line interface<a class="headerlink" href="#command-line-interface" title="Permanent link">&para;</a></h1>
-<p>Install the package in a virtual environment, then run <code>cmne --help</code>.</p>
+<p>Install the package in a virtual environment, then run <code>cmne --help</code>. Add <code>--json</code> <strong>before</strong> the command for machine-readable success and error objects. Success exits 0; a domain or input error exits 2 and includes a code, cause, field path, and corrective action.</p>
 <table>
 <thead>
 <tr>
 <th>Command</th>
 <th>Effect</th>
-<th>Output</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>cmne create PATH [--name NAME] [--sample]</code></td>
-<td>Create a new project; <code>--sample</code> seeds Mara and Len and C0–C3</td>
-<td>Project path</td>
+<td><code>create PATH [--name NAME] [--sample]</code></td>
+<td>Create a project and optional Mara/Len sample</td>
 </tr>
 <tr>
-<td><code>cmne run PATH [--branch ID]</code></td>
-<td>Synchronously run a branch; default <code>main</code></td>
-<td>Pretty printed run JSON</td>
+<td><code>validate-contract FILE</code></td>
+<td>Validate a JSON narrative contract</td>
 </tr>
 <tr>
-<td><code>cmne graph PATH [--branch ID] [--lens LENS]</code></td>
-<td>Read a lens graph; defaults <code>main</code>, <code>story</code></td>
-<td>Pretty printed graph JSON</td>
+<td><code>replay PATH [--branch ID]</code></td>
+<td>Replay six projections and hashes</td>
+</tr>
+<tr>
+<td><code>fork PATH SEQUENCE NAME [--branch ID]</code></td>
+<td>Create an independent branch and draft suffix</td>
+</tr>
+<tr>
+<td><code>apply-revision PATH C0\|C1\|C2\|C3</code></td>
+<td>Inspect a seeded condition's revision state</td>
+</tr>
+<tr>
+<td><code>plan-discourse PATH FILE [--branch ID]</code></td>
+<td>Atomically seal an <code>acts</code> array from JSON</td>
+</tr>
+<tr>
+<td><code>packet PATH [--branch ID]</code></td>
+<td>Build a filtered scene packet</td>
+</tr>
+<tr>
+<td><code>realize PATH [--branch ID] [--variant 0\|1\|2]</code></td>
+<td>Realize and check deterministic prose</td>
+</tr>
+<tr>
+<td><code>check PATH FILE [--branch ID]</code></td>
+<td>Check a UTF-8 prose file against the packet</td>
+</tr>
+<tr>
+<td><code>trace PATH TARGET [--query TYPE]</code></td>
+<td>Trace an event, actor belief, reader inference, model change, or run exposure</td>
+</tr>
+<tr>
+<td><code>run PATH [--branch ID] [--variant 0\|1\|2]</code></td>
+<td>Save a run and rejected-candidate findings</td>
+</tr>
+<tr>
+<td><code>graph PATH [--branch ID] [--lens LENS]</code></td>
+<td>Read a lens graph</td>
+</tr>
+<tr>
+<td><code>analysis-plan PATH FILE</code></td>
+<td>Save or amend the fixed study plan</td>
+</tr>
+<tr>
+<td><code>study-generate PATH</code></td>
+<td>Save three matched template variants for C0–C3</td>
+</tr>
+<tr>
+<td><code>study-metrics PATH [--branch ID]</code></td>
+<td>Read blocking and descriptive structural measures</td>
+</tr>
+<tr>
+<td><code>study-ablations PATH [--branch ID]</code></td>
+<td>Read seven analysis-only ablation descriptions</td>
+</tr>
+<tr>
+<td><code>study-realize-ablations PATH [--branch ID]</code></td>
+<td>Save seven controlled ablation passages and checker findings</td>
+</tr>
+<tr>
+<td><code>export-evaluation PATH [--seed N]</code></td>
+<td>Write randomized public passages and a separate private key</td>
+</tr>
+<tr>
+<td><code>responses-import PATH STUDY_ID FILE</code></td>
+<td>Atomically validate and import evaluator responses</td>
+</tr>
+<tr>
+<td><code>report PATH STUDY_ID</code></td>
+<td>Save and print a descriptive study report</td>
+</tr>
+<tr>
+<td><code>decision-packet PATH STUDY_ID</code></td>
+<td>Save a hashed review packet with study, structural, and ablation evidence</td>
 </tr>
 </tbody>
 </table>
+<p>Example:</p>
 <div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
 cmne<span class="w"> </span>create<span class="w"> </span>/tmp/cmne-example<span class="w"> </span>--sample
-cmne<span class="w"> </span>run<span class="w"> </span>/tmp/cmne-example<span class="w"> </span>--branch<span class="w"> </span>main
-cmne<span class="w"> </span>graph<span class="w"> </span>/tmp/cmne-example<span class="w"> </span>--branch<span class="w"> </span>main<span class="w"> </span>--lens<span class="w"> </span>story
+cmne<span class="w"> </span>--json<span class="w"> </span>replay<span class="w"> </span>/tmp/cmne-example
+cmne<span class="w"> </span>study-generate<span class="w"> </span>/tmp/cmne-example
+cmne<span class="w"> </span>analysis-plan<span class="w"> </span>/tmp/cmne-example<span class="w"> </span>plan.json
+cmne<span class="w"> </span>export-evaluation<span class="w"> </span>/tmp/cmne-example<span class="w"> </span>--seed<span class="w"> </span><span class="m">33</span>
 </code></pre></div>
-<p>Accepted lens names are <code>fixture</code>, <code>story</code>, <code>discourse</code>, <code>mind</code>, <code>provenance</code>, <code>motif</code>, and <code>pipeline</code>. For the sample comparison, inspect branch IDs in <code>project.cmne.json</code> or use the GUI/sidecar <code>branch.list</code>. The CLI does not expose export or draft editing; <a href="json-rpc.html">JSON-RPC</a> does.</p>
+<p><code>analysis-plan</code> must precede export. The CLI accepts only JSON imports; it does not execute YAML tags. See <a href="../manual/evaluate-study.html">Prepare a blinded evaluation</a> for the plan and response fields. Long CLI runs are synchronous; the desktop sidecar offers background run polling and cancellation between conditions.</p>
 
 
 

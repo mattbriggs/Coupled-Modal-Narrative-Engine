@@ -8,18 +8,18 @@
 | Reviews | SRS-033 v0.2, SRS-033-A, SRS-033-V, IMPL-033 v0.2 |
 | Reviewer stance | Literary critic and senior Python engineer, one reader holding both hats |
 
-### How to read this scorecard now (2026-10-20)
+### How to read this scorecard now (2026-10-21)
 
-The 51/100 and 100/100 figures, heat map, and radar chart compare two **versions of the written design**. They have not been rescored against the running application. The source has since gained a Tauri/React desktop shell, Python sidecar/kernel, and Mara/Len sample. The evidence and gaps are recorded in [SRS-033 Implementation Status](SRS-033-Implementation-Status.md). Statements below about cassettes, Pydantic, `import-linter`, generated schemas, complete GUI behavior, and study verification describe the design's coverage of those topics, not shipped features.
+The 51/100 and 100/100 figures, heat map, and radar chart compare two **versions of the written design**. They have not been rescored against the running application. The source has since gained a Tauri/React desktop shell, Python sidecar/kernel, and Mara/Len sample. The evidence and gaps are recorded in [SRS-033 Implementation Status](SRS-033-Implementation-Status.md). Cassettes, Pydantic, `import-linter`, complete GUI behavior, and human study verification below remain design targets; generated JSON Schema and TypeScript types now ship.
 
 | Evidence from the current implementation | Result | What it does not establish |
 |---|---|---|
-| 20 Python unit tests | Passed | Full AC-01–AC-42, property and mutation gates, or literary validity. |
+| 88 Python behavior tests and one Rust retry-policy test | Passed | Full AC-01–AC-42, property and mutation gates, or literary validity. |
 | TypeScript/Vite build and Rust `cargo check` | Passed | GUI end-to-end, accessibility, and performance goals. |
 | Unsigned macOS `.app` build and bundled-sidecar smoke | Passed | Signed release, packaged GUI interaction, or Windows/Linux support. |
 | Four offline condition runs | Distinct deterministic passages of roughly 800 words; 28 stage records passed in an earlier bundled-sidecar smoke | Model-backed generation, full grounding, blinded study, or literary validity. |
 
-The implementation score is **not assigned**. Section 7's independent evidence-based rescoring remains open. Do not interpret a 10 in the original table as an implementation pass.
+The running software has a separate, dated [ten-category codebase review](SRS-033-Codebase-Review-2026-10-21.md). Section 7's independent evidence-based rescoring and Milestone 9 sign-off remain open. Do not interpret a 10 in the original table as an implementation pass.
 
 ## 1. What this review does
 
@@ -51,8 +51,8 @@ The package was read twice: first as it stood after the first SRS and plan (base
 
 1. **The package now says what a success would mean.** The first SRS promised an engine that produces an epiphany. A critic asks whose epiphany: the character's, the reader's, or the observer's. The revision keeps three answers apart (character, reader, observer) and ties each to a different proposed event type. That is the most important semantic repair in the specification.
 2. **Story and telling are kept apart in the design.** Position carries time in the proposed visual language, so a reader of the canvas can see event order and telling order. The current app has separate story/discourse lenses and a basic time scrubber; the specified retrospection overlay remains open.
-3. **Interpretation is not fact.** Observer-relative readings sit beside events and never replace them. The specified motif ledger (REQ-158) would let an evaluator ask what the chair or the bowl meant at D01 versus D05 without editing a single event; the current Motif lens does not implement the full ledger.
-4. **Voice is a requirement in the design.** A full voice profile and drift checker are planned. The current packet and checker do not verify those requirements.
+3. **Interpretation is not fact.** Observer-relative readings sit beside events and never replace them. The specified motif ledger (REQ-158) would let an evaluator ask what the chair or the bowl meant at D01 versus D05 without editing a single event; the current Motif lens derives a basic ledger, but does not implement the full visual catalog.
+4. **Voice is a requirement in the design.** A full voice profile and drift checker are planned. The current packet and checker enforce selected phrase and length rules, not the full voice requirement.
 5. **The theory table is honest about its status.** Genette, Phelan, Ryan, Doležel, Bremond and Herman are cited as established. Cohn, Iser, Jauss, Barthes, Kermode and Joyce appear as reviewer-proposed lenses and are marked that way.
 
 ## 3. Reading as a Python programmer
@@ -60,7 +60,7 @@ The package was read twice: first as it stood after the first SRS and plan (base
 1. **Determinism is partly implemented.** Basis-point integers, canonical JSON, content-derived IDs, and offline template output support repeatable local runs. Cassette replay and model-output reproducibility remain planned.
 2. **No code is evaluated.** The formula language is a closed AST with depth and node limits. This removes the usual temptation to `eval` an author's rule.
 3. **Layering is specified more fully than it is enforced.** The current kernel lives in `src/cmne/`; there is no `kernel/fixtures.py` or `import-linter` gate in the app.
-4. **Concurrency has basic safeguards.** A PID lock refuses a second writer and `app.hello` checks the protocol major version. Read-only second opens and concurrent reads during writes are not implemented.
+4. **Concurrency has basic safeguards.** A PID lock refuses a second writer and `app.hello` checks the protocol major version. Read-only second opens and concurrent committed-state reads during a background run are implemented; packaged GUI recovery remains unverified.
 5. **Tests cover selected kernel behavior.** Mutation testing and the 80% kill target remain planned.
 
 ## 4. Criterion detail

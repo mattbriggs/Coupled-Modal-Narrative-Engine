@@ -10,6 +10,7 @@ contracts/active.json
 branches/<branch-id>/story.ndjson
 branches/<branch-id>/discourse.ndjson
 branches/<branch-id>/evaluation.ndjson
+snapshots/<branch-id>.json
 drafts/<draft-id>.json
 packets/<packet-hash>.json
 runs/<run-id>.json
@@ -20,7 +21,11 @@ The metadata file records the name, active branch, parent, fork sequence, and co
 
 ## Event integrity
 
-An event contains `stream`, `branch_id`, one-based `sequence`, `schema_version`, `payload`, `event_id`, and `integrity_hash`. IDs and hashes come from canonical JSON with sorted keys and SHA-256. On read, the kernel verifies sequence, schema, ID, hash, and duplicate IDs. Stream writes replace a complete file atomically. A project lock prevents a second writer; normal close removes the lock. Never edit a sealed stream directly.
+An event contains `stream`, `branch_id`, one-based `sequence`, `schema_version`, `payload`, `event_id`, and `integrity_hash`. IDs and hashes come from canonical JSON with sorted keys and SHA-256. On read, the kernel verifies sequence, schema, ID, hash, and duplicate IDs. A same-stream command validates its full event batch before one atomic file replacement; existing sealed lines retain their original bytes. Never edit a sealed stream directly.
+
+The lock records PID, host, and start time. One writer owns it, while a read-only project instance can inspect committed streams. A stale lock is reported and must be cleared explicitly after confirming that its writer stopped. Full replay checks a snapshot against fixture, contract, reducer, event heads, projection data, and content hash; an invalid snapshot is rebuilt by a writer. Snapshot files are caches, not canon. The shipped event schema and reducer are version 2; version-1 story/discourse events gain `source_kind: authored` in memory while their sealed bytes and IDs remain unchanged. Project metadata remains format version 1.
+
+Fixture and contract edits revalidate sealed events and preconditions before replacing their JSON files. A proposed contract that makes an existing crisis invalid is refused and leaves the old contract bytes intact. A failed switch to another project keeps the current project's lock and state.
 
 ## Fork semantics
 

@@ -1,0 +1,645 @@
+{
+  "$defs": {
+    "Actor": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "type": "object"
+    },
+    "DiscoursePayload": {
+      "properties": {
+        "cue": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "duration_weight_bp": {
+          "maximum": 10000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "focalizer": {
+          "type": "string"
+        },
+        "hypothetical": {
+          "type": "boolean"
+        },
+        "mode": {
+          "enum": [
+            "scene",
+            "summary",
+            "ellipsis",
+            "pause",
+            "memory",
+            "repetition"
+          ],
+          "type": "string"
+        },
+        "narrative_time": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "reveal": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "salience_bp": {
+          "maximum": 10000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "source_kind": {
+          "enum": [
+            "authored"
+          ],
+          "type": "string"
+        },
+        "story_refs": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "text": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "unreliable": {
+          "type": "boolean"
+        },
+        "variant": {
+          "enum": [
+            "authored",
+            "suspense",
+            "surprise",
+            "dramatic_irony"
+          ],
+          "type": "string"
+        },
+        "withhold": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "title"
+      ],
+      "type": "object"
+    },
+    "Entity": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "motif": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "type": "object"
+    },
+    "ErrorData": {
+      "properties": {
+        "cause": {
+          "type": "string"
+        },
+        "cmne_code": {
+          "type": "string"
+        },
+        "field_path": {
+          "type": "string"
+        },
+        "next_action": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "cmne_code",
+        "field_path",
+        "cause",
+        "next_action"
+      ],
+      "type": "object"
+    },
+    "Event": {
+      "properties": {
+        "branch_id": {
+          "type": "string"
+        },
+        "effective_schema_version": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "event_id": {
+          "type": "string"
+        },
+        "integrity_hash": {
+          "type": "string"
+        },
+        "payload": {
+          "type": "object"
+        },
+        "schema_version": {
+          "enum": [
+            1,
+            2
+          ],
+          "type": "integer"
+        },
+        "sequence": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "stored_schema_version": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "stream": {
+          "enum": [
+            "story",
+            "discourse",
+            "evaluation"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "stream",
+        "branch_id",
+        "sequence",
+        "schema_version",
+        "payload",
+        "event_id",
+        "integrity_hash"
+      ],
+      "type": "object"
+    },
+    "Fixture": {
+      "properties": {
+        "actors": {
+          "items": {
+            "$ref": "#/$defs/Actor"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "type": "array"
+        },
+        "content_hash": {
+          "type": "string"
+        },
+        "entities": {
+          "items": {
+            "$ref": "#/$defs/Entity"
+          },
+          "type": "array"
+        },
+        "initial_facts": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object"
+              }
+            ]
+          },
+          "type": "array"
+        },
+        "style": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "actors"
+      ],
+      "type": "object"
+    },
+    "Formula": {
+      "properties": {
+        "observer_id": {
+          "type": "string"
+        },
+        "op": {
+          "enum": [
+            "atom",
+            "not",
+            "and",
+            "or",
+            "implies",
+            "necessarily",
+            "possibly",
+            "believes",
+            "suspends",
+            "in_scenario"
+          ],
+          "type": "string"
+        },
+        "operands": {
+          "items": {
+            "$ref": "#/$defs/Formula"
+          },
+          "type": "array"
+        },
+        "predicate": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object"
+            }
+          ]
+        },
+        "scenario_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "op"
+      ],
+      "type": "object"
+    },
+    "NarrativeContract": {
+      "properties": {
+        "content_hash": {
+          "type": "string"
+        },
+        "facts_that_must_be_clear": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "forbidden_story_conditions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "high_commitment_bp": {
+          "maximum": 10000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "prose_bounds": {
+          "properties": {
+            "max_words": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "min_words": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "min_words",
+            "max_words"
+          ],
+          "type": "object"
+        },
+        "questions_that_must_remain_open": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "repair_budget_bp": {
+          "maximum": 10000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "required_story_conditions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "strain_threshold_bp": {
+          "maximum": 10000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "strain_weights_bp": {
+          "properties": {
+            "contradiction": {
+              "maximum": 10000,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "failed_prediction": {
+              "maximum": 10000,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "identity_goal": {
+              "maximum": 10000,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "repair_complexity": {
+              "maximum": 10000,
+              "minimum": 0,
+              "type": "integer"
+            },
+            "unexplained": {
+              "maximum": 10000,
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "voice": {
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "ProjectionResult": {
+      "properties": {
+        "hashes": {
+          "type": "object"
+        },
+        "projections": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "projections",
+        "hashes"
+      ],
+      "type": "object"
+    },
+    "RpcError": {
+      "properties": {
+        "code": {
+          "type": "integer"
+        },
+        "data": {
+          "$ref": "#/$defs/ErrorData"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message",
+        "data"
+      ],
+      "type": "object"
+    },
+    "RunResult": {
+      "properties": {
+        "branch_id": {
+          "type": "string"
+        },
+        "conditions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "findings": {
+          "items": {
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "packet_hash": {
+          "type": "string"
+        },
+        "projection_hashes": {
+          "type": "object"
+        },
+        "prose": {
+          "type": "string"
+        },
+        "run_id": {
+          "type": "string"
+        },
+        "stages": {
+          "items": {
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "passed",
+            "failed"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "branch_id",
+        "conditions",
+        "prose",
+        "findings",
+        "stages",
+        "packet_hash",
+        "projection_hashes",
+        "status"
+      ],
+      "type": "object"
+    },
+    "StoryPayload": {
+      "properties": {
+        "access_path": {
+          "enum": [
+            "perception",
+            "testimony",
+            "memory"
+          ],
+          "type": "string"
+        },
+        "actor_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "belief_revision": {
+          "type": "object"
+        },
+        "causal_parents": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "conceptual_revision": {
+          "type": "object"
+        },
+        "crisis": {
+          "type": "object"
+        },
+        "description": {
+          "type": "string"
+        },
+        "entity_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "interpretations": {
+          "items": {
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "action",
+            "observation",
+            "utterance",
+            "recollection",
+            "decision",
+            "revision",
+            "crisis"
+          ],
+          "type": "string"
+        },
+        "modal_revision": {
+          "type": "object"
+        },
+        "observed_by": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "preconditions": {
+          "items": {
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "proposal_id": {
+          "type": "string"
+        },
+        "remembered_story_sequences": {
+          "items": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "type": "array"
+        },
+        "source_kind": {
+          "enum": [
+            "authored",
+            "generated"
+          ],
+          "type": "string"
+        },
+        "strain_bp": {
+          "maximum": 10000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "strain_components_bp": {
+          "type": "object"
+        },
+        "title": {
+          "type": "string"
+        },
+        "validator_id": {
+          "type": "string"
+        },
+        "world_facts": {
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object"
+              }
+            ]
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "title"
+      ],
+      "type": "object"
+    },
+    "TransitionResult": {
+      "properties": {
+        "accepted": {
+          "type": "boolean"
+        },
+        "emitted_events": {
+          "items": {
+            "$ref": "#/$defs/Event"
+          },
+          "type": "array"
+        },
+        "invariant_results": {
+          "items": {
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "projection_hash_after": {
+          "type": "object"
+        },
+        "projection_hash_before": {
+          "type": "object"
+        },
+        "rejected_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "accepted",
+        "emitted_events",
+        "rejected_reason",
+        "invariant_results",
+        "projection_hash_before",
+        "projection_hash_after"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://github.com/mattbriggs/Coupled-Modal-Narrative-Engine/schema/cmne.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

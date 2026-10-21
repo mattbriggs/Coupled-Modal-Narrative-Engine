@@ -2,11 +2,13 @@
 
 ## Goal
 
-Create a bounded local project, record what happens, decide what the reader sees, and seal a runnable scene. This procedure uses the current GUI. For advanced fixture, contract, and revision fields, use the [JSON-RPC API](../api/json-rpc.md).
+Create a bounded local project, record what happens, decide what the reader sees, and seal a runnable scene. This procedure uses the current GUI. For advanced revision fields, use the [JSON-RPC API](../api/json-rpc.md).
 
 ## Fact: current editing surface
 
-The GUI can create a project and edit **story** and **discourse** drafts. New projects begin with two placeholder actors (`actor_a`, `actor_b`) and no entities. Fixture, Mind, and Motif are mostly inspection lenses today. The GUI does not yet provide a palette for adding actors, objects, rules, or full revision operators. Rename actors or add entities through `fixture.save` before writing events; see [contracts](../api/contracts.md).
+The GUI can create a project, edit the fixture and contract as validated JSON, and edit **story** and **discourse** drafts. New projects begin with two placeholder actors (`actor_a`, `actor_b`) and no entities. Mind and Motif are mostly inspection lenses today. The GUI does not yet provide a palette for adding actors, objects, rules, or full revision operators. Use the Fixture lens JSON editors to rename actors or add entities before writing events; see [contracts](../api/contracts.md).
+
+Saving a fixture or contract checks it against every sealed story event and event precondition first. If a new crisis threshold would invalidate an existing crisis, the save is rejected and the prior contract remains in place. A contract is project-wide across branches, so test a conflicting rule in a separate project copy.
 
 ## Procedure: create a project
 
@@ -15,6 +17,14 @@ The GUI can create a project and edit **story** and **discourse** drafts. New pr
 3. Click **Create project**. The new project opens in Story lens. If you keep the placeholder fixture, use `actor_a` and `actor_b` in actor fields.
 
 **Result.** The folder has `project.cmne.json`, a fixture, a contract, and a `main` branch. The new default contract has no required story conditions and permits 0–1100 words.
+
+## Procedure: set the fixture and contract
+
+1. Open **Fixture**. Edit **Fixture JSON** to name the two actors, add entities, or set starting facts. Choose **Validate and save fixture**. The sidecar checks existing sealed references before replacing it.
+2. Edit **Narrative contract JSON** to set required and forbidden conditions, questions to leave open, strain weights, and `prose_bounds`. Choose **Validate and save contract**. If `min_words` exceeds `max_words`, an inline error appears and saving is disabled; the sidecar still performs the full validation.
+3. Read any coded error, cause, and next action in the status message. Correct the JSON or the named field and save again.
+
+**Result.** The workbench refreshes the validated project summary and graph. Sealed event bytes are not rewritten.
 
 ## Structure: minimum authoring constructs
 

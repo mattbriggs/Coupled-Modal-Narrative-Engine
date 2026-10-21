@@ -1,0 +1,1456 @@
+{
+  "counts": {
+    "partial": 8,
+    "passed": 32,
+    "planned": 232
+  },
+  "criteria": {
+    "AC-01": {
+      "planned_test": "tests/acceptance/test_ac_01.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_core.py::test_sample_replays_deterministically_and_keeps_six_projections"
+      ]
+    },
+    "AC-02": {
+      "planned_test": "tests/acceptance/test_ac_02.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestone1.py::test_sealed_event_has_no_update_or_delete_command"
+      ]
+    },
+    "AC-03": {
+      "planned_test": "tests/acceptance/test_ac_03.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestone1.py::test_sequence_seven_rejects_expected_five_without_mutation"
+      ]
+    },
+    "AC-04": {
+      "planned_test": "tests/acceptance/test_ac_04.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestone1.py::test_second_invalid_event_rejects_the_whole_batch",
+        "tests/test_milestone1.py::test_rpc_batch_returns_all_events_or_no_events"
+      ]
+    },
+    "AC-05": {
+      "planned_test": "tests/acceptance/test_ac_05.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestone1.py::test_command_results_name_access_and_disclosure_invariants"
+      ]
+    },
+    "AC-06": {
+      "planned_test": "tests/acceptance/test_ac_06.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestone1.py::test_command_results_name_access_and_disclosure_invariants",
+        "tests/test_milestone1.py::test_ungrounded_disclosure_does_not_append"
+      ]
+    },
+    "AC-07": {
+      "planned_test": "tests/acceptance/test_ac_07.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestone1.py::test_story_only_replay_leaves_reader_at_initial_state"
+      ]
+    },
+    "AC-08": {
+      "planned_test": "tests/acceptance/test_ac_08.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestones23.py::test_ac08_necessity_and_impossibility_conflict_is_rejected"
+      ]
+    },
+    "AC-09": {
+      "planned_test": "tests/acceptance/test_ac_09.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestones23.py::test_ac09_ac10_old_models_and_interpretations_survive_revision"
+      ]
+    },
+    "AC-10": {
+      "planned_test": "tests/acceptance/test_ac_10.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestones23.py::test_ac09_ac10_old_models_and_interpretations_survive_revision"
+      ]
+    },
+    "AC-11": {
+      "planned_test": "tests/acceptance/test_ac_11.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestones23.py::test_ac11_ac12_crisis_needs_access_and_offers_seven_options"
+      ]
+    },
+    "AC-12": {
+      "planned_test": "tests/acceptance/test_ac_12.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestones23.py::test_ac11_ac12_crisis_needs_access_and_offers_seven_options"
+      ]
+    },
+    "AC-13": {
+      "planned_test": "tests/acceptance/test_ac_13.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestones23.py::test_ac13_four_conditions_have_distinct_state_transitions"
+      ]
+    },
+    "AC-14": {
+      "planned_test": "tests/acceptance/test_ac_14.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestone1.py::test_branch_append_does_not_change_sibling_projection"
+      ]
+    },
+    "AC-15": {
+      "planned_test": "tests/acceptance/test_ac_15.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestones23.py::test_ac15_packet_repeat_is_identical_and_filtered"
+      ]
+    },
+    "AC-16": {
+      "planned_test": "tests/acceptance/test_ac_16.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestones23.py::test_ac16_private_motive_rejected"
+      ]
+    },
+    "AC-17": {
+      "planned_test": "tests/acceptance/test_ac_17.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestones23.py::test_ac17_open_question_resolution_rejected"
+      ]
+    },
+    "AC-18": {
+      "planned_test": "tests/acceptance/test_ac_18.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestones23.py::test_ac18_metaphor_is_not_fact"
+      ]
+    },
+    "AC-19": {
+      "planned_test": "tests/acceptance/test_ac_19.py",
+      "status": "planned",
+      "tests": []
+    },
+    "AC-20": {
+      "planned_test": "tests/acceptance/test_ac_20.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestones23.py::test_ac20_generated_proposal_trace_cites_validator"
+      ]
+    },
+    "AC-21": {
+      "planned_test": "tests/acceptance/test_ac_21.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestones23.py::test_ac21_candidate_has_seven_structural_checks"
+      ]
+    },
+    "AC-22": {
+      "planned_test": "tests/acceptance/test_ac_22.py",
+      "status": "partial",
+      "tests": [
+        "tests/test_study_cli.py::test_layer_a_b_and_seven_ablation_descriptions_leave_canon_unchanged"
+      ]
+    },
+    "AC-23": {
+      "planned_test": "tests/acceptance/test_ac_23.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestone1.py::test_snapshot_corruption_is_rebuilt_from_events"
+      ]
+    },
+    "AC-24": {
+      "planned_test": "tests/acceptance/test_ac_24.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestone1.py::test_corrupt_event_names_the_line",
+        "tests/test_milestone1.py::test_malformed_event_line_is_named_and_refused"
+      ]
+    },
+    "AC-25": {
+      "planned_test": "tests/acceptance/test_ac_25.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_study_cli.py::test_ac25_blinded_public_set_has_no_condition_labels_or_key"
+      ]
+    },
+    "AC-26": {
+      "planned_test": "tests/acceptance/test_ac_26.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_formula.py::test_formula_limits_and_unknown_operator"
+      ]
+    },
+    "AC-27": {
+      "planned_test": "tests/acceptance/test_ac_27.py",
+      "status": "partial",
+      "tests": [
+        "tests/test_milestone1.py::test_canonical_hash_vector_and_key_order",
+        "tests/test_milestone1.py::test_checked_in_hash_vectors"
+      ]
+    },
+    "AC-28": {
+      "planned_test": "tests/acceptance/test_ac_28.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestone1.py::test_same_commands_in_two_projects_have_same_ids_and_hashes"
+      ]
+    },
+    "AC-29": {
+      "planned_test": "tests/acceptance/test_ac_29.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestone1.py::test_stale_lock_requires_explicit_clear",
+        "tests/test_milestone1.py::test_second_process_gets_lock_error_while_reader_opens"
+      ]
+    },
+    "AC-30": {
+      "planned_test": "tests/acceptance/test_ac_30.py",
+      "status": "planned",
+      "tests": []
+    },
+    "AC-31": {
+      "planned_test": "tests/acceptance/test_ac_31.py",
+      "status": "planned",
+      "tests": []
+    },
+    "AC-32": {
+      "planned_test": "tests/acceptance/test_ac_32.py",
+      "status": "partial",
+      "tests": [
+        "tests/test_core.py::test_project_rejects_symlink_that_leaves_root"
+      ]
+    },
+    "AC-33": {
+      "planned_test": "tests/acceptance/test_ac_33.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestones23.py::test_ac33_voice_phrase_and_length"
+      ]
+    },
+    "AC-34": {
+      "planned_test": "tests/acceptance/test_ac_34.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_study_cli.py::test_ac34_export_requires_plan_and_amendment_cites_prior_hash"
+      ]
+    },
+    "AC-35": {
+      "planned_test": "tests/acceptance/test_ac_35.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestone1.py::test_upcast_view_preserves_stored_event_bytes"
+      ]
+    },
+    "AC-36": {
+      "planned_test": "tests/acceptance/test_ac_36.py",
+      "status": "passed",
+      "tests": [
+        "scripts/check_error_catalog.py::main"
+      ]
+    },
+    "AC-37": {
+      "planned_test": "tests/acceptance/test_ac_37.py",
+      "status": "planned",
+      "tests": []
+    },
+    "AC-38": {
+      "planned_test": "tests/acceptance/test_ac_38.py",
+      "status": "partial",
+      "tests": [
+        "tests/test_milestone1.py::test_failed_replace_keeps_old_stream_intact",
+        "tests/test_milestone1.py::test_process_death_before_replace_keeps_complete_stream",
+        "tests/test_milestone1.py::test_process_death_after_replace_leaves_complete_stream_and_draft"
+      ]
+    },
+    "AC-39": {
+      "planned_test": "tests/acceptance/test_ac_39.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_milestones23.py::test_ac39_motif_ledger_links_appearances_and_interpretations"
+      ]
+    },
+    "AC-40": {
+      "planned_test": "tests/acceptance/test_ac_40.py",
+      "status": "passed",
+      "tests": [
+        "tests/test_study_cli.py::test_ac40_report_handles_null_and_contrary_results_with_intervals"
+      ]
+    },
+    "AC-41": {
+      "planned_test": "tests/acceptance/test_ac_41.py",
+      "status": "partial",
+      "tests": [
+        "tests/test_core.py::test_protocol_requires_hello"
+      ]
+    },
+    "AC-42": {
+      "planned_test": "tests/acceptance/test_ac_42.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-01": {
+      "planned_test": "tests/acceptance/test_gac_01.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-02": {
+      "planned_test": "tests/acceptance/test_gac_02.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-03": {
+      "planned_test": "tests/acceptance/test_gac_03.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-04": {
+      "planned_test": "tests/acceptance/test_gac_04.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-05": {
+      "planned_test": "tests/acceptance/test_gac_05.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-06": {
+      "planned_test": "tests/acceptance/test_gac_06.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-07": {
+      "planned_test": "tests/acceptance/test_gac_07.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-08": {
+      "planned_test": "tests/acceptance/test_gac_08.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-09": {
+      "planned_test": "tests/acceptance/test_gac_09.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-10": {
+      "planned_test": "tests/acceptance/test_gac_10.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-11": {
+      "planned_test": "tests/acceptance/test_gac_11.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-12": {
+      "planned_test": "tests/acceptance/test_gac_12.py",
+      "status": "partial",
+      "tests": [
+        "tests/test_core.py::test_fork_keeps_prefix_and_draft_suffix"
+      ]
+    },
+    "GAC-13": {
+      "planned_test": "tests/acceptance/test_gac_13.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-14": {
+      "planned_test": "tests/acceptance/test_gac_14.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-15": {
+      "planned_test": "tests/acceptance/test_gac_15.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-16": {
+      "planned_test": "tests/acceptance/test_gac_16.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-17": {
+      "planned_test": "tests/acceptance/test_gac_17.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-18": {
+      "planned_test": "tests/acceptance/test_gac_18.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-19": {
+      "planned_test": "tests/acceptance/test_gac_19.py",
+      "status": "partial",
+      "tests": [
+        "tests/test_core.py::test_reinterpretation_changes_the_mind_but_keeps_the_past"
+      ]
+    },
+    "GAC-20": {
+      "planned_test": "tests/acceptance/test_gac_20.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-21": {
+      "planned_test": "tests/acceptance/test_gac_21.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-22": {
+      "planned_test": "tests/acceptance/test_gac_22.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GAC-23": {
+      "planned_test": "tests/acceptance/test_gac_23.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-001": {
+      "planned_test": "tests/acceptance/test_gui_001.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-002": {
+      "planned_test": "tests/acceptance/test_gui_002.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-003": {
+      "planned_test": "tests/acceptance/test_gui_003.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-004": {
+      "planned_test": "tests/acceptance/test_gui_004.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-005": {
+      "planned_test": "tests/acceptance/test_gui_005.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-006": {
+      "planned_test": "tests/acceptance/test_gui_006.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-007": {
+      "planned_test": "tests/acceptance/test_gui_007.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-008": {
+      "planned_test": "tests/acceptance/test_gui_008.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-009": {
+      "planned_test": "tests/acceptance/test_gui_009.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-010": {
+      "planned_test": "tests/acceptance/test_gui_010.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-011": {
+      "planned_test": "tests/acceptance/test_gui_011.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-012": {
+      "planned_test": "tests/acceptance/test_gui_012.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-013": {
+      "planned_test": "tests/acceptance/test_gui_013.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-014": {
+      "planned_test": "tests/acceptance/test_gui_014.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-015": {
+      "planned_test": "tests/acceptance/test_gui_015.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-016": {
+      "planned_test": "tests/acceptance/test_gui_016.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-017": {
+      "planned_test": "tests/acceptance/test_gui_017.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-018": {
+      "planned_test": "tests/acceptance/test_gui_018.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-019": {
+      "planned_test": "tests/acceptance/test_gui_019.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-020": {
+      "planned_test": "tests/acceptance/test_gui_020.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-021": {
+      "planned_test": "tests/acceptance/test_gui_021.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-022": {
+      "planned_test": "tests/acceptance/test_gui_022.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-023": {
+      "planned_test": "tests/acceptance/test_gui_023.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-024": {
+      "planned_test": "tests/acceptance/test_gui_024.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-025": {
+      "planned_test": "tests/acceptance/test_gui_025.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-026": {
+      "planned_test": "tests/acceptance/test_gui_026.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-027": {
+      "planned_test": "tests/acceptance/test_gui_027.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-028": {
+      "planned_test": "tests/acceptance/test_gui_028.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-029": {
+      "planned_test": "tests/acceptance/test_gui_029.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-030": {
+      "planned_test": "tests/acceptance/test_gui_030.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-031": {
+      "planned_test": "tests/acceptance/test_gui_031.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-032": {
+      "planned_test": "tests/acceptance/test_gui_032.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-033": {
+      "planned_test": "tests/acceptance/test_gui_033.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-034": {
+      "planned_test": "tests/acceptance/test_gui_034.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-035": {
+      "planned_test": "tests/acceptance/test_gui_035.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-036": {
+      "planned_test": "tests/acceptance/test_gui_036.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-037": {
+      "planned_test": "tests/acceptance/test_gui_037.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-038": {
+      "planned_test": "tests/acceptance/test_gui_038.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-039": {
+      "planned_test": "tests/acceptance/test_gui_039.py",
+      "status": "planned",
+      "tests": []
+    },
+    "GUI-040": {
+      "planned_test": "tests/acceptance/test_gui_040.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-001": {
+      "planned_test": "tests/acceptance/test_req_001.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-002": {
+      "planned_test": "tests/acceptance/test_req_002.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-003": {
+      "planned_test": "tests/acceptance/test_req_003.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-004": {
+      "planned_test": "tests/acceptance/test_req_004.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-005": {
+      "planned_test": "tests/acceptance/test_req_005.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-006": {
+      "planned_test": "tests/acceptance/test_req_006.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-007": {
+      "planned_test": "tests/acceptance/test_req_007.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-008": {
+      "planned_test": "tests/acceptance/test_req_008.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-009": {
+      "planned_test": "tests/acceptance/test_req_009.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-010": {
+      "planned_test": "tests/acceptance/test_req_010.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-011": {
+      "planned_test": "tests/acceptance/test_req_011.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-012": {
+      "planned_test": "tests/acceptance/test_req_012.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-013": {
+      "planned_test": "tests/acceptance/test_req_013.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-014": {
+      "planned_test": "tests/acceptance/test_req_014.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-015": {
+      "planned_test": "tests/acceptance/test_req_015.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-016": {
+      "planned_test": "tests/acceptance/test_req_016.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-017": {
+      "planned_test": "tests/acceptance/test_req_017.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-018": {
+      "planned_test": "tests/acceptance/test_req_018.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-019": {
+      "planned_test": "tests/acceptance/test_req_019.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-020": {
+      "planned_test": "tests/acceptance/test_req_020.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-021": {
+      "planned_test": "tests/acceptance/test_req_021.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-022": {
+      "planned_test": "tests/acceptance/test_req_022.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-023": {
+      "planned_test": "tests/acceptance/test_req_023.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-024": {
+      "planned_test": "tests/acceptance/test_req_024.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-025": {
+      "planned_test": "tests/acceptance/test_req_025.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-026": {
+      "planned_test": "tests/acceptance/test_req_026.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-027": {
+      "planned_test": "tests/acceptance/test_req_027.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-028": {
+      "planned_test": "tests/acceptance/test_req_028.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-029": {
+      "planned_test": "tests/acceptance/test_req_029.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-030": {
+      "planned_test": "tests/acceptance/test_req_030.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-031": {
+      "planned_test": "tests/acceptance/test_req_031.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-032": {
+      "planned_test": "tests/acceptance/test_req_032.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-033": {
+      "planned_test": "tests/acceptance/test_req_033.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-034": {
+      "planned_test": "tests/acceptance/test_req_034.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-035": {
+      "planned_test": "tests/acceptance/test_req_035.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-036": {
+      "planned_test": "tests/acceptance/test_req_036.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-037": {
+      "planned_test": "tests/acceptance/test_req_037.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-038": {
+      "planned_test": "tests/acceptance/test_req_038.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-039": {
+      "planned_test": "tests/acceptance/test_req_039.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-040": {
+      "planned_test": "tests/acceptance/test_req_040.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-041": {
+      "planned_test": "tests/acceptance/test_req_041.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-042": {
+      "planned_test": "tests/acceptance/test_req_042.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-043": {
+      "planned_test": "tests/acceptance/test_req_043.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-044": {
+      "planned_test": "tests/acceptance/test_req_044.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-045": {
+      "planned_test": "tests/acceptance/test_req_045.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-046": {
+      "planned_test": "tests/acceptance/test_req_046.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-047": {
+      "planned_test": "tests/acceptance/test_req_047.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-048": {
+      "planned_test": "tests/acceptance/test_req_048.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-049": {
+      "planned_test": "tests/acceptance/test_req_049.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-050": {
+      "planned_test": "tests/acceptance/test_req_050.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-051": {
+      "planned_test": "tests/acceptance/test_req_051.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-052": {
+      "planned_test": "tests/acceptance/test_req_052.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-053": {
+      "planned_test": "tests/acceptance/test_req_053.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-054": {
+      "planned_test": "tests/acceptance/test_req_054.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-055": {
+      "planned_test": "tests/acceptance/test_req_055.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-056": {
+      "planned_test": "tests/acceptance/test_req_056.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-057": {
+      "planned_test": "tests/acceptance/test_req_057.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-058": {
+      "planned_test": "tests/acceptance/test_req_058.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-059": {
+      "planned_test": "tests/acceptance/test_req_059.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-060": {
+      "planned_test": "tests/acceptance/test_req_060.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-061": {
+      "planned_test": "tests/acceptance/test_req_061.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-062": {
+      "planned_test": "tests/acceptance/test_req_062.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-063": {
+      "planned_test": "tests/acceptance/test_req_063.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-064": {
+      "planned_test": "tests/acceptance/test_req_064.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-065": {
+      "planned_test": "tests/acceptance/test_req_065.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-066": {
+      "planned_test": "tests/acceptance/test_req_066.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-067": {
+      "planned_test": "tests/acceptance/test_req_067.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-068": {
+      "planned_test": "tests/acceptance/test_req_068.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-069": {
+      "planned_test": "tests/acceptance/test_req_069.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-070": {
+      "planned_test": "tests/acceptance/test_req_070.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-071": {
+      "planned_test": "tests/acceptance/test_req_071.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-072": {
+      "planned_test": "tests/acceptance/test_req_072.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-073": {
+      "planned_test": "tests/acceptance/test_req_073.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-074": {
+      "planned_test": "tests/acceptance/test_req_074.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-075": {
+      "planned_test": "tests/acceptance/test_req_075.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-076": {
+      "planned_test": "tests/acceptance/test_req_076.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-077": {
+      "planned_test": "tests/acceptance/test_req_077.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-078": {
+      "planned_test": "tests/acceptance/test_req_078.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-079": {
+      "planned_test": "tests/acceptance/test_req_079.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-080": {
+      "planned_test": "tests/acceptance/test_req_080.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-081": {
+      "planned_test": "tests/acceptance/test_req_081.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-082": {
+      "planned_test": "tests/acceptance/test_req_082.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-083": {
+      "planned_test": "tests/acceptance/test_req_083.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-084": {
+      "planned_test": "tests/acceptance/test_req_084.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-085": {
+      "planned_test": "tests/acceptance/test_req_085.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-086": {
+      "planned_test": "tests/acceptance/test_req_086.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-087": {
+      "planned_test": "tests/acceptance/test_req_087.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-088": {
+      "planned_test": "tests/acceptance/test_req_088.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-089": {
+      "planned_test": "tests/acceptance/test_req_089.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-090": {
+      "planned_test": "tests/acceptance/test_req_090.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-091": {
+      "planned_test": "tests/acceptance/test_req_091.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-092": {
+      "planned_test": "tests/acceptance/test_req_092.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-093": {
+      "planned_test": "tests/acceptance/test_req_093.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-094": {
+      "planned_test": "tests/acceptance/test_req_094.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-095": {
+      "planned_test": "tests/acceptance/test_req_095.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-096": {
+      "planned_test": "tests/acceptance/test_req_096.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-097": {
+      "planned_test": "tests/acceptance/test_req_097.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-098": {
+      "planned_test": "tests/acceptance/test_req_098.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-099": {
+      "planned_test": "tests/acceptance/test_req_099.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-100": {
+      "planned_test": "tests/acceptance/test_req_100.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-101": {
+      "planned_test": "tests/acceptance/test_req_101.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-102": {
+      "planned_test": "tests/acceptance/test_req_102.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-103": {
+      "planned_test": "tests/acceptance/test_req_103.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-104": {
+      "planned_test": "tests/acceptance/test_req_104.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-105": {
+      "planned_test": "tests/acceptance/test_req_105.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-106": {
+      "planned_test": "tests/acceptance/test_req_106.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-107": {
+      "planned_test": "tests/acceptance/test_req_107.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-108": {
+      "planned_test": "tests/acceptance/test_req_108.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-109": {
+      "planned_test": "tests/acceptance/test_req_109.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-110": {
+      "planned_test": "tests/acceptance/test_req_110.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-111": {
+      "planned_test": "tests/acceptance/test_req_111.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-112": {
+      "planned_test": "tests/acceptance/test_req_112.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-113": {
+      "planned_test": "tests/acceptance/test_req_113.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-114": {
+      "planned_test": "tests/acceptance/test_req_114.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-115": {
+      "planned_test": "tests/acceptance/test_req_115.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-116": {
+      "planned_test": "tests/acceptance/test_req_116.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-117": {
+      "planned_test": "tests/acceptance/test_req_117.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-118": {
+      "planned_test": "tests/acceptance/test_req_118.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-119": {
+      "planned_test": "tests/acceptance/test_req_119.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-120": {
+      "planned_test": "tests/acceptance/test_req_120.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-121": {
+      "planned_test": "tests/acceptance/test_req_121.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-122": {
+      "planned_test": "tests/acceptance/test_req_122.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-123": {
+      "planned_test": "tests/acceptance/test_req_123.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-124": {
+      "planned_test": "tests/acceptance/test_req_124.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-125": {
+      "planned_test": "tests/acceptance/test_req_125.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-126": {
+      "planned_test": "tests/acceptance/test_req_126.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-127": {
+      "planned_test": "tests/acceptance/test_req_127.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-128": {
+      "planned_test": "tests/acceptance/test_req_128.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-129": {
+      "planned_test": "tests/acceptance/test_req_129.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-130": {
+      "planned_test": "tests/acceptance/test_req_130.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-131": {
+      "planned_test": "tests/acceptance/test_req_131.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-132": {
+      "planned_test": "tests/acceptance/test_req_132.py",
+      "status": "partial",
+      "tests": [
+        "tests/test_milestones23.py::test_nine_independent_golden_histories"
+      ]
+    },
+    "REQ-133": {
+      "planned_test": "tests/acceptance/test_req_133.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-134": {
+      "planned_test": "tests/acceptance/test_req_134.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-135": {
+      "planned_test": "tests/acceptance/test_req_135.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-136": {
+      "planned_test": "tests/acceptance/test_req_136.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-137": {
+      "planned_test": "tests/acceptance/test_req_137.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-138": {
+      "planned_test": "tests/acceptance/test_req_138.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-139": {
+      "planned_test": "tests/acceptance/test_req_139.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-140": {
+      "planned_test": "tests/acceptance/test_req_140.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-141": {
+      "planned_test": "tests/acceptance/test_req_141.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-142": {
+      "planned_test": "tests/acceptance/test_req_142.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-143": {
+      "planned_test": "tests/acceptance/test_req_143.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-144": {
+      "planned_test": "tests/acceptance/test_req_144.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-145": {
+      "planned_test": "tests/acceptance/test_req_145.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-146": {
+      "planned_test": "tests/acceptance/test_req_146.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-147": {
+      "planned_test": "tests/acceptance/test_req_147.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-148": {
+      "planned_test": "tests/acceptance/test_req_148.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-149": {
+      "planned_test": "tests/acceptance/test_req_149.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-150": {
+      "planned_test": "tests/acceptance/test_req_150.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-151": {
+      "planned_test": "tests/acceptance/test_req_151.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-152": {
+      "planned_test": "tests/acceptance/test_req_152.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-153": {
+      "planned_test": "tests/acceptance/test_req_153.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-154": {
+      "planned_test": "tests/acceptance/test_req_154.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-155": {
+      "planned_test": "tests/acceptance/test_req_155.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-156": {
+      "planned_test": "tests/acceptance/test_req_156.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-157": {
+      "planned_test": "tests/acceptance/test_req_157.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-158": {
+      "planned_test": "tests/acceptance/test_req_158.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-159": {
+      "planned_test": "tests/acceptance/test_req_159.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-160": {
+      "planned_test": "tests/acceptance/test_req_160.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-161": {
+      "planned_test": "tests/acceptance/test_req_161.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-162": {
+      "planned_test": "tests/acceptance/test_req_162.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-163": {
+      "planned_test": "tests/acceptance/test_req_163.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-164": {
+      "planned_test": "tests/acceptance/test_req_164.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-165": {
+      "planned_test": "tests/acceptance/test_req_165.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-166": {
+      "planned_test": "tests/acceptance/test_req_166.py",
+      "status": "planned",
+      "tests": []
+    },
+    "REQ-167": {
+      "planned_test": "tests/acceptance/test_req_167.py",
+      "status": "planned",
+      "tests": []
+    }
+  }
+}

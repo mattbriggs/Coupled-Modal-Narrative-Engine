@@ -1,0 +1,15 @@
+{
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "binary": "app/src-tauri/target/release/bundle/macos/CMNE Workbench.app/Contents/MacOS/cmne-sidecar",
+  "status": "passed",
+  "checks": [
+    "schema-2 handshake",
+    "project create and close",
+    "disk-backed draft recovery",
+    "atomic two-event batch",
+    "verified read",
+    "12-passage study generation and blind export",
+    "seven realized ablations",
+    "generalization decision packet"
+  ]
+}

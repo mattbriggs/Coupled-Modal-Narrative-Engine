@@ -1,5 +1,7 @@
 """Bundled Mara and Len experiment seed."""
 
+from typing import Any
+
 FIXTURE = {
     "id": "mara-len", "version": 1, "name": "The chair and the bowl",
     "actors": [
@@ -20,7 +22,7 @@ FIXTURE = {
               "explanation_ceiling": "low"},
 }
 
-CONTRACT = {
+CONTRACT: dict[str, Any] = {
     "id": "bounded-epiphany", "version": 1,
     "required_story_conditions": ["Len leaves", "Mara finds the note"],
     "forbidden_story_conditions": ["Len's exact motive is known"],
@@ -28,9 +30,14 @@ CONTRACT = {
     "questions_that_must_remain_open": ["Was the repair care or avoidance?"],
     "prose_bounds": {"min_words": 700, "max_words": 1100},
     "strain_threshold_bp": 6500,
+    "strain_weights_bp": {"contradiction": 2500, "unexplained": 2000,
+                          "failed_prediction": 2000, "repair_complexity": 2000,
+                          "identity_goal": 1500},
+    "high_commitment_bp": 7000,
+    "repair_budget_bp": 5000,
 }
 
-STORY = [
+STORY: list[dict[str, Any]] = [
     {"title": "Len repairs the chair", "kind": "action", "actor_ids": ["len"], "entity_ids": ["chair"],
      "description": "Len tightened the chair's loose joint before Mara came home.",
      "world_facts": ["Len repairs the chair"], "strain_bp": 700},
@@ -41,8 +48,15 @@ STORY = [
      "description": "The note remained folded beneath the bowl.",
      "world_facts": ["Len writes a note"], "strain_bp": 1300},
     {"title": "Len gives an ordinary reason", "kind": "utterance", "actor_ids": ["len"], "observed_by": ["mara"],
+     "remembered_story_sequences": [1, 2],
      "description": "He told Mara he would be late.", "world_facts": ["Len gives an ordinary reason"],
-     "interpretations": [{"observer_id": "mara", "model_version": 1, "claim": "The repairs are care", "confidence_bp": 7800}],
+     "interpretations": [
+         {"observer_id": "mara", "model_version": 1, "claim": "The repairs are care",
+          "confidence_bp": 7800, "target_story_sequences": [1, 2]},
+         {"observer_id": "mara", "model_version": 1, "claim": "The chair repair is care",
+          "confidence_bp": 7600, "target_story_sequences": [1]},
+         {"observer_id": "mara", "model_version": 1, "claim": "The bowl replacement is care",
+          "confidence_bp": 7400, "target_story_sequences": [2]}],
      "strain_bp": 1400},
     {"title": "Len leaves; the chair rocks", "kind": "action", "actor_ids": ["len"], "entity_ids": ["chair", "bag"],
      "observed_by": ["mara"], "description": "After Len left, the chair rocked once in the empty kitchen.",
@@ -57,25 +71,32 @@ STORY = [
      "world_facts": ["The note lists deferred departures"], "strain_bp": 7400},
     {"title": "Mara remembers the repairs", "kind": "recollection", "actor_ids": ["mara"],
      "observed_by": ["mara"], "entity_ids": ["chair", "bowl"],
+     "remembered_story_sequences": [1, 2],
      "description": "The mended chair and the replaced bowl returned to Mara as two possible explanations.",
      "strain_bp": 8200},
     {"title": "Mara cannot choose one meaning", "kind": "crisis", "actor_ids": ["mara"],
+     "entity_ids": ["chair", "bowl"],
      "description": "Neither meaning canceled the other.", "strain_bp": 8800,
+     "crisis": {"observer_id": "mara", "evidence_story_sequence": 7,
+                "commitment_bp": 8000, "repair_cost_bp": 8200,
+                "registered_inadequacy": True, "consequence": "Mara's relationship to Len"},
      "conceptual_revision": {"observer_id": "mara", "concepts": ["care", "avoidance"],
                              "migration_map": {"care": ["care", "avoidance"]},
                              "unresolved_terms": ["care", "avoidance"]},
      "interpretations": [
          {"observer_id": "mara", "model_version": 2, "claim": "The chair repair could be care or avoidance",
-          "status": "suspended", "confidence_bp": 5000, "target_story_sequences": [1]},
+          "status": "suspended", "confidence_bp": 5000, "target_story_sequences": [1],
+          "evidence_story_sequences": [7]},
          {"observer_id": "mara", "model_version": 2, "claim": "The bowl replacement could be care or avoidance",
-          "status": "suspended", "confidence_bp": 5000, "target_story_sequences": [2]},
+          "status": "suspended", "confidence_bp": 5000, "target_story_sequences": [2],
+          "evidence_story_sequences": [7]},
      ]},
     {"title": "Mara moves the bowl", "kind": "action", "actor_ids": ["mara"], "entity_ids": ["bowl"],
      "description": "Mara placed the bowl somewhere it had never stood before.",
      "world_facts": ["Mara moves the bowl"], "strain_bp": 6000},
 ]
 
-DISCOURSE = [
+DISCOURSE: list[dict[str, Any]] = [
     {"title": "The rocking chair", "mode": "scene", "story_index": 4,
      "text": "After Len left, the chair rocked once. Mara watched it come to rest.", "cue": ["something has changed"]},
     {"title": "The routine reason", "mode": "scene", "story_index": 3,
@@ -118,11 +139,26 @@ CONDITION_SUFFIXES = {
         {"title": "Mara admits another possibility", "kind": "revision", "actor_ids": ["mara"],
          "description": "A repair could belong to someone who meant to leave, as well as someone who meant to stay.",
          "modal_revision": {"observer_id": "mara", "add_scenarios": ["care and departure coexist"],
-                            "allow_rivals": True},
+                            "allow_rivals": True, "evidence_story_sequence": 7},
          "strain_bp": 7200},
         STORY[9],
     ],
 }
+
+# The sample assesses five separate pressures. The Tension machine applies the
+# contract's integer weights; the old strain_bp remains an explanatory hint.
+for _sample_event in STORY:
+    _sample_event["strain_components_bp"] = {
+        "contradiction": _sample_event["strain_bp"],
+        "unexplained": _sample_event["strain_bp"],
+        "failed_prediction": _sample_event["strain_bp"],
+        "repair_complexity": _sample_event["strain_bp"],
+        "identity_goal": _sample_event["strain_bp"],
+    }
+for _sample_suffix in CONDITION_SUFFIXES.values():
+    for _sample_event in _sample_suffix:
+        _sample_event.setdefault("strain_components_bp", {
+            name: _sample_event["strain_bp"] for name in CONTRACT["strain_weights_bp"]})
 
 CONDITION_PAUSES = {
     "C0": "The last line gave her an address and a date. Mara set the note down and looked at the bowl.",
@@ -136,7 +172,7 @@ def supports_expanded_sample(fixture: dict, story: list[dict]) -> bool:
     """Keep authored expansion off branches whose canon or fixture changed."""
     if {key: value for key, value in fixture.items() if key != "content_hash"} != FIXTURE:
         return False
-    defaults = {"description": "", "actor_ids": [], "entity_ids": [], "observed_by": [],
+    defaults = {"description": "", "source_kind": "authored", "actor_ids": [], "entity_ids": [], "observed_by": [],
                 "world_facts": [], "interpretations": [], "preconditions": [], "strain_bp": 0}
     actual = []
     for event in story:

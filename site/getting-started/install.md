@@ -11,13 +11,13 @@ From the repository root:
 ```sh
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -e '.[bundle]'
+python -m pip install -e '.[bundle,docs,dev]'
 cd app
 npm ci
 cd ..
 ```
 
-`.[bundle]` installs CMNE and PyInstaller into `.venv`. `npm ci` reads the committed `app/package-lock.json`. React and Tauri are built by the next command.
+The extras install CMNE, PyInstaller, MkDocs, Ruff, and Mypy into `.venv`. `npm ci` reads the committed `app/package-lock.json`. React and Tauri are built by the next command.
 
 ## Procedure: build and launch the packaged app
 
@@ -46,8 +46,10 @@ The Tauri development command prepares a sidecar wrapper and starts Vite. Return
 ```sh
 source .venv/bin/activate
 python -m unittest discover -s tests -v
+mypy src --ignore-missing-imports --no-incremental
+ruff check src scripts tests --select F,B,UP,SIM
 (cd app && npm run build)
-(cd app/src-tauri && cargo check)
+(cd app/src-tauri && cargo clippy --locked --all-targets -- -D warnings)
 ```
 
 The tests cover selected kernel and sidecar behavior; they are not the complete target SRS acceptance suite. See [current limits](../design/roadmap.md).

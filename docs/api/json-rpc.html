@@ -622,6 +622,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../manual/evaluate-study.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prepare a blinded evaluation — S-07 to S-09
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../manual/constructs.html" class="md-nav__link">
         
   
@@ -898,6 +926,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design/code-review.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software code review
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1154,6 +1210,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#blinded-study" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Blinded study
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#errors" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1188,6 +1255,34 @@
     
   
     Data contracts and errors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="error-catalog.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error catalog
   
 
     
@@ -1307,6 +1402,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#blinded-study" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Blinded study
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#errors" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1341,7 +1447,7 @@
 <p><code>cmne-sidecar</code> (or <code>python -m cmne_sidecar.server</code>) reads one JSON-RPC 2.0 request per input line and writes one response per output line. Keep one process open for a sequence of calls. <code>app.hello</code> must succeed before other methods; it accepts protocol major version <code>1</code> and returns version, schema, package, and lens names. Standard output is protocol only; diagnostics use standard error.</p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;jsonrpc&quot;</span><span class="p">:</span><span class="s2">&quot;2.0&quot;</span><span class="p">,</span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="nt">&quot;method&quot;</span><span class="p">:</span><span class="s2">&quot;app.hello&quot;</span><span class="p">,</span><span class="nt">&quot;params&quot;</span><span class="p">:{</span><span class="nt">&quot;protocol_version&quot;</span><span class="p">:</span><span class="s2">&quot;1.0&quot;</span><span class="p">}}</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;jsonrpc&quot;</span><span class="p">:</span><span class="s2">&quot;2.0&quot;</span><span class="p">,</span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="nt">&quot;result&quot;</span><span class="p">:{</span><span class="nt">&quot;protocol_version&quot;</span><span class="p">:</span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span><span class="nt">&quot;schema_version&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="nt">&quot;package_version&quot;</span><span class="p">:</span><span class="s2">&quot;…&quot;</span><span class="p">,</span><span class="nt">&quot;lenses&quot;</span><span class="p">:[</span><span class="s2">&quot;fixture&quot;</span><span class="p">,</span><span class="s2">&quot;story&quot;</span><span class="p">,</span><span class="s2">&quot;discourse&quot;</span><span class="p">,</span><span class="s2">&quot;mind&quot;</span><span class="p">,</span><span class="s2">&quot;provenance&quot;</span><span class="p">,</span><span class="s2">&quot;motif&quot;</span><span class="p">,</span><span class="s2">&quot;pipeline&quot;</span><span class="p">]}}</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;jsonrpc&quot;</span><span class="p">:</span><span class="s2">&quot;2.0&quot;</span><span class="p">,</span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="nt">&quot;result&quot;</span><span class="p">:{</span><span class="nt">&quot;protocol_version&quot;</span><span class="p">:</span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span><span class="nt">&quot;schema_version&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;package_version&quot;</span><span class="p">:</span><span class="s2">&quot;…&quot;</span><span class="p">,</span><span class="nt">&quot;lenses&quot;</span><span class="p">:[</span><span class="s2">&quot;fixture&quot;</span><span class="p">,</span><span class="s2">&quot;story&quot;</span><span class="p">,</span><span class="s2">&quot;discourse&quot;</span><span class="p">,</span><span class="s2">&quot;mind&quot;</span><span class="p">,</span><span class="s2">&quot;provenance&quot;</span><span class="p">,</span><span class="s2">&quot;motif&quot;</span><span class="p">,</span><span class="s2">&quot;pipeline&quot;</span><span class="p">]}}</span>
 </code></pre></div>
 <h2 id="project-and-validation">Project and validation<a class="headerlink" href="#project-and-validation" title="Permanent link">&para;</a></h2>
 <table>
@@ -1365,8 +1471,13 @@
 </tr>
 <tr>
 <td><code>project.open</code></td>
+<td><code>path</code>; optional <code>read_only: true</code></td>
+<td>Project summary; read-only opens can coexist with a writer. A failed switch retains the previous project. Close before changing one project's access mode.</td>
+</tr>
+<tr>
+<td><code>project.clear_stale_lock</code></td>
 <td><code>path</code></td>
-<td>Project summary</td>
+<td><code>{cleared: true}</code> only when a same-host lock owner is no longer running</td>
 </tr>
 <tr>
 <td><code>project.close</code></td>
@@ -1393,9 +1504,14 @@
 <td><code>fixture</code> / <code>contract</code></td>
 <td>Validated and saved object</td>
 </tr>
+<tr>
+<td><code>fixture.import</code> / <code>contract.import</code></td>
+<td><code>path</code> to a JSON file</td>
+<td>Validated and saved object; unsafe paths, symlinks, YAML, and oversized files are refused</td>
+</tr>
 </tbody>
 </table>
-<p>The summary has <code>path</code>, <code>name</code>, <code>active_branch</code>, <code>branches</code>, <code>fixture</code>, and <code>contract</code>. Saving fixture/contract updates the current project document; it does not rewrite already sealed events.</p>
+<p>The summary has <code>path</code>, <code>name</code>, <code>active_branch</code>, <code>branches</code>, <code>fixture</code>, and <code>contract</code>. Saving a fixture or contract revalidates sealed story events and preconditions before replacing the file; an incompatible crisis threshold or other rule is rejected without changing the old contract. Neither save rewrites sealed events. Mutating methods refuse a read-only project.</p>
 <h2 id="branch-events-and-graph">Branch, events, and graph<a class="headerlink" href="#branch-events-and-graph" title="Permanent link">&para;</a></h2>
 <p>All branch-aware methods accept optional <code>branch_id</code>; omitted means the metadata's active branch, or <code>main</code>.</p>
 <table>
@@ -1420,7 +1536,7 @@
 <tr>
 <td><code>branch.compare</code></td>
 <td><code>left</code>, <code>right</code></td>
-<td>Shared prefix, first divergence, unique counts, hashes</td>
+<td>Shared prefix, state-transition histories, changed interpretations, hashes</td>
 </tr>
 <tr>
 <td><code>events.read</code></td>
@@ -1429,7 +1545,7 @@
 </tr>
 <tr>
 <td><code>command.submit</code></td>
-<td><code>stream</code> (<code>story</code>/<code>discourse</code>), <code>payload</code>, optional <code>expected_sequence</code></td>
+<td><code>stream</code> (<code>story</code>/<code>discourse</code>), either <code>payload</code> or nonempty <code>payloads</code>, optional <code>expected_sequence</code></td>
 <td><code>accepted</code>, <code>emitted_events</code>, <code>rejected_reason</code>, invariant results, before/after hashes</td>
 </tr>
 <tr>
@@ -1454,12 +1570,12 @@
 </tr>
 <tr>
 <td><code>trace.query</code></td>
-<td><code>node_id</code></td>
-<td>Causal parents, observers, disclosures, interpretations</td>
+<td><code>node_id</code>; optional <code>query</code>, <code>actor_id</code>, <code>claim</code>, <code>model_version</code></td>
+<td>Event/proposal provenance, actor belief, reader inference, model change, or prose access</td>
 </tr>
 </tbody>
 </table>
-<p><code>command.submit</code> returns <code>accepted: false</code> for a narrative validation rejection rather than an RPC error. Check that field before assuming the event was appended.</p>
+<p><code>command.submit</code> validates every payload in a same-stream batch before one atomic stream replacement. Later payloads can depend on earlier payloads in that batch. If any fails, none is appended. It returns <code>accepted: false</code> for a pre-commit narrative validation rejection. A storage or projection error after an append can return an RPC error even when the event committed; inspect <code>events.read</code> before retrying. Never infer rejection from a post-commit error.</p>
 <h2 id="drafts">Drafts<a class="headerlink" href="#drafts" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -1479,6 +1595,11 @@
 <td><code>draft.get</code></td>
 <td><code>draft_id</code></td>
 <td>Draft JSON</td>
+</tr>
+<tr>
+<td><code>draft.list</code></td>
+<td><code>branch_id</code>; optional <code>lens</code> (<code>story</code> by default)</td>
+<td>Recoverable drafts for that branch/lens, newest first</td>
 </tr>
 <tr>
 <td><code>draft.patch</code></td>
@@ -1503,6 +1624,7 @@
 </tbody>
 </table>
 <p>A draft contains <code>id</code>, <code>branch_id</code>, <code>lens</code>, <code>nodes</code>, and <code>edges</code>. Node entries have <code>id</code>, <code>title</code>, and <code>fields</code>; edge entries have <code>source</code>, <code>target</code>, and <code>kind</code> (<code>causes</code> for story or <code>refs</code> for discourse). Preview and seal validate references, fields, and graph rules. Story draft seals in causal order; discourse draft seals in node ID order when no causal dependencies exist.</p>
+<p><code>draft.list</code> reads validated draft files on disk. The workbench uses it to recover a draft when its browser local-storage pointer is unavailable after a crash or reset.</p>
 <h2 id="run-and-export">Run and export<a class="headerlink" href="#run-and-export" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -1520,18 +1642,18 @@
 </tr>
 <tr>
 <td><code>run.start</code></td>
-<td>Optional <code>branch_id</code>, <code>conditions</code></td>
-<td>One run; or <code>{runs, status}</code> for exactly <code>C0,C1,C2,C3</code></td>
+<td>Optional <code>branch_id</code>, <code>conditions</code>, <code>variant_index</code>, <code>async: true</code></td>
+<td>Saved run(s), or <code>{job_id, status, total}</code> for a background run</td>
 </tr>
 <tr>
 <td><code>run.status</code></td>
-<td>Optional <code>branch_id</code></td>
-<td>Latest saved run or idle status</td>
+<td>Optional <code>branch_id</code> or <code>job_id</code></td>
+<td>Latest saved run, or background progress and completed runs</td>
 </tr>
 <tr>
 <td><code>run.cancel</code></td>
 <td>—</td>
-<td><code>{cancelled:false, reason:…}</code> because runs are synchronous</td>
+<td>Requests cancellation at the next condition boundary</td>
 </tr>
 <tr>
 <td><code>export.report</code></td>
@@ -1541,10 +1663,69 @@
 </tbody>
 </table>
 <p>For a single run, the condition must match the selected branch's condition. To run all four sample branches, pass <code>conditions: ["C0","C1","C2","C3"]</code> in that order. <code>export.report</code> requires a saved run for that branch.</p>
+<p><code>async: true</code> returns promptly. Poll <code>run.status</code> with the returned <code>job_id</code>; its <code>completed</code> and <code>total</code> fields show condition progress. Each status result is a snapshot, so its run list will not change after the response is returned. <code>run.cancel</code> stops before the next condition, without changing sealed story or discourse. Read-only graph/event queries and draft editing remain available while a run is active; canon, fixture, contract, study, and export mutations are refused until it finishes.</p>
+<h2 id="blinded-study">Blinded study<a class="headerlink" href="#blinded-study" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Parameters</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>study.plan.save</code> / <code>study.plan.get</code></td>
+<td><code>plan</code> for save</td>
+<td>Frozen plan, hash, creation time, and optional prior-plan hash</td>
+</tr>
+<tr>
+<td><code>study.generate</code></td>
+<td>—</td>
+<td>Three deterministic composition variants for each C0–C3 branch</td>
+</tr>
+<tr>
+<td><code>study.metrics</code></td>
+<td>Optional <code>branch_id</code></td>
+<td>Layer A blocking and Layer B descriptive measures</td>
+</tr>
+<tr>
+<td><code>study.ablations</code></td>
+<td>Optional <code>branch_id</code></td>
+<td>Seven analysis-only ablation descriptions and hashes</td>
+</tr>
+<tr>
+<td><code>study.ablations.realize</code></td>
+<td>Optional <code>branch_id</code></td>
+<td>Seven saved controlled passages, packet/text hashes, and findings; canon unchanged</td>
+</tr>
+<tr>
+<td><code>study.export</code></td>
+<td>Optional integer <code>seed</code></td>
+<td>Public folder, private key path, study ID, passage count</td>
+</tr>
+<tr>
+<td><code>study.responses.import</code></td>
+<td><code>study_id</code> and <code>path</code> or <code>responses</code> document</td>
+<td>Validated batch count; malformed batches make no changes</td>
+</tr>
+<tr>
+<td><code>study.report</code></td>
+<td><code>study_id</code></td>
+<td>Saved descriptive report, including null and contrary results</td>
+</tr>
+<tr>
+<td><code>study.decision_packet</code></td>
+<td><code>study_id</code></td>
+<td>Saved hashed evidence packet; human decision remains pending</td>
+</tr>
+</tbody>
+</table>
+<p>The public evaluation folder includes an accessible HTML protocol and passages. The condition key lives under <code>study/keys/</code> and should not be shared with evaluators. See <a href="../manual/evaluate-study.html">the evaluation procedure</a>.</p>
 <h2 id="errors">Errors<a class="headerlink" href="#errors" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">&quot;jsonrpc&quot;</span><span class="p">:</span><span class="s2">&quot;2.0&quot;</span><span class="p">,</span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span><span class="nt">&quot;error&quot;</span><span class="p">:{</span><span class="nt">&quot;code&quot;</span><span class="p">:</span><span class="mi">-32000</span><span class="p">,</span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="s2">&quot;…&quot;</span><span class="p">,</span><span class="nt">&quot;data&quot;</span><span class="p">:{</span><span class="nt">&quot;cmne_code&quot;</span><span class="p">:</span><span class="s2">&quot;E-STORY-001&quot;</span><span class="p">,</span><span class="nt">&quot;field_path&quot;</span><span class="p">:</span><span class="s2">&quot;title&quot;</span><span class="p">,</span><span class="nt">&quot;next_action&quot;</span><span class="p">:</span><span class="s2">&quot;…&quot;</span><span class="p">,</span><span class="nt">&quot;cause&quot;</span><span class="p">:</span><span class="s2">&quot;…&quot;</span><span class="p">}}}</span>
 </code></pre></div>
-<p><code>-32000</code> wraps a <code>CmneError</code>; <code>-32602</code> indicates invalid parameters; <code>-32700</code> indicates invalid JSON; <code>-32603</code> is an internal sidecar error. The <code>cmne_code</code> gives the domain-specific cause. Unknown methods yield <code>E-RPC-001</code>. See <a href="contracts.html">Data contracts and errors</a>.</p>
+<p><code>-32000</code> wraps a <code>CmneError</code>; <code>-32602</code> indicates invalid parameters (including a non-object <code>params</code> value); <code>-32700</code> indicates invalid JSON; <code>-32603</code> is an internal sidecar error. A non-object request receives <code>E-PROTO-001</code>. The <code>cmne_code</code> gives the domain-specific cause. Unknown methods yield <code>E-RPC-001</code>. See <a href="contracts.html">Data contracts and errors</a>.</p>
 
 
 

@@ -38,6 +38,10 @@ class FormulaTests(unittest.TestCase):
         huge = {"op": "and", "operands": [wide for _ in range(16)]}
         with self.assertRaises(CmneError):
             validate(huge)
+        exactly_256 = {"op": "and", "operands": [
+            {"op": "and", "operands": [atom(f"{group}-{index}") for index in range(16)]}
+            for group in range(15)]}
+        self.assertIsNone(evaluate(exactly_256, EvaluationContext()))
 
     def test_typed_predicate_from_projection(self):
         predicate = {"name": "inside", "arguments": ["mara", "kitchen"], "polarity": "positive"}

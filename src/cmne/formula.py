@@ -9,7 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from .core import CmneError, canonical, require
+from .core import canonical, require
 
 OPERATORS = {"atom", "not", "and", "or", "implies", "necessarily", "possibly",
              "believes", "suspends", "in_scenario"}

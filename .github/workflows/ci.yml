@@ -1,0 +1,87 @@
+name: CMNE checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  python-frontend-docs:
+    name: Python, frontend, docs (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - name: Install Python and docs
+        run: python -m pip install -e '.[docs,dev]'
+      - name: Python static typing
+        run: mypy src --ignore-missing-imports --no-incremental
+      - name: Python lint
+        run: ruff check src scripts tests --select F,B,UP,SIM
+      - name: Python tests
+        run: python -m unittest discover -s tests -v
+      - name: Python line coverage
+        run: python scripts/coverage_report.py
+      - name: Acceptance inventory
+        run: python scripts/check_acceptance.py
+      - name: Generated contracts are current
+        run: python scripts/export_schemas.py --check
+      - name: Error catalog is complete
+        run: python scripts/check_error_catalog.py
+      - name: Error catalog page is current
+        run: python scripts/export_error_catalog.py --check
+      - name: Frontend dependencies
+        run: npm ci
+        working-directory: app
+      - name: Frontend build
+        run: npm run build
+        working-directory: app
+      - name: Documentation build
+        run: mkdocs build --strict
+
+  rust-macos:
+    name: Rust shell (macOS)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Check Tauri shell
+        run: cargo clippy --locked --all-targets -- -D warnings
+        working-directory: app/src-tauri
+
+  packaged-macos:
+    name: Packaged app and sidecar smoke (macOS)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Create build environment
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install -e '.[bundle]'
+          cd app
+          npm ci
+      - name: Build app
+        run: ./build_app.sh --skip-install
+      - name: Smoke packaged sidecar
+        run: python scripts/smoke_sidecar.py 'app/src-tauri/target/release/bundle/macos/CMNE Workbench.app/Contents/MacOS/cmne-sidecar'

@@ -41,6 +41,17 @@ const CONDITION_LABELS: Record<string, string> = {
   C3: "Conceptual revision",
 };
 
+const DEFAULT_ANALYSIS_PLAN = JSON.stringify({
+  hypotheses: ["C3 yields more cited reinterpretation than C0"],
+  primary_measures: ["retrospective_citation", "distinct_details", "preparedness", "unresolved_meaningful"],
+  secondary_measures: ["motif_recurrence"],
+  target_sample_size: 8,
+  sample_size_rationale: "Pilot checks the reading protocol before recruitment.",
+  agreement_metric: "percent_agreement",
+  exclusion_rules: ["Incomplete passages"],
+  session_limit_minutes: 20,
+}, null, 2);
+
 function parseList(value: string): string[] {
   return value
     .split(",")
@@ -56,12 +67,14 @@ function Field({
   value,
   onChange,
   multiline = false,
+  rows = 4,
   hint,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   multiline?: boolean;
+  rows?: number;
   hint?: string;
 }) {
   return (
@@ -71,7 +84,7 @@ function Field({
         <textarea
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          rows={4}
+          rows={rows}
         />
       ) : (
         <input value={value} onChange={(e) => onChange(e.target.value)} />
@@ -82,10 +95,10 @@ function Field({
 }
 
 function Sparkline({
-  values,
+  series,
   threshold,
 }: {
-  values: number[];
+  series: Record<string, number[]>;
   threshold: number;
 }) {
   const width = 570,
@@ -94,19 +107,15 @@ function Sparkline({
     top = 13,
     plotW = width - 48,
     plotH = height - 30;
-  const points = values
-    .map(
-      (v, i) =>
-        `${left + (i / Math.max(1, values.length - 1)) * plotW},${top + plotH - (v / 10000) * plotH}`,
-    )
-    .join(" ");
+  const colors: Record<string, string> = { C0: "#3b5f82", C1: "#bc7037", C2: "#6e5a9b", C3: "#147a68" };
+  const maxLength = Math.max(0, ...Object.values(series).map((values) => values.length));
   const ty = top + plotH - (threshold / 10000) * plotH;
   return (
     <svg
       viewBox={`0 0 ${width} ${height}`}
       className="strain-chart"
       role="img"
-      aria-label={`Strain over ${values.length} story events; threshold ${threshold / 100}%`}
+      aria-label={`Strain for ${Object.keys(series).join(", ")} over up to ${maxLength} story events; threshold ${threshold / 100}%`}
     >
       {[0, 2500, 5000, 7500, 10000].map((v) => (
         <g key={v}>
@@ -129,15 +138,18 @@ function Sparkline({
         y2={ty}
         className="chart-threshold"
       />
-      <polyline points={points} className="chart-line" />
-      {values.map((v, i) => (
-        <circle
-          key={i}
-          cx={left + (i / Math.max(1, values.length - 1)) * plotW}
-          cy={top + plotH - (v / 10000) * plotH}
-          r="3.5"
-          className="chart-dot"
-        />
+      {Object.entries(series).map(([condition, values]) => (
+        <g key={condition}>
+          <polyline
+            points={values.map((v, i) => `${left + (i / Math.max(1, maxLength - 1)) * plotW},${top + plotH - (v / 10000) * plotH}`).join(" ")}
+            fill="none" stroke={colors[condition] ?? "#222"} strokeWidth="2.5"
+            strokeDasharray={condition === "C1" ? "6 3" : condition === "C2" ? "2 3" : undefined}
+          />
+          {values.map((v, i) => (
+            <circle key={i} cx={left + (i / Math.max(1, maxLength - 1)) * plotW}
+              cy={top + plotH - (v / 10000) * plotH} r="3" fill={colors[condition] ?? "#222"} />
+          ))}
+        </g>
       ))}
     </svg>
   );
@@ -153,7 +165,31 @@ export default function App() {
   const [pendingSource, setPendingSource] = useState<string | null>(null);
   const [outline, setOutline] = useState(false);
   const [run, setRun] = useState<RunResult | null>(null);
+  const [runJob, setRunJob] = useState<string | null>(null);
+  const [runProgress, setRunProgress] = useState("");
+  const [analysisPlanText, setAnalysisPlanText] = useState(DEFAULT_ANALYSIS_PLAN);
+  const [fixtureText, setFixtureText] = useState("");
+  const [contractText, setContractText] = useState("");
+  const contractError = useMemo(() => {
+    if (!contractText) return "Enter a narrative contract before saving.";
+    try {
+      const value = JSON.parse(contractText) as { prose_bounds?: { min_words?: number; max_words?: number } };
+      const bounds = value.prose_bounds;
+      if (bounds && typeof bounds.min_words === "number" && typeof bounds.max_words === "number"
+          && bounds.min_words > bounds.max_words) {
+        return "prose_bounds.min_words must be no greater than max_words.";
+      }
+      return null;
+    } catch {
+      return "Enter valid JSON before saving the narrative contract.";
+    }
+  }, [contractText]);
+  const [studySeed, setStudySeed] = useState("33");
+  const [studyId, setStudyId] = useState("");
+  const [responsePath, setResponsePath] = useState("");
+  const [studyReport, setStudyReport] = useState<Record<string, unknown> | null>(null);
   const [strain, setStrain] = useState<number[]>([]);
+  const [strainSeries, setStrainSeries] = useState<Record<string, number[]>>({});
   const [discourseCount, setDiscourseCount] = useState(0);
   const [storyTime, setStoryTime] = useState<number | null>(null);
   const [discourseTime, setDiscourseTime] = useState<number | null>(null);
@@ -213,6 +249,16 @@ export default function App() {
         { branch_id: useBranch },
       );
       setStrain(series.series.map((point) => point.strain_bp));
+      const conditionBranches = project.branches.filter((item) => item.condition);
+      if (conditionBranches.length === 4) {
+        const values = await Promise.all(conditionBranches.map(async (item) => {
+          const result = await rpc<{ series: { strain_bp: number }[] }>("strain.series", { branch_id: item.branch_id });
+          return [item.condition!, result.series.map((point) => point.strain_bp)] as const;
+        }));
+        setStrainSeries(Object.fromEntries(values));
+      } else {
+        setStrainSeries({ [useBranch]: series.series.map((point) => point.strain_bp) });
+      }
     },
     [project, lens, branch, draft?.id, storyTime, discourseTime],
   );
@@ -227,6 +273,8 @@ export default function App() {
       const summary = await rpc<ProjectSummary>(method, params);
       localStorage.setItem("cmne:last-project", summary.path);
       setProject(summary);
+      setFixtureText(JSON.stringify(summary.fixture, null, 2));
+      setContractText(JSON.stringify(summary.contract, null, 2));
       setBranch(summary.active_branch);
       setLens("story");
       setStoryTime(null);
@@ -246,6 +294,19 @@ export default function App() {
         } catch {
           localStorage.removeItem(
             `cmne:draft:${summary.path}:${summary.active_branch}:story`,
+          );
+        }
+      }
+      if (!recoveredDraft) {
+        const available = await rpc<Draft[]>("draft.list", {
+          branch_id: summary.active_branch,
+          lens: "story",
+        });
+        recoveredDraft = available[0] ?? null;
+        if (recoveredDraft) {
+          localStorage.setItem(
+            `cmne:draft:${summary.path}:${summary.active_branch}:story`,
+            recoveredDraft.id,
           );
         }
       }
@@ -384,6 +445,18 @@ export default function App() {
         );
       }
     }
+    if (!nextDraft && (nextLens === "story" || nextLens === "discourse")) {
+      const available = await rpc<Draft[]>("draft.list", {
+        branch_id: branch,
+        lens: nextLens,
+      });
+      nextDraft = available[0] ?? null;
+      if (nextDraft)
+        localStorage.setItem(
+          `cmne:draft:${project.path}:${branch}:${nextLens}`,
+          nextDraft.id,
+        );
+    }
     setDraft(nextDraft);
     resetHistory();
     await refresh(nextDraft?.id ?? null, nextLens, branch);
@@ -404,8 +477,22 @@ export default function App() {
       try {
         nextDraft = await rpc<Draft>("draft.get", { draft_id: draftId });
       } catch {
-        /* no recovery */
+        localStorage.removeItem(
+          `cmne:draft:${project.path}:${nextBranch}:${lens}`,
+        );
       }
+    }
+    if (!nextDraft && isEditable) {
+      const available = await rpc<Draft[]>("draft.list", {
+        branch_id: nextBranch,
+        lens,
+      });
+      nextDraft = available[0] ?? null;
+      if (nextDraft)
+        localStorage.setItem(
+          `cmne:draft:${project.path}:${nextBranch}:${lens}`,
+          nextDraft.id,
+        );
     }
     setDraft(nextDraft);
     resetHistory();
@@ -697,23 +784,21 @@ export default function App() {
     }
     setBusy(true);
     try {
-      const result = await rpc<RunResult>("run.start", {
+      const result = await rpc<{ job_id: string; status: string }>("run.start", {
         branch_id: branch,
+        async: true,
         conditions: [
           project?.branches.find((item) => item.branch_id === branch)
             ?.condition ?? "C3",
         ],
       });
-      setRun(result);
+      setRunJob(result.job_id);
+      setRunProgress("Starting run…");
       setLens("pipeline");
       setDraft(null);
       resetHistory();
       await refresh(null, "pipeline");
-      setNotice(
-        result.status === "passed"
-          ? "Run complete. Grounding check passed."
-          : "Run complete with findings.",
-      );
+      setNotice("Run started. You can keep inspecting committed state.");
     } catch (error) {
       setNotice(String(error));
     } finally {
@@ -728,24 +813,60 @@ export default function App() {
     }
     setBusy(true);
     try {
-      const result = await rpc<{ runs: RunResult[]; status: string }>(
+      const result = await rpc<{ job_id: string; status: string }>(
         "run.start",
-        { conditions: ["C0", "C1", "C2", "C3"] },
+        { conditions: ["C0", "C1", "C2", "C3"], async: true },
       );
-      setRun(result.runs.find((item) => item.branch_id === branch) ?? null);
+      setRunJob(result.job_id);
+      setRunProgress("Starting four condition runs…");
       setLens("pipeline");
       setDraft(null);
       resetHistory();
       await refresh(null, "pipeline");
-      setNotice(
-        result.status === "passed"
-          ? "All four condition runs passed. Select a branch to read its passage."
-          : "Condition runs completed with findings. Review the pipeline.",
-      );
+      setNotice("Condition runs started. Progress appears here as they finish.");
     } catch (error) {
       setNotice(String(error));
     } finally {
       setBusy(false);
+    }
+  }
+
+  useEffect(() => {
+    if (!runJob) return;
+    let alive = true;
+    const poll = async () => {
+      try {
+        const status = await rpc<{ status: string; completed: number; total: number; runs: RunResult[] }>(
+          "run.status", { job_id: runJob },
+        );
+        if (!alive) return;
+        setRunProgress(`${status.completed} of ${status.total} conditions complete`);
+        if (status.status !== "running") {
+          setRun(status.runs.find((item) => item.branch_id === branch) ?? status.runs.at(-1) ?? null);
+          setRunJob(null);
+          setNotice(status.status === "passed" ? "Run complete. Grounding check passed." :
+            status.status === "cancelled" ? "Run cancelled at a safe point." :
+              "Run completed with findings. Review the pipeline.");
+          void refresh(null, "pipeline");
+        }
+      } catch (error) {
+        if (alive) {
+          setRunJob(null);
+          setNotice(String(error));
+        }
+      }
+    };
+    void poll();
+    const timer = window.setInterval(() => void poll(), 350);
+    return () => { alive = false; window.clearInterval(timer); };
+  }, [runJob, branch, refresh]);
+
+  async function cancelRun() {
+    try {
+      await rpc("run.cancel", {});
+      setNotice("Cancellation requested; current condition will finish first.");
+    } catch (error) {
+      setNotice(String(error));
     }
   }
 
@@ -755,6 +876,105 @@ export default function App() {
         branch_id: branch,
       });
       setNotice(`Report saved to ${result.path}`);
+    } catch (error) {
+      setNotice(String(error));
+    }
+  }
+
+  async function saveAnalysisPlan() {
+    try {
+      const saved = await rpc<{ plan: { content_hash: string }; amends_plan_hash: string | null }>(
+        "study.plan.save", { plan: JSON.parse(analysisPlanText) },
+      );
+      setNotice(`Analysis plan saved: ${saved.plan.content_hash.slice(0, 12)}${saved.amends_plan_hash ? " (amendment)" : ""}`);
+    } catch (error) {
+      setNotice(String(error));
+    }
+  }
+
+  async function saveProjectDocument(kind: "fixture" | "contract") {
+    if (!project) return;
+    setBusy(true);
+    try {
+      await rpc(`${kind}.save`, { [kind]: JSON.parse(kind === "fixture" ? fixtureText : contractText) });
+      const summary = await rpc<ProjectSummary>("project.get");
+      setProject(summary);
+      setFixtureText(JSON.stringify(summary.fixture, null, 2));
+      setContractText(JSON.stringify(summary.contract, null, 2));
+      await refresh();
+      setNotice(`${kind === "fixture" ? "Fixture" : "Narrative contract"} saved and validated.`);
+    } catch (error) {
+      setNotice(String(error));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function generateStudy() {
+    setBusy(true);
+    try {
+      const result = await rpc<{ runs: RunResult[] }>("study.generate", {});
+      setNotice(`${result.runs.length} matched candidates saved across C0–C3.`);
+    } catch (error) {
+      setNotice(String(error));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function realizeAblations() {
+    setBusy(true);
+    try {
+      const results = await rpc<{ status: string; text_changed: boolean }[]>(
+        "study.ablations.realize", { branch_id: branch },
+      );
+      setNotice(`${results.length} ablation passages saved; ${results.filter((item) => item.status === "passed").length} passed checks and ${results.filter((item) => item.status === "rejected").length} retained with findings.`);
+    } catch (error) {
+      setNotice(String(error));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function exportStudy() {
+    try {
+      const result = await rpc<{ study_id: string; public_path: string; key_path: string; passage_count: number }>(
+        "study.export", { seed: Number(studySeed) },
+      );
+      setStudyId(result.study_id);
+      setNotice(`${result.passage_count} blinded passages: ${result.public_path}. Separate key: ${result.key_path}`);
+    } catch (error) {
+      setNotice(String(error));
+    }
+  }
+
+  async function importStudyResponses() {
+    try {
+      const result = await rpc<{ accepted: number }>("study.responses.import", {
+        study_id: studyId, path: responsePath,
+      });
+      setNotice(`${result.accepted} evaluator responses imported.`);
+    } catch (error) {
+      setNotice(String(error));
+    }
+  }
+
+  async function loadStudyReport() {
+    try {
+      const result = await rpc<Record<string, unknown>>("study.report", { study_id: studyId });
+      setStudyReport(result);
+      setNotice("Descriptive study report saved in the project.");
+    } catch (error) {
+      setNotice(String(error));
+    }
+  }
+
+  async function buildDecisionPacket() {
+    try {
+      const result = await rpc<{ content_hash: string; decision: string }>(
+        "study.decision_packet", { study_id: studyId },
+      );
+      setNotice(`Review packet saved (${result.content_hash.slice(0, 12)}). Decision: ${result.decision}.`);
     } catch (error) {
       setNotice(String(error));
     }
@@ -946,7 +1166,7 @@ export default function App() {
               <button
                 className="primary"
                 onClick={() => void startRun()}
-                disabled={!project || busy}
+                disabled={!project || busy || !!runJob}
               >
                 <Play size={16} fill="currentColor" /> Run scene
               </button>
@@ -955,14 +1175,33 @@ export default function App() {
                 <button
                   className="secondary"
                   onClick={() => void startAllRuns()}
-                  disabled={busy}
+                  disabled={busy || !!runJob}
                   title="Run C0, C1, C2, and C3 on their branches"
                 >
                   <Activity size={16} /> Run C0–C3
                 </button>
               )}
+              {runJob && (
+                <button className="secondary" onClick={() => void cancelRun()}>
+                  <X size={16} /> Cancel run
+                </button>
+              )}
             </div>
           </div>
+          {lens === "fixture" && project && (
+            <details className="passage-details" open>
+              <summary>Scene setup and narrative contract <span>validated JSON editors</span></summary>
+              <div className="study-workflow">
+                <p>Define the two actors, entities, and starting facts. The contract sets required facts, open questions, strain weights, and prose bounds. Saving validates references against sealed events.</p>
+                <Field label="Fixture JSON" value={fixtureText} onChange={setFixtureText} multiline rows={12} />
+                <button disabled={busy || project.read_only} onClick={() => void saveProjectDocument("fixture")}>Validate and save fixture</button>
+                <Field label="Narrative contract JSON" value={contractText} onChange={setContractText} multiline rows={12} />
+                {contractError && <p role="alert" className="field-error">{contractError}</p>}
+                <button disabled={busy || project.read_only || !!contractError} onClick={() => void saveProjectDocument("contract")}>Validate and save contract</button>
+              </div>
+            </details>
+          )}
+          {runJob && <p role="status" aria-live="polite">{runProgress}</p>}
           <div className="context-row">
             <span>
               <GitBranch size={14} />{" "}
@@ -1017,8 +1256,7 @@ export default function App() {
                   <div className="outline-heading">
                     <h2>{title?.label} outline</h2>
                     <p>
-                      Text alternative to the canvas. Select a row to inspect or
-                      connect nodes.
+                      Text alternative to the canvas. Use Enter or Space to inspect a node or complete a pending connection.
                     </p>
                   </div>
                   <table>
@@ -1043,8 +1281,13 @@ export default function App() {
                           }
                           tabIndex={0}
                           onKeyDown={(e) => {
-                            if (e.key === "Enter") setSelectedId(node.id);
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              if (pendingSource) void connect(pendingSource, node.id);
+                              else setSelectedId(node.id);
+                            }
                           }}
+                          aria-label={node.textAlt}
                         >
                           <td>{shortId(node.id)}</td>
                           <td>{node.kind.replace("_", " ")}</td>
@@ -1059,6 +1302,20 @@ export default function App() {
                               .map((e) => e.kind)
                               .join(", ") || "—"}
                           </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <h3>Links</h3>
+                  <table>
+                    <thead><tr><th>Source</th><th>Relation</th><th>Target</th><th>State</th></tr></thead>
+                    <tbody>
+                      {graph.edges.map((edge) => (
+                        <tr key={edge.id}>
+                          <td>{graph.nodes.find((node) => node.id === edge.source)?.title ?? shortId(edge.source)}</td>
+                          <td>{edge.kind}</td>
+                          <td>{graph.nodes.find((node) => node.id === edge.target)?.title ?? shortId(edge.target)}</td>
+                          <td>{edge.state}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -1133,7 +1390,8 @@ export default function App() {
             </div>
             <div className="dock-content">
               <div className="chart-panel">
-                <Sparkline values={strain} threshold={threshold} />
+                <Sparkline series={strainSeries} threshold={threshold} />
+                <p className="chart-legend">{Object.keys(strainSeries).join(" · ")} · threshold {threshold / 100}%</p>
                 <div className="chart-caption">
                   <span>
                     STORY SEQUENCE{" "}
@@ -1197,6 +1455,33 @@ export default function App() {
                 <span>{finding.message}</span>
               </div>
             ))}
+            {project?.branches.filter((item) => item.condition).length === 4 && (
+              <details className="passage-details">
+                <summary>Evaluation study <span>plan · blind set · responses</span></summary>
+                <div className="study-workflow">
+                  <p>Freeze the analysis plan before exporting. The public passages and private condition key are saved in separate project folders.</p>
+                  <Field label="Analysis plan (JSON)" value={analysisPlanText}
+                    onChange={setAnalysisPlanText} multiline />
+                  <button onClick={() => void saveAnalysisPlan()}>Save or amend plan</button>
+                  <button onClick={() => void generateStudy()} disabled={busy || !!runJob}>
+                    Generate 12 matched passages
+                  </button>
+                  <button onClick={() => void realizeAblations()} disabled={busy || !!runJob}>
+                    Realize seven ablations for this branch
+                  </button>
+                  <Field label="Randomization seed" value={studySeed} onChange={setStudySeed} />
+                  <button onClick={() => void exportStudy()}>Export blinded set</button>
+                  <Field label="Study ID" value={studyId} onChange={setStudyId} />
+                  <Field label="Response JSON path" value={responsePath} onChange={setResponsePath} />
+                  <button onClick={() => void importStudyResponses()} disabled={!studyId || !responsePath}>
+                    Import responses
+                  </button>
+                  <button onClick={() => void loadStudyReport()} disabled={!studyId}>Generate report</button>
+                  <button onClick={() => void buildDecisionPacket()} disabled={!studyId || busy}>Build generalization review packet</button>
+                  {studyReport && <pre className="study-report">{JSON.stringify(studyReport, null, 2)}</pre>}
+                </div>
+              </details>
+            )}
           </section>
         </main>
 

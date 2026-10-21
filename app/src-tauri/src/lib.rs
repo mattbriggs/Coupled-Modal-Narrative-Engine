@@ -113,14 +113,17 @@ const METHODS: &[&str] = &[
     "project.create",
     "project.sample",
     "project.open",
+    "project.clear_stale_lock",
     "project.close",
     "project.get",
     "fixture.validate",
     "fixture.get",
     "fixture.save",
+    "fixture.import",
     "contract.validate",
     "contract.get",
     "contract.save",
+    "contract.import",
     "branch.list",
     "branch.fork",
     "branch.compare",
@@ -130,6 +133,7 @@ const METHODS: &[&str] = &[
     "graph.validate_connection",
     "draft.create",
     "draft.get",
+    "draft.list",
     "draft.patch",
     "draft.compile_preview",
     "draft.seal",
@@ -140,11 +144,30 @@ const METHODS: &[&str] = &[
     "trace.query",
     "packet.build",
     "packet.get",
+    "study.plan.save",
+    "study.plan.get",
+    "study.generate",
+    "study.metrics",
+    "study.ablations",
+    "study.ablations.realize",
+    "study.export",
+    "study.responses.import",
+    "study.report",
+    "study.decision_packet",
     "run.start",
     "run.status",
     "run.cancel",
     "export.report",
 ];
+
+fn safe_to_retry(method: &str) -> bool {
+    matches!(
+        method,
+        "app.hello"
+            | "fixture.validate"
+            | "contract.validate"
+    )
+}
 
 #[tauri::command]
 fn rpc_call(state: tauri::State<AppState>, method: String, params: Value) -> Result<Value, String> {
@@ -157,9 +180,18 @@ fn rpc_call(state: tauri::State<AppState>, method: String, params: Value) -> Res
     }
     match guard.as_mut().unwrap().call(&method, params.clone()) {
         Ok(result) => Ok(result),
-        Err(error) if error.contains("exited unexpectedly") || error.contains("Broken pipe") => {
+        Err(error)
+            if safe_to_retry(&method)
+                && (error.contains("exited unexpectedly") || error.contains("Broken pipe")) =>
+        {
             *guard = Some(Sidecar::start()?);
             guard.as_mut().unwrap().call(&method, params)
+        }
+        Err(error) if error.contains("exited unexpectedly") || error.contains("Broken pipe") => {
+            *guard = None;
+            Err(format!(
+                "Sidecar stopped while {method} was running; its outcome is unknown. Reopen and inspect the project before retrying. {error}"
+            ))
         }
         Err(error) => Err(error),
     }
@@ -183,4 +215,20 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![rpc_call, default_sample_path])
         .run(tauri::generate_context!())
         .expect("error while running CMNE Workbench");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::safe_to_retry;
+
+    #[test]
+    fn recovery_retries_only_stateless_reads() {
+        for method in ["app.hello", "fixture.validate", "contract.validate"] {
+            assert!(safe_to_retry(method), "{method}");
+        }
+        for method in ["project.get", "events.read", "project.create", "command.submit",
+                       "draft.seal", "study.responses.import"] {
+            assert!(!safe_to_retry(method), "{method}");
+        }
+    }
 }

@@ -2,6 +2,8 @@
 
 All documents are JSON-compatible. IDs are strings. Basis-point values are integers in `0..10000`. Validators return a copy with defaults and, for fixture/contract, a `content_hash`.
 
+The runtime shape definitions are in `src/cmne/contracts.py`. `scripts/export_schemas.py` generates `schema/cmne.schema.json` and `app/src/generated/contracts.ts`; CI checks that both match the Python definitions. Semantic checks such as access and disclosure grounding remain in the kernel validators. JSON imports reject duplicate keys and nonfinite values.
+
 ## Fixture and contract
 
 ```json
@@ -22,11 +24,14 @@ A fixture requires exactly two actors, each with unique `id` and `name`. Entitie
   "facts_that_must_be_clear": [],
   "questions_that_must_remain_open": [],
   "prose_bounds": {"min_words":0,"max_words":1100},
-  "strain_threshold_bp":6500
+  "strain_threshold_bp":6500,
+  "strain_weights_bp":{"contradiction":2500,"unexplained":2000,"failed_prediction":2000,"repair_complexity":2000,"identity_goal":1500},
+  "high_commitment_bp":7000,
+  "repair_budget_bp":5000
 }
 ```
 
-Required and forbidden conditions may not overlap; a claim may not be both clear and open. Bounds must be ordered nonnegative integers. The current run checks required story facts, forbidden literal prose strings, and word bounds. Other fields are stored for future checks.
+Required and forbidden conditions may not overlap; a claim may not be both clear and open. Bounds must be ordered nonnegative integers. Strain weights must total 10,000 basis points. The run checks required story facts, selected grounding/voice rules, forbidden strings, and word bounds. Arbitrary open questions still require a reviewer or a project-specific rule.
 
 ## Story event payload
 
@@ -41,12 +46,12 @@ Required and forbidden conditions may not overlap; a claim may not be both clear
   "observed_by":["mara"],
   "access_path":"perception",
   "world_facts":["note_under_bowl"],
-  "strain_bp":4800,
+  "strain_components_bp":{"contradiction":2000,"unexplained":7000,"failed_prediction":4000,"repair_complexity":3000,"identity_goal":4000},
   "preconditions":[]
 }
 ```
 
-`title` is required. `kind` defaults to `action` and may be `action`, `observation`, `utterance`, `recollection`, `decision`, `revision`, or `crisis`. Causal parents must be earlier sealed event IDs. Observation requires `observed_by` and an access path of `perception`, `testimony`, or `memory`. `strain_bp` defaults to 0. Optional `interpretations` have `observer_id`, positive `model_version`, `claim`, and earlier `target_story_sequences`. Optional `belief_revision` has observer, claim, `accepted`/`rejected`/`suspended` status, `confidence_bp`, and an accessible earlier `evidence_story_sequence`. `modal_revision` has observer and `add_scenarios`; `conceptual_revision` has observer, `concepts`, and `migration_map`.
+`title` is required. `kind` defaults to `action` and may be `action`, `observation`, `utterance`, `recollection`, `decision`, `revision`, or `crisis`. Causal parents must be earlier sealed event IDs. Observation requires `observed_by` and an access path of `perception`, `testimony`, or `memory`. New assessments use five `strain_components_bp` values; replay retains historical `strain_bp` for older sealed events. A crisis also needs `crisis` with observer, accessible evidence sequence, commitment, and repair cost. Optional `interpretations` have observer, model version, claim, and earlier targets; revisions preserve earlier records. `belief_revision` has status, confidence, and accessible evidence. `modal_revision` can add/remove constraints or scenarios; `conceptual_revision` records new concepts and a migration map. Generated proposals use `source_kind: generated`, `proposal_id`, and `validator_id: cmne-command-validator-v2`.
 
 ## Discourse act payload
 
@@ -63,7 +68,7 @@ Required and forbidden conditions may not overlap; a claim may not be both clear
 }
 ```
 
-`title` is required. `mode` defaults to `scene` and also accepts `summary`, `ellipsis`, `pause`, `memory`, and `repetition`. References must exist on the branch. Every revealed claim must occur in a referenced event's `world_facts`, unless `hypothetical` or `unreliable` is truthy. A claim already revealed cannot later be withheld. `text` becomes prose in the offline realizer.
+`title` is required. `mode` defaults to `scene` and also accepts `summary`, `ellipsis`, `pause`, `memory`, and `repetition`. Optional `narrative_time`, `duration_weight_bp`, `salience_bp`, and `variant` record telling choices. References must exist on the branch. Every revealed claim must occur in a referenced event's `world_facts`, unless `hypothetical` or `unreliable` is truthy. A claim already revealed cannot later be withheld. `text` becomes prose in the offline realizer.
 
 ## Formula AST
 
@@ -81,11 +86,13 @@ Operators: `atom`, `not`, `and`, `or`, `implies`, `necessarily`, `possibly`, `be
 ## Sealed event envelope
 
 ```json
-{"stream":"story","branch_id":"main","sequence":1,"schema_version":1,
- "payload":{"title":"…"},"event_id":"evt_…","integrity_hash":"…"}
+{"stream":"story","branch_id":"main","sequence":1,"schema_version":2,
+ "payload":{"title":"…","source_kind":"authored"},"event_id":"evt_…","integrity_hash":"…"}
 ```
 
 The event ID and integrity hash derive from the canonical envelope body. `event_id` is a stable prefix of the hash; `integrity_hash` is the full SHA-256 hex digest. Opening/reading a stream verifies both.
+
+Version-1 story/discourse events are up-cast in memory with `source_kind: authored`; their stored lines and IDs remain unchanged. Newly sealed events use version 2. Project metadata remains format version 1.
 
 ## Common domain errors
 
@@ -102,3 +109,5 @@ The event ID and integrity hash derive from the canonical envelope body. `event_
 | `E-RUN-001`, `E-EXPORT-001` | Match branch/condition or run before export |
 
 The sidecar's `error.data` includes `cmne_code`, `field_path`, `next_action`, and `cause` for domain errors. `command.submit` can instead report a rejected command inside a successful RPC result.
+
+The [generated error catalog](error-catalog.md) lists every current domain code, cause, and next action.

@@ -737,6 +737,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../manual/evaluate-study.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prepare a blinded evaluation — S-07 to S-09
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../manual/constructs.html" class="md-nav__link">
         
   
@@ -1013,6 +1041,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design/code-review.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software code review
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1219,6 +1275,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../api/error-catalog.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api/tauri.html" class="md-nav__link">
         
   
@@ -1366,12 +1450,12 @@
 <p>From the repository root:</p>
 <div class="highlight"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
 <span class="nb">source</span><span class="w"> </span>.venv/bin/activate
-python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;.[bundle]&#39;</span>
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;.[bundle,docs,dev]&#39;</span>
 <span class="nb">cd</span><span class="w"> </span>app
 npm<span class="w"> </span>ci
 <span class="nb">cd</span><span class="w"> </span>..
 </code></pre></div>
-<p><code>.[bundle]</code> installs CMNE and PyInstaller into <code>.venv</code>. <code>npm ci</code> reads the committed <code>app/package-lock.json</code>. React and Tauri are built by the next command.</p>
+<p>The extras install CMNE, PyInstaller, MkDocs, Ruff, and Mypy into <code>.venv</code>. <code>npm ci</code> reads the committed <code>app/package-lock.json</code>. React and Tauri are built by the next command.</p>
 <h2 id="procedure-build-and-launch-the-packaged-app">Procedure: build and launch the packaged app<a class="headerlink" href="#procedure-build-and-launch-the-packaged-app" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>./build_app.sh<span class="w"> </span>--skip-install
 ./launch_app.sh
@@ -1390,8 +1474,10 @@ npm<span class="w"> </span>run<span class="w"> </span>tauri<span class="w"> </sp
 <h2 id="procedure-verify-the-installation">Procedure: verify the installation<a class="headerlink" href="#procedure-verify-the-installation" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
 python<span class="w"> </span>-m<span class="w"> </span>unittest<span class="w"> </span>discover<span class="w"> </span>-s<span class="w"> </span>tests<span class="w"> </span>-v
+mypy<span class="w"> </span>src<span class="w"> </span>--ignore-missing-imports<span class="w"> </span>--no-incremental
+ruff<span class="w"> </span>check<span class="w"> </span>src<span class="w"> </span>scripts<span class="w"> </span>tests<span class="w"> </span>--select<span class="w"> </span>F,B,UP,SIM
 <span class="o">(</span><span class="nb">cd</span><span class="w"> </span>app<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>npm<span class="w"> </span>run<span class="w"> </span>build<span class="o">)</span>
-<span class="o">(</span><span class="nb">cd</span><span class="w"> </span>app/src-tauri<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>cargo<span class="w"> </span>check<span class="o">)</span>
+<span class="o">(</span><span class="nb">cd</span><span class="w"> </span>app/src-tauri<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>cargo<span class="w"> </span>clippy<span class="w"> </span>--locked<span class="w"> </span>--all-targets<span class="w"> </span>--<span class="w"> </span>-D<span class="w"> </span>warnings<span class="o">)</span>
 </code></pre></div>
 <p>The tests cover selected kernel and sidecar behavior; they are not the complete target SRS acceptance suite. See <a href="../design/roadmap.html">current limits</a>.</p>
 <h2 id="result">Result<a class="headerlink" href="#result" title="Permanent link">&para;</a></h2>

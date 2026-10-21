@@ -11,7 +11,7 @@
       
       
       
-        <link rel="prev" href="contracts.html">
+        <link rel="prev" href="error-catalog.html">
       
       
       
@@ -620,6 +620,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../manual/evaluate-study.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prepare a blinded evaluation — S-07 to S-09
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../manual/constructs.html" class="md-nav__link">
         
   
@@ -896,6 +924,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design/code-review.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software code review
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1101,6 +1157,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="error-catalog.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1212,8 +1296,8 @@
 <span class="kd">const</span><span class="w"> </span><span class="nx">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">invoke</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="p">(</span><span class="s2">&quot;default_sample_path&quot;</span><span class="p">);</span>
 </code></pre></div>
 <p><code>app/src/api.ts</code> wraps <code>invoke</code> in <code>rpc&lt;T&gt;(method, params)</code> and turns serialized sidecar errors into messages containing the CMNE code and field path. It also defines <code>Lens</code>, <code>ViewNode</code>, <code>ViewEdge</code>, <code>ViewGraph</code>, <code>Draft</code>, <code>ProjectSummary</code>, and <code>RunResult</code> TypeScript types.</p>
-<p>The Rust bridge permits only methods in its <code>METHODS</code> allow-list, currently the <a href="json-rpc.html">JSON-RPC reference</a> method set. It owns one child sidecar behind a mutex, increments request IDs, checks matching response IDs, and performs the protocol handshake on start. Development uses <code>python3 -m cmne_sidecar.server</code> with <code>PYTHONPATH</code> set to the repository <code>src</code>; the packaged app uses its bundled <code>cmne-sidecar</code> executable. <code>CMNE_SIDECAR_BIN</code> can override the child path. After an unexpected exit or broken pipe, the bridge starts a new child and retries the call once; clients may need to reopen the project because sidecar state is process-local.</p>
-<p>The shell does not interpret narrative payloads. Validation and storage stay in the Python kernel. A single synchronous run blocks the sidecar request until it returns; <code>run.cancel</code> is currently a no-op response.</p>
+<p>The Rust bridge permits only methods in its <code>METHODS</code> allow-list, currently the <a href="json-rpc.html">JSON-RPC reference</a> method set. It owns one child sidecar behind a mutex, increments request IDs, checks matching response IDs, and performs the protocol handshake on start. Development uses <code>python3 -m cmne_sidecar.server</code> with <code>PYTHONPATH</code> set to the repository <code>src</code>; the packaged app uses its bundled <code>cmne-sidecar</code> executable. <code>CMNE_SIDECAR_BIN</code> can override the child path. After an unexpected exit or broken pipe, the bridge retries only stateless <code>app.hello</code>, <code>fixture.validate</code>, and <code>contract.validate</code> calls. It returns an uncertain-outcome error for project calls and creates a fresh sidecar on the next request. Reopen and inspect the project before repeating an interrupted mutation; the bridge cannot infer whether that mutation committed before the child stopped.</p>
+<p>The shell does not interpret narrative payloads. Validation and storage stay in the Python kernel. The workbench calls <code>run.start</code> with <code>async: true</code>, polls <code>run.status</code>, and can request <code>run.cancel</code>; the sidecar stops before the next condition. The Rust bridge still serializes individual RPC requests, but each background-run request returns promptly so committed-state reads remain available.</p>
 
 
 

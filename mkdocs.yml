@@ -63,6 +63,7 @@ nav:
       - Revise and compare — S-03, S-05, S-06: manual/revise-compare.md
       - Generate and export — S-04: manual/generate-export.md
       - Read the result: manual/read-output.md
+      - Prepare a blinded evaluation — S-07 to S-09: manual/evaluate-study.md
       - Constructs and rules: manual/constructs.md
       - Recovery and troubleshooting — S-10, S-13: manual/troubleshooting.md
   - Design:
@@ -72,10 +73,12 @@ nav:
       - Pipeline and checks: design/pipeline.md
       - Storage and integrity: design/storage.md
       - Current limits and roadmap: design/roadmap.md
+      - Software code review: design/code-review.md
   - API:
       - API overview: api/index.md
       - Python kernel: api/python.md
       - Command line: api/cli.md
       - JSON-RPC sidecar: api/json-rpc.md
       - Data contracts and errors: api/contracts.md
+      - Error catalog: api/error-catalog.md
       - Tauri bridge: api/tauri.md

@@ -1,0 +1,107 @@
+[
+  {
+    "id": "direct_observation",
+    "story": [{"title": "Mara sees the open door", "kind": "observation", "observed_by": ["actor_a"], "access_path": "perception", "world_facts": ["door open"]}],
+    "discourse": [],
+    "expect": [
+      {"path": "projections.actor_a.observations", "length": 1},
+      {"path": "projections.actor_b.observations", "length": 0},
+      {"path": "projections.environment.facts", "contains": "door open"}
+    ]
+  },
+  {
+    "id": "deceptive_testimony",
+    "fixture_initial_facts": ["Len plans to leave"],
+    "story": [{"title": "Len promises to stay", "kind": "utterance", "actor_ids": ["actor_b"], "observed_by": ["actor_a"], "world_facts": ["Len promises to stay"], "interpretations": [{"observer_id": "actor_a", "model_version": 1, "claim": "Len intends to stay"}]}],
+    "discourse": [],
+    "expect": [
+      {"path": "projections.actor_a.beliefs.Len intends to stay.status", "equals": "accepted"},
+      {"path": "projections.environment.facts", "contains": "Len plans to leave"},
+      {"path": "projections.environment.facts", "excludes": "Len intends to stay"}
+    ]
+  },
+  {
+    "id": "mistaken_memory",
+    "fixture_initial_facts": ["chair was broken"],
+    "story": [
+      {"title": "The chair breaks", "kind": "observation", "observed_by": ["actor_a"], "access_path": "perception", "world_facts": ["chair broken"]},
+      {"title": "Mara misremembers the chair", "kind": "recollection", "observed_by": ["actor_a"], "interpretations": [{"observer_id": "actor_a", "model_version": 1, "claim": "The chair never broke", "target_story_sequences": [1]}]}
+    ],
+    "discourse": [],
+    "expect": [
+      {"path": "projections.actor_a.beliefs.The chair never broke.status", "equals": "accepted"},
+      {"path": "projections.environment.facts", "contains": "chair broken"},
+      {"path": "projections.environment.facts", "excludes": "The chair never broke"},
+      {"path": "projections.environment.events", "length": 2}
+    ]
+  },
+  {
+    "id": "belief_correction",
+    "story": [
+      {"title": "Mara finds the note", "kind": "observation", "observed_by": ["actor_a"], "access_path": "perception", "world_facts": ["note found"]},
+      {"title": "Mara rejects her belief", "kind": "revision", "belief_revision": {"observer_id": "actor_a", "claim": "Len will stay", "status": "rejected", "confidence_bp": 8000, "evidence_story_sequence": 1}}
+    ],
+    "discourse": [],
+    "expect": [
+      {"path": "projections.actor_a.beliefs.Len will stay.status", "equals": "rejected"},
+      {"path": "projections.actor_a.conceptual_model.version", "equals": 1},
+      {"path": "projections.environment.facts", "contains": "note found"}
+    ]
+  },
+  {
+    "id": "modal_expansion",
+    "story": [
+      {"title": "Mara finds a second date", "kind": "observation", "observed_by": ["actor_a"], "access_path": "perception", "world_facts": ["second date found"]},
+      {"title": "Mara admits another future", "kind": "revision", "modal_revision": {"observer_id": "actor_a", "evidence_story_sequence": 1, "add_scenarios": [{"id": "he_might_stay", "possible": true}]}}
+    ],
+    "discourse": [],
+    "expect": [
+      {"path": "projections.actor_a.modal_model.version", "equals": 2},
+      {"path": "projections.actor_a.modal_model.scenarios", "length": 1},
+      {"path": "projections.actor_a.conceptual_model.version", "equals": 1}
+    ]
+  },
+  {
+    "id": "conceptual_split",
+    "story": [{"title": "Mara splits care", "kind": "revision", "conceptual_revision": {"observer_id": "actor_a", "concepts": ["care", "avoidance"], "migration_map": {"care": ["care", "avoidance"]}}}],
+    "discourse": [],
+    "expect": [
+      {"path": "projections.actor_a.conceptual_model.version", "equals": 2},
+      {"path": "projections.actor_a.conceptual_model.migration_map.care", "equals": ["care", "avoidance"]},
+      {"path": "projections.actor_b.conceptual_model.version", "equals": 1}
+    ]
+  },
+  {
+    "id": "unresolved_crisis",
+    "story": [
+      {"title": "Mara reads the note", "kind": "observation", "observed_by": ["actor_a"], "access_path": "perception", "world_facts": ["note read"]},
+      {"title": "Mara cannot settle care", "kind": "crisis", "strain_components_bp": {"contradiction": 8000, "unexplained": 8000, "failed_prediction": 8000, "repair_complexity": 8000, "identity_goal": 8000}, "crisis": {"observer_id": "actor_a", "evidence_story_sequence": 1, "commitment_bp": 8000, "repair_cost_bp": 8000, "registered_inadequacy": true, "consequence": "uncertainty"}, "conceptual_revision": {"observer_id": "actor_a", "concepts": ["care", "departure"], "migration_map": {"care": ["care", "departure"]}, "unresolved_terms": ["care"]}}
+    ],
+    "discourse": [],
+    "expect": [
+      {"path": "projections.actor_a.crises", "length": 1},
+      {"path": "projections.actor_a.crises.0.assessment.eligible", "equals": true},
+      {"path": "projections.actor_a.conceptual_model.unresolved_terms", "contains": "care"}
+    ]
+  },
+  {
+    "id": "reader_only_disclosure",
+    "story": [{"title": "Len leaves", "world_facts": ["Len leaves"]}],
+    "discourse": [{"title": "Reader learns Len left", "story_ref_indices": [0], "reveal": ["Len leaves"]}],
+    "expect": [
+      {"path": "projections.reader.revealed", "contains": "Len leaves"},
+      {"path": "projections.actor_a.observations", "length": 0},
+      {"path": "projections.actor_a.conceptual_model.version", "equals": 1}
+    ]
+  },
+  {
+    "id": "character_only_revision",
+    "story": [{"title": "Mara changes her concept", "kind": "revision", "conceptual_revision": {"observer_id": "actor_a", "concepts": ["care", "absence"], "migration_map": {"care": ["care", "absence"]}}}],
+    "discourse": [],
+    "expect": [
+      {"path": "projections.actor_a.conceptual_model.version", "equals": 2},
+      {"path": "projections.reader.revealed", "length": 0},
+      {"path": "projections.reader.cued", "length": 0}
+    ]
+  }
+]

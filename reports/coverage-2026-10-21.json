@@ -1,0 +1,93 @@
+{
+  "method": "stdlib trace executable-line coverage",
+  "tests_passed": true,
+  "covered": 2785,
+  "executable": 3116,
+  "line_coverage_pct": 89.4,
+  "files": [
+    {
+      "file": "src/cmne/__init__.py",
+      "covered": 1,
+      "executable": 2,
+      "line_coverage_pct": 50.0
+    },
+    {
+      "file": "src/cmne/cli.py",
+      "covered": 100,
+      "executable": 143,
+      "line_coverage_pct": 69.9
+    },
+    {
+      "file": "src/cmne/contracts.py",
+      "covered": 207,
+      "executable": 217,
+      "line_coverage_pct": 95.4
+    },
+    {
+      "file": "src/cmne/core.py",
+      "covered": 447,
+      "executable": 458,
+      "line_coverage_pct": 97.6
+    },
+    {
+      "file": "src/cmne/errors.py",
+      "covered": 107,
+      "executable": 109,
+      "line_coverage_pct": 98.2
+    },
+    {
+      "file": "src/cmne/formula.py",
+      "covered": 96,
+      "executable": 103,
+      "line_coverage_pct": 93.2
+    },
+    {
+      "file": "src/cmne/machines.py",
+      "covered": 108,
+      "executable": 111,
+      "line_coverage_pct": 97.3
+    },
+    {
+      "file": "src/cmne/project.py",
+      "covered": 909,
+      "executable": 1014,
+      "line_coverage_pct": 89.6
+    },
+    {
+      "file": "src/cmne/prose.py",
+      "covered": 101,
+      "executable": 108,
+      "line_coverage_pct": 93.5
+    },
+    {
+      "file": "src/cmne/quantities.py",
+      "covered": 8,
+      "executable": 9,
+      "line_coverage_pct": 88.9
+    },
+    {
+      "file": "src/cmne/sample.py",
+      "covered": 185,
+      "executable": 189,
+      "line_coverage_pct": 97.9
+    },
+    {
+      "file": "src/cmne/study.py",
+      "covered": 294,
+      "executable": 304,
+      "line_coverage_pct": 96.7
+    },
+    {
+      "file": "src/cmne/upcast.py",
+      "covered": 32,
+      "executable": 35,
+      "line_coverage_pct": 91.4
+    },
+    {
+      "file": "src/cmne_sidecar/server.py",
+      "covered": 190,
+      "executable": 314,
+      "line_coverage_pct": 60.5
+    }
+  ]
+}

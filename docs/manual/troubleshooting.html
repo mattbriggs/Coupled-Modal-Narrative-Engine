@@ -624,6 +624,34 @@
   
   
     <li class="md-nav__item">
+      <a href="evaluate-study.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prepare a blinded evaluation — S-07 to S-09
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="constructs.html" class="md-nav__link">
         
   
@@ -738,6 +766,17 @@
     <span class="md-ellipsis">
       
         Principle — preserve project integrity
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#procedure-sidecar-stopped-during-a-project-operation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Procedure — sidecar stopped during a project operation
       
     </span>
   </a>
@@ -991,6 +1030,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design/code-review.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software code review
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1197,6 +1264,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../api/error-catalog.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api/tauri.html" class="md-nav__link">
         
   
@@ -1285,6 +1380,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#procedure-sidecar-stopped-during-a-project-operation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Procedure — sidecar stopped during a project operation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#fact-current-recovery-scope" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1329,12 +1435,20 @@
 <li>Keep the draft open and run its preview validation.</li>
 <li>Follow the error's <code>field_path</code>: check title, actor IDs, story references, causal edges, observation access, and disclosure grounding.</li>
 <li>Correct the draft and preview again. A rejected seal returns errors and does not emit events.</li>
-<li>Seal after preview accepts it. Draft JSON persists in <code>&lt;project&gt;/drafts/</code> until sealed or deleted; after an interrupted session, reopen the project and inspect the recovered draft.</li>
+<li>Seal after preview accepts it. Draft JSON persists in <code>&lt;project&gt;/drafts/</code> until sealed or deleted; after an interrupted session, reopen the project and inspect the recovered draft. The workbench can find the newest draft for the branch and lens on disk even if its local-storage pointer was lost.</li>
 </ol>
 <h2 id="principle-preserve-project-integrity">Principle — preserve project integrity<a class="headerlink" href="#principle-preserve-project-integrity" title="Permanent link">&para;</a></h2>
 <p>Do not hand edit sealed NDJSON streams. The engine verifies event IDs, hashes, sequence, and schema when reading them. A second writer receives <code>E-LOCK-001</code>; close the first app/process before reopening the project. Back up the whole project directory when sharing or archiving a branch.</p>
+<p>If the app reports a <strong>stale lock</strong>, confirm the former writer has stopped, then clear it through <code>project.clear_stale_lock</code> or <code>Project.clear_stale_lock(path)</code> before reopening. A read-only open can inspect committed history while another process owns the writer lock. Never clear a lock for a running process or another host.</p>
+<h2 id="procedure-sidecar-stopped-during-a-project-operation">Procedure — sidecar stopped during a project operation<a class="headerlink" href="#procedure-sidecar-stopped-during-a-project-operation" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Read the error. An <strong>outcome unknown</strong> message means the child stopped before the shell could confirm whether the operation committed.</li>
+<li>Reopen the project. If its old writer left a stale lock, confirm the child stopped and clear that lock explicitly.</li>
+<li>Read the relevant event stream, draft, contract, or run record before repeating the action. A failed project switch keeps the previous open project; a failed contract edit leaves its old bytes intact.</li>
+<li>Repeat only work that is absent from the saved project. The shell automatically retries only stateless validation calls.</li>
+</ol>
 <h2 id="fact-current-recovery-scope">Fact — current recovery scope<a class="headerlink" href="#fact-current-recovery-scope" title="Permanent link">&para;</a></h2>
-<p>The shell can restart a failed sidecar once; saved drafts and sealed streams survive a normal process interruption. There is no model service or cost budget in the current release, so the model outage flow from scenario S-10 is a future feature. <code>run.cancel</code> reports that no asynchronous run is active; a run is synchronous. The <a href="../design/roadmap.html">roadmap</a> identifies further recovery work.</p>
+<p>Saved drafts and sealed streams survive a normal process interruption. There is no model service or cost budget in the current release, so the model outage flow from scenario S-10 is future work. Background runs can be cancelled before the next condition; a currently executing condition finishes first and sealed events remain intact. The <a href="../design/roadmap.html">roadmap</a> identifies further recovery work.</p>
 
 
 

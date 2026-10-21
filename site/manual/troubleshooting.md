@@ -13,12 +13,21 @@
 1. Keep the draft open and run its preview validation.
 2. Follow the error's `field_path`: check title, actor IDs, story references, causal edges, observation access, and disclosure grounding.
 3. Correct the draft and preview again. A rejected seal returns errors and does not emit events.
-4. Seal after preview accepts it. Draft JSON persists in `<project>/drafts/` until sealed or deleted; after an interrupted session, reopen the project and inspect the recovered draft.
+4. Seal after preview accepts it. Draft JSON persists in `<project>/drafts/` until sealed or deleted; after an interrupted session, reopen the project and inspect the recovered draft. The workbench can find the newest draft for the branch and lens on disk even if its local-storage pointer was lost.
 
 ## Principle — preserve project integrity
 
 Do not hand edit sealed NDJSON streams. The engine verifies event IDs, hashes, sequence, and schema when reading them. A second writer receives `E-LOCK-001`; close the first app/process before reopening the project. Back up the whole project directory when sharing or archiving a branch.
 
+If the app reports a **stale lock**, confirm the former writer has stopped, then clear it through `project.clear_stale_lock` or `Project.clear_stale_lock(path)` before reopening. A read-only open can inspect committed history while another process owns the writer lock. Never clear a lock for a running process or another host.
+
+## Procedure — sidecar stopped during a project operation
+
+1. Read the error. An **outcome unknown** message means the child stopped before the shell could confirm whether the operation committed.
+2. Reopen the project. If its old writer left a stale lock, confirm the child stopped and clear that lock explicitly.
+3. Read the relevant event stream, draft, contract, or run record before repeating the action. A failed project switch keeps the previous open project; a failed contract edit leaves its old bytes intact.
+4. Repeat only work that is absent from the saved project. The shell automatically retries only stateless validation calls.
+
 ## Fact — current recovery scope
 
-The shell can restart a failed sidecar once; saved drafts and sealed streams survive a normal process interruption. There is no model service or cost budget in the current release, so the model outage flow from scenario S-10 is a future feature. `run.cancel` reports that no asynchronous run is active; a run is synchronous. The [roadmap](../design/roadmap.md) identifies further recovery work.
+Saved drafts and sealed streams survive a normal process interruption. There is no model service or cost budget in the current release, so the model outage flow from scenario S-10 is future work. Background runs can be cancelled before the next condition; a currently executing condition finishes first and sealed events remain intact. The [roadmap](../design/roadmap.md) identifies further recovery work.

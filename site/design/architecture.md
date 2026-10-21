@@ -18,7 +18,7 @@ sequenceDiagram
   Shell-->>UI: result or error string
 ```
 
-The React UI owns editing interaction and graph presentation. The Rust command `rpc_call` restricts method names and serializes access to one child process. It starts the Python sidecar from the development virtual environment or bundled executable, performs `app.hello`, and restarts once after a broken pipe. The sidecar speaks line-delimited JSON-RPC 2.0 on standard input/output; logs go to standard error. The Python kernel owns narrative validation, storage, replay, packet construction, realization, and checking.
+The React UI owns editing interaction and graph presentation. The Rust command `rpc_call` restricts method names and serializes access to one child process. It starts the Python sidecar from the development virtual environment or bundled executable and performs `app.hello`. After a child failure, only stateless validation requests are retried automatically; a project request returns an uncertain-outcome error so no write is sent twice. The sidecar speaks line-delimited JSON-RPC 2.0 on standard input/output; logs go to standard error. The Python kernel owns narrative validation, storage, replay, packet construction, realization, and checking.
 
 The UI offers seven lenses. **Story** and **Discourse** allow drafts; **Fixture**, **Mind**, **Provenance**, **Motif**, and **Pipeline** visualize current or derived data. The graph envelope includes nodes and edges with IDs, titles, fields, state, and text alternatives. An outline, inspector, scrubber, strain chart, trace pane, and branch comparison provide other routes through the same data.
 

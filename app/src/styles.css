@@ -728,6 +728,11 @@ select:focus-visible,
   overflow: auto;
   background: #fbfcfc;
 }
+.field-error {
+  color: #8b2020;
+  font-weight: 650;
+  margin: 0.25rem 0;
+}
 .outline-heading {
   padding: 22px 26px 12px;
 }
@@ -961,6 +966,33 @@ select:focus-visible,
   color: #3b4347;
   font-size: 13px;
   line-height: 1.55;
+}
+.study-workflow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 12px 0;
+}
+.study-workflow > p,
+.study-workflow > .field:first-of-type {
+  flex-basis: 100%;
+}
+.study-workflow .field {
+  min-width: 160px;
+}
+.study-workflow .field textarea {
+  min-height: 120px;
+  font-family: "DM Mono", monospace;
+}
+.study-report {
+  max-height: 300px;
+  overflow: auto;
+  flex-basis: 100%;
+  padding: 10px;
+  background: #f9faf8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 .finding-row {
   display: flex;

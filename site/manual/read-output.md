@@ -35,12 +35,12 @@
 }
 ```
 
-The actual run also contains `run_sequence` and all seven stage entries. Hashes identify packet and projection content; they are useful for comparing repeatable runs, not for interpreting the prose.
+The actual run also contains `run_sequence`, `matched_variant_index`, `candidate` sentence annotations, `repair_first`, and all seven stage entries. Hashes identify packet and projection content; they are useful for comparing repeatable runs, not for interpreting the prose.
 
 ## Principle — a finding is a diagnostic
 
-`E-PROSE-WORDS` means the generated word count is outside the contract's bounds. `E-PROSE-FORBIDDEN` means a forbidden string appears in the prose. `E-RUN-CONTRACT` means a required story condition is absent from the grounded story facts. `E-RUN-EMPTY` and `E-RUN-PLAN` mean story or discourse is missing. A failed stage indicates the layer where the current implementation classifies the problem. [Troubleshooting](troubleshooting.md) gives recovery steps.
+`E-PROSE-WORDS` means the generated word count is outside the contract's bounds. `E-PROSE-PRIVATE` flags a close-focalized assertion about another actor's private cognition; `E-PROSE-RESOLUTION` flags an explicit answer to the sample's open question. `E-VOICE-PHRASE` and `E-VOICE-LENGTH` name style violations. `E-RUN-CONTRACT` means a required story fact is absent; `E-RUN-EMPTY` and `E-RUN-PLAN` mean story or discourse is missing. The finding's `layer` and optional `sentence_index` identify where to repair first. [Troubleshooting](troubleshooting.md) gives recovery steps.
 
 ## Fact — what the strain chart shows
 
-`strain_bp` is an author supplied value from 0 to 10,000 at each story event. The chart plots that sequence; it is not a measurement of reader emotion. The current telling tension projection is a simple function of the number of withheld claims. Use these numbers to inspect your own design choices, not as an external evaluation.
+For events with `strain_components_bp`, the chart plots the weighted integer score from contradiction, unexplained evidence, failed prediction, repair complexity, and identity/goal cost. Older sealed events retain their historical `strain_bp` for replay. This is a modeled value, not a measurement of reader emotion. Telling tension is currently a simple function of withheld claims. Use these numbers to inspect design choices, not as external evaluation.

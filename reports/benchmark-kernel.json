@@ -1,0 +1,29 @@
+{
+  "host": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "python": "3.14.3",
+  "fixture": {
+    "story_events": 100,
+    "discourse_acts": 10
+  },
+  "replay": {
+    "median_seconds": 0.0003,
+    "max_seconds": 0.0003,
+    "samples": 5,
+    "budget_seconds": 1.0,
+    "passed": true
+  },
+  "packet": {
+    "median_seconds": 0.0013,
+    "max_seconds": 0.0013,
+    "samples": 5,
+    "budget_seconds": 2.0,
+    "passed": true
+  },
+  "sidecar_ready": {
+    "median_seconds": 0.0461,
+    "max_seconds": 0.0498,
+    "samples": 3,
+    "budget_seconds": 3.0,
+    "passed": true
+  }
+}

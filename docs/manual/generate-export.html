@@ -748,6 +748,34 @@
   
   
     <li class="md-nav__item">
+      <a href="evaluate-study.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prepare a blinded evaluation — S-07 to S-09
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="constructs.html" class="md-nav__link">
         
   
@@ -1024,6 +1052,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design/code-review.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software code review
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1230,6 +1286,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../api/error-catalog.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api/tauri.html" class="md-nav__link">
         
   
@@ -1388,13 +1472,13 @@
 <pre class="mermaid"><code>flowchart LR
   A[Sealed story and discourse] --&gt; B[Scene packet]
   B --&gt; C[Offline realization]
-  C --&gt; D[Word and forbidden-text checks]
+  C --&gt; D[Sentence, grounding, voice and contract checks]
   D --&gt; E[Saved run JSON]
   E --&gt; F[Markdown export]</code></pre>
 <h2 id="procedure-generate-the-sample">Procedure — generate the sample<a class="headerlink" href="#procedure-generate-the-sample" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Open <strong>Mara and Len</strong> and select a C0–C3 branch.</li>
-<li>Select <strong>Run</strong> for that branch, or <strong>Run C0–C3</strong> for all four sample conditions.</li>
+<li>Select <strong>Run scene</strong> for that branch, or <strong>Run C0–C3</strong> for all four sample conditions. The workbench shows progress while committed state remains readable; <strong>Cancel run</strong> stops at the next condition boundary.</li>
 <li>Read the passage and run status in the passage/pipeline views. For all four, select each branch to inspect its own passage.</li>
 <li>If the status is <strong>failed</strong>, read the finding and correct the named story, discourse, or contract issue. Fork first if the correction changes a sealed event.</li>
 <li>Run again. The newest run is the one used by export for the selected branch.</li>
@@ -1415,7 +1499,7 @@ cmne<span class="w"> </span>run<span class="w"> </span><span class="s2">&quot;/p
 <h2 id="principle-writing-a-custom-scene">Principle — writing a custom scene<a class="headerlink" href="#principle-writing-a-custom-scene" title="Permanent link">&para;</a></h2>
 <p>For a new project, the realizer joins nonempty discourse <code>text</code> in discourse order, separated by blank lines. If an act has no text, it falls back to the descriptions or titles of its referenced story events. Write the desired narration in the discourse acts and use <code>story_refs</code> to keep each act tied to sealed events. The 700–1,100-word authored expansion belongs only to the unchanged Mara and Len seed; an edited cue or a new project uses its own text.</p>
 <h2 id="fact-what-the-checker-tests">Fact — what the checker tests<a class="headerlink" href="#fact-what-the-checker-tests" title="Permanent link">&para;</a></h2>
-<p>The implemented checker tests word bounds and literal forbidden assertions, plus run-level missing story/discourse and required story facts. It does not prove every sentence true or detect all leaked private knowledge. Read the passage yourself for voice, continuity, and grounding. See <a href="read-output.html">Read the result</a>.</p>
+<p>The implemented checker records sentence annotations and deterministic findings for word bounds, forbidden assertions, some unsupported claims and entities, causal claims, another actor's private cognition in close focalization, premature literal disclosures, explicit resolution of the sample's open question, and voice limits. Its language rules are conservative and can miss paraphrases or misclassify a sentence. Read the passage yourself for voice, continuity, and grounding. See <a href="read-output.html">Read the result</a>.</p>
 
 
 

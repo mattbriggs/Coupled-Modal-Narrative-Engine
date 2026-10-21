@@ -17,20 +17,18 @@
 | 0.2 | Reworked after the system assessment. Added tasks for the formula language, deterministic hashing and IDs, project lock, schema up-casting, record/replay adapter and budget guard, voice profile, motif ledger, analysis plan, draft compiler and graph services, the visual-language kit, the graph canvas, accessibility, and mutation testing. Moved the loader out of the application layer (finding F-04). Added the protocol handshake and read/write rules. Added ADR index and risk register. Replaced the GUI requirement list with a pointer to SRS §3.17 and SRS-033-V. |
 | 0.3 checkpoint | Recorded what the first runnable app actually implements and which planned tasks and gates remain open. The task table and diagrams remain the target roadmap. |
 
-### Current implementation checkpoint (2026-10-19)
+### Current implementation checkpoint (2026-10-21)
 
 Use [SRS-033 Implementation Status](SRS-033-Implementation-Status.md) as the dated record of delivered code and verification. This plan's proposed structure, diagrams, task exit criteria, and completion template describe the **target release**. They are not evidence that a task is complete.
 
 | Planned area | Current state | Remaining work |
 |---|---|---|
-| Desktop shell and bridge | Tauri 2 Rust command relay, JSON-RPC 2.0 handshake, allowlist, one broken-pipe restart, PyInstaller external binary; unsigned macOS `.app` built. | Progress notifications, cancelable worker, packaged GUI and Windows/Linux gates. |
-| Python/domain | `src/cmne/{core,formula,project,sample,cli}.py` implements basic validation, closed formula AST, hashed streams, six named projections, simple revisions, branch fork/compare, packet, template realizer, limited checker. | Pydantic/JSON Schema contracts, full machine and revision semantics, provenance graph, schema up-casting, adapter ports/cassettes/budget, full checker. |
-| Frontend | `app/src/App.tsx` and `GraphCanvas.tsx` provide seven lenses, custom SVG graph, story/discourse draft editing, outline, scrubber, strain chart, completed pipeline view, passage, trace, and report export. | Planned React Flow/ELK/ECharts architecture is **not installed**; add full graph interactions, visual diff/overlays, accessibility and performance checks. |
-| Research and release | Mara/Len C0–C3 sample runs offline; 18 Python tests, TypeScript build, Rust check, macOS bundle, and sidecar smoke passed. | 700–1100-word study bound, blind evaluation and analysis, traceability gate, property/mutation tests, full AC/GAC and independent package review. |
+| Desktop shell and bridge | Tauri 2 Rust relay, JSON-RPC 2.0 handshake, allowlist, stateless-only retry after sidecar failure, bundled Python executable, unsigned macOS `.app`, background condition progress and cancellation. | Packaged GUI crash/reopen journey, stage-level progress, and Windows/Linux package gates. |
+| Python/domain | `src/cmne/` provides typed boundary shapes and generated JSON Schema/TypeScript, closed formula AST, atomic hashed streams, six projections, weighted strain/crisis rules, versioned revisions, five traces, in-memory v1-to-v2 up-cast, filtered packet, and selected prose checks. | Full invariant and independent golden evidence, formal semantics, adapter/cassette/budget ports, broader semantic checker. |
+| Frontend | Seven lenses, custom SVG graph, fixture/contract JSON editing, story/discourse drafts, outline, scrubbers, four-condition strain chart, pipeline/passage/trace, study panel and report export. | React Flow/ELK/ECharts remain proposed; complete graph interactions, diff/overlays, keyboard/table parity, accessibility and performance checks. |
+| Research and release | Mara/Len C0–C3 offline passages meet the new sample's 700–1100-word bound; fixed study plans, 12 distinct blind-export variants, response import/report, seven realized controlled ablations, and a hashed decision packet. 88 Python tests, Mypy, Ruff, TypeScript, Rust Clippy/test, local macOS bundle and sidecar smoke pass. | Real human study is Milestone 9; cross-OS CI, property/mutation, full AC/GAC, and independent software review remain open. |
 
-The actual source layout is `src/cmne/`, `src/cmne_sidecar/`, `app/src/`, `app/src-tauri/`, `scripts/`, and `tests/`. Project data use JSON and NDJSON, not the proposed YAML layout. The CLI uses `argparse`, not Typer. The run completes synchronously; the live-progress sequence and cancellation state machine in §5 are future design. The `T-` rows in §8 still need task-by-task evidence before they can be marked done.
-
-**2026-10-20 update:** The seeded sample now produces roughly 800 words per condition with an offline authored expansion and a 700–1100-word contract for newly created samples. The current suite has 20 Python tests. Model-backed realization, full grounding, evaluation, and the remaining release gates are still open.
+The actual source layout is `src/cmne/`, `src/cmne_sidecar/`, `app/src/`, `app/src-tauri/`, `scripts/`, and `tests/`. Project data use JSON and NDJSON, not the proposed YAML layout. The CLI uses `argparse`, not Typer. Runs can be synchronous or background jobs with cancellation between conditions; stage-level streaming in §5 remains a target. The `T-` rows in §8 still need task-by-task evidence before they can be marked done. The [roadmap](SRS-033-Project-Roadmap.md) and [software codebase review](SRS-033-Codebase-Review-2026-10-21.md) carry current gates and scores.
 
 ---
 
@@ -205,7 +203,7 @@ flowchart TD
 | # | Boundary | Contract | Validation point | Failure behavior |
 |---|---|---|---|---|
 | B1 | Frontend ↔ Rust | Tauri command `rpc_call(method, params)`; events `cmne://progress`, `log`, `sidecar-state` | Rust allow-lists methods; frontend validates responses against generated schemas | Typed `ShellError`; toast; view state kept |
-| B2 | Rust ↔ sidecar | JSON-RPC 2.0, one object per line; `app.hello` first (REQ-165) | Sidecar validates params; Rust validates framing and protocol version | `-32700` on malformed input; E-PROTO-001 on version mismatch; one restart, then failed state |
+| B2 | Rust ↔ sidecar | JSON-RPC 2.0, one object per line; `app.hello` first (REQ-165) | Sidecar validates params; Rust validates framing and protocol version | `-32700` on malformed input; E-PROTO-001 on version mismatch; retry only stateless requests, report uncertain mutation outcomes for inspection |
 | B3 | Sidecar ↔ application | Service methods with Pydantic request and response models | Pydantic at the dispatcher | Domain error → RPC error with `data.code` |
 | B4 | Application ↔ domain | Commands and `TransitionResult` | Command bus | `accepted=false` with invariant IDs |
 | B5 | Domain ↔ store | `EventStore` protocol and project lock | Sequence check, line integrity, lock | E-APPEND-001, E-APPEND-002, E-LOCK-001 |
@@ -312,7 +310,7 @@ Notifications from sidecar to shell: `progress` (`run_id`, `stage`, `condition`,
 | Observer | `application/progress.py` | Services publish progress; sidecar and CLI subscribe. |
 | Facade | `application/*_service.py` | One stable surface for CLI and sidecar. |
 | Table-driven state machine | Crisis lifecycle, draft lifecycle, supervisor | Transitions as data; testable per edge. |
-| Supervisor | `sidecar.rs` | Start, health-check, restart once, stop. |
+| Supervisor | `sidecar.rs` | Start, health-check, retry stateless calls once, stop; never replay an uncertain write. |
 
 ---
 
@@ -432,7 +430,7 @@ Trivial line comments are not used. Rust (`///`) and TypeScript (TSDoc) follow t
 | Contract | JSON Schema export matches generated TypeScript; RPC round trips; protocol handshake | `pytest`, `jsonschema` |
 | Sidecar | Framing, dispatch, error mapping, read/write modes, progress, cancellation, stderr-only logs, handshake mismatch | `pytest` with subprocess |
 | Adapter | Cassette record and replay with sockets blocked; budget stop; secret redaction | `pytest`, recorded cassettes |
-| Rust | Supervisor start, one restart, stop; allow-list; path checks; protocol mismatch | `cargo test` with the real sidecar |
+| Rust | Supervisor start, stateless retry, uncertain-write handling, stop; allow-list; path checks; protocol mismatch | `cargo test` with the real sidecar |
 | Frontend unit | Stores, bridge, draft ops, undo/redo, lens projectors, connection hints, form-to-field mapping | `vitest`, Testing Library |
 | Visual catalog | Every node, edge, and state has a story; snapshots under light, dark, grayscale, and forced-colors | Storybook, Playwright |
 | Accessibility | `axe-core` on every lens and the outline view; keyboard-only flows | Playwright, `axe-core` |
@@ -511,7 +509,7 @@ Columns: **ID**, **Phase**, **Task**, **Files**, **Contracts**, **Tests**, **Doc
 | T-21 | P10 | CLI | `cli/main.py` | REQ-115–117 | CLI tests with Typer runner; exit codes; `--json` | User guide: CLI | T-20 | All REQ-115 commands work on the sample |
 | T-22 | P11 | Sidecar server: framing, handshake, read/write dispatcher, methods, notifications, schema export | `cmne_sidecar/*`, `scripts/gen_types.py` | JSON-RPC surface (§3.3); REQ-164, 165, 166 | AC-41; framing fuzz; error mapping; stderr-only logs; read during write | API page: RPC reference | T-20a | Contract tests pass; generated `types.ts` compiles; sidecar ready ≤ 3 s |
 | T-23 | P11 | Build sidecar binary per target | `scripts/build_sidecar.py`, `app/src-tauri/binaries/` | Target-triple naming | Binary answers `app.hello` and `project.open` | Developer guide: build | T-22 | PyInstaller binary runs on macOS arm64; CI builds all targets |
-| T-24 | P12 | Rust shell: supervisor, relay, allow-list, file broker, settings | `app/src-tauri/src/*.rs`, `capabilities/default.json` | `ShellError`; events; B1, B2 | Rust tests: start, restart once, stop, allow-list, path checks, protocol mismatch | Design page: shell | T-23 | GAC-06 passes at the Rust level; capabilities minimal |
+| T-24 | P12 | Rust shell: supervisor, relay, allow-list, file broker, settings | `app/src-tauri/src/*.rs`, `capabilities/default.json` | `ShellError`; events; B1, B2 | Rust tests: start, stateless retry, no uncertain-write replay, stop, allow-list, path checks, protocol mismatch | Design page: shell | T-23 | GAC-06 passes at the Rust level; capabilities minimal |
 | T-25 | P13 | Frontend base: Vite, TypeScript, bridge, mock bridge, stores, error components, tokens | `bridge/*`, `state/*`, `components/*`, `generated/*` | Generated types; `AppError` | Vitest for bridge, stores, error mapping | Developer guide: regenerate types | T-22, T-24 | App launches and calls `project.create` through Rust to Python |
 | T-26 | P14 | Project, import, export, settings, first-run sample | `features/project/*`, `import-export/*`, `settings/*` | GUI-001–004, 038, 040 | GAC-01, GAC-08; Playwright import/export | User guide: import and export | T-25 | Drag-and-drop and dialog imports work; invalid files leave the project unchanged; sample opens read-only |
 | T-27 | P15 | Visual-language kit: tokens, node and edge components for every kind, state glyphs, catalog | `features/graph/nodes/*`, `edges/*`, `registry.ts`, `catalog/*`, `components/tokens.css` | SRS-033-V §3–4; GUI-006, 010 | GAC-23; grayscale and forced-colors snapshots | Visual language catalog | T-25 | Every kind and state has a story and a table row; states distinguishable in grayscale |

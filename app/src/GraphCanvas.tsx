@@ -193,7 +193,9 @@ export default function GraphCanvas({
             scrollRef.current?.scrollTo({
               left: 0,
               top: 0,
-              behavior: "smooth",
+              behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+                ? "auto"
+                : "smooth",
             });
           }}
         >
@@ -201,14 +203,14 @@ export default function GraphCanvas({
         </button>
       </div>
       {pendingSource && (
-        <div className="connect-banner">
+        <div className="connect-banner" role="status">
           Select a target node to connect. Press Esc to cancel.
         </div>
       )}
       <div
         ref={scrollRef}
         className="graph-scroll"
-        role="application"
+        role="region"
         aria-label={`${lens} graph canvas`}
       >
         <div

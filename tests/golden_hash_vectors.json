@@ -1,0 +1,5 @@
+[
+  {"value": {}, "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"},
+  {"value": {"z": [1, 2], "a": {"truth": true, "name": "Mara"}}, "sha256": "bfd3e4993471ab09d6f42a2cf53bf3c3a5e8fc170c33650575e588b87c11d963"},
+  {"value": {"unicode": "Mara 🥣", "ratio_bp": 3333}, "sha256": "1f20b689770c20872b0ccd93130d18a22e494de2b2b9876b422b03253e0a8a9d"}
+]

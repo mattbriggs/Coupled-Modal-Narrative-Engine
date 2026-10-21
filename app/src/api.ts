@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
+import type { Fixture, NarrativeContract } from "./generated/contracts";
 
 export type Lens =
   | "fixture"
@@ -63,9 +64,10 @@ export interface ProjectSummary {
   path: string;
   name: string;
   active_branch: string;
+  read_only?: boolean;
   branches: Branch[];
-  fixture: Record<string, unknown>;
-  contract: Record<string, unknown>;
+  fixture: Fixture;
+  contract: NarrativeContract;
 }
 export interface Finding {
   code: string;
@@ -121,10 +123,10 @@ export async function rpc<T>(
     try {
       const parsed = JSON.parse(raw) as {
         message?: string;
-        data?: { cmne_code?: string; field_path?: string };
+        data?: { cmne_code?: string; field_path?: string; cause?: string; next_action?: string };
       };
       throw new Error(
-        `${parsed.data?.cmne_code ? `${parsed.data.cmne_code}: ` : ""}${parsed.message ?? raw}${parsed.data?.field_path ? ` (${parsed.data.field_path})` : ""}`,
+        `${parsed.data?.cmne_code ? `${parsed.data.cmne_code}: ` : ""}${parsed.data?.cause ?? parsed.message ?? raw}${parsed.data?.field_path ? ` (${parsed.data.field_path})` : ""}${parsed.data?.next_action ? ` Next: ${parsed.data.next_action}` : ""}`,
       );
     } catch (error) {
       if (error instanceof SyntaxError) throw new Error(raw);

@@ -21,5 +21,6 @@ The design pages document **implemented behavior**. The original [_design specif
 | Deterministic run and checking | [Pipeline](pipeline.md) |
 | Project layout, integrity, and branches | [Storage](storage.md) |
 | Shipped scope and planned work | [Roadmap](roadmap.md) |
+| Dated ten-category software review | [Code review](code-review.md) |
 
 For user tasks, start with the [manual](../manual/index.md). For callable interfaces, see the [API](../api/index.md).

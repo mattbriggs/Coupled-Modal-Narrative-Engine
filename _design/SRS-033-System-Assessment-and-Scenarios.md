@@ -10,23 +10,21 @@
 
 **Scope note.** This assessment originally covered the specification package before code existed. The scenarios and UML below describe the **intended system**. The dated checkpoint below states what the current app actually supports; see [SRS-033 Implementation Status](SRS-033-Implementation-Status.md) for architecture and evidence.
 
-### Scenario checkpoint (2026-10-19)
+### Scenario checkpoint (2026-10-21)
 
 | Scenario | Current implementation | Missing from the described journey |
 |---|---|---|
 | S-01 First sample run | First launch creates/opens Mara and Len; Story, Pipeline, strain chart, and deterministic passage are available. | Read-only sample copy, welcome tour, glossary tooltips, live stage animation, and packaged GUI smoke. |
-| S-02 Compose a scene | Create project; add and seal story/discourse drafts; connection validation and field errors. | Fixture and Mind palette editing, full concept/rule graph authoring, and multi-event seal transaction. |
+| S-02 Compose a scene | Create project; edit fixture/contract JSON; add and seal multi-node story/discourse drafts atomically; connection validation and field errors. | Fixture and Mind palette editing, full concept/rule graph authoring, and complete canvas/outline parity. |
 | S-03 Tune the rule | Fork a sealed story event, edit draft copies, run a branch, scrub projections; sample C3 records retrospective links to S01/S02. | Dedicated rule-weight editor, full revision proposal workflow, and prescribed overlay inspection. |
-| S-04 Repair a leak | Basic checker findings, stage status, and trace details exist. | Private-cognition detection, span highlighting, finding-to-node navigation, and full repair-first classification. |
+| S-04 Repair a leak | Selected private-cognition, disclosure, causal and voice findings, stage status, repair-first labels, and trace details exist. | Broad adversarial grounding, span highlighting, and finding-to-node navigation. |
 | S-05 Remove anomaly | Fork from a selected event; draft suffix can be edited and sealed; branch compare gives basic divergence data. | Node deletion/diff-mode journey and complete dependent-event repair guidance. |
-| S-06 Compare C1/C3 | Four condition branches and basic branch compare; separate strain chart per selected branch. | Graph diff marks and overlaid strain series. |
-| S-07–S-09 Study | Markdown export of an individual run only. | Analysis plan, blinded export, evaluator response flow, import, and statistical report. |
+| S-06 Compare C1/C3 | Four condition branches, state transition comparison, and an overlaid four-condition strain chart. | Graph diff marks and full visual comparison. |
+| S-07–S-09 Study | Fixed plan/amendments, 12 distinct offline variants, randomized blind export, separate key, cited-span response import, descriptive report, seven controlled ablations, and decision packet. | Recruited human responses, literary interpretation, and sign-off (Milestone 9). |
 | S-10–S-12 Adapter and replication | Offline template runs and saved run/projection hashes. | Model adapter, budget, cassette replay, adapter contract tests, and published-run replication workflow. |
 | S-13 Recover draft | Draft JSON persists and the frontend attempts recovery; sealed events remain in project streams. | Timestamped recovery offer and end-to-end crash-recovery verification. |
 
-The current run is synchronous and its Pipeline lens shows the saved result. The sequence and state diagrams that show a worker, live progress, cancellation, cassettes, or model API are proposed architecture. The project files are JSON/NDJSON rather than the YAML-oriented layout pictured in some diagrams. The sample's contract allows 0–1100 words, so the 700–1100-word study bound has not been reached.
-
-**2026-10-20 update:** New Mara/Len samples now enforce 700–1100 words, and the offline realizer assembles roughly 800 words for each condition. Existing saved samples keep their old contract file but produce the longer passage when rerun. The blinded study and response scenarios remain unimplemented.
+Runs can execute in a background sidecar worker with condition-level progress and cancellation before the next condition. The sequence and state diagrams that show stage-level streaming, cassettes, or a model API remain proposed architecture. Project files are JSON/NDJSON rather than the YAML-oriented layout pictured in some diagrams. New Mara/Len samples enforce 700–1100 words, and the offline realizer assembles roughly 800 words for each condition. Existing saved samples retain their contract until edited; rerunning produces the longer passage without changing canon. Human study results have not been collected.
 
 ---
 
@@ -792,19 +790,16 @@ sequenceDiagram
     participant R as Rust supervisor
     participant S as Sidecar
     S--xR: process exits unexpectedly
-    R->>F: sidecar-state failed
-    R->>S: restart once
+    R->>F: outcome unknown for project call
+    F->>R: reopen and inspect project
+    R->>S: start and app.hello
     S-->>R: ready with protocol version
-    R->>S: project.open and replay verification
-    S-->>R: hashes match last committed state
-    R->>F: sidecar-state ready
-    F->>R: run.status
-    R->>S: run.status
-    S-->>F: run interrupted at stage
-    F->>F: show Resume or Start over
+    R->>S: read committed events and runs
+    S-->>R: verified saved state
+    R->>F: show saved state before retry
 ```
 
-*Recovery.* Committed events are authoritative; the run restarts from the last completed stage.
+*Recovery target.* Committed events are authoritative. The current bridge reports an uncertain project-operation outcome and does not automatically reopen or resume a run; the author explicitly inspects saved state before retrying. Automated safe reopen/resumption remains a later GUI gate.
 
 ### 3.7 State diagrams
 

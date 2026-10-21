@@ -10,7 +10,7 @@ A **run** reads the selected branch's sealed story and discourse, builds a scene
 flowchart LR
   A[Sealed story and discourse] --> B[Scene packet]
   B --> C[Offline realization]
-  C --> D[Word and forbidden-text checks]
+  C --> D[Sentence, grounding, voice and contract checks]
   D --> E[Saved run JSON]
   E --> F[Markdown export]
 ```
@@ -18,7 +18,7 @@ flowchart LR
 ## Procedure — generate the sample
 
 1. Open **Mara and Len** and select a C0–C3 branch.
-2. Select **Run** for that branch, or **Run C0–C3** for all four sample conditions.
+2. Select **Run scene** for that branch, or **Run C0–C3** for all four sample conditions. The workbench shows progress while committed state remains readable; **Cancel run** stops at the next condition boundary.
 3. Read the passage and run status in the passage/pipeline views. For all four, select each branch to inspect its own passage.
 4. If the status is **failed**, read the finding and correct the named story, discourse, or contract issue. Fork first if the correction changes a sealed event.
 5. Run again. The newest run is the one used by export for the selected branch.
@@ -47,4 +47,4 @@ For a new project, the realizer joins nonempty discourse `text` in discourse ord
 
 ## Fact — what the checker tests
 
-The implemented checker tests word bounds and literal forbidden assertions, plus run-level missing story/discourse and required story facts. It does not prove every sentence true or detect all leaked private knowledge. Read the passage yourself for voice, continuity, and grounding. See [Read the result](read-output.md).
+The implemented checker records sentence annotations and deterministic findings for word bounds, forbidden assertions, some unsupported claims and entities, causal claims, another actor's private cognition in close focalization, premature literal disclosures, explicit resolution of the sample's open question, and voice limits. Its language rules are conservative and can miss paraphrases or misclassify a sentence. Read the passage yourself for voice, continuity, and grounding. See [Read the result](read-output.md).

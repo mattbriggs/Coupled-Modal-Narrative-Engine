@@ -17,7 +17,7 @@ These are experimental **design conditions**, not evidence that one passage is b
 
 1. [Launch the app](../getting-started/install.md). The first launch opens **Mara and Len · The chair and the bowl**. If another project opens, choose the project name at the top and select **Open bundled Mara and Len sample**.
 2. In the **Story** lens, select the chair repair, departure, note, and crisis events. The inspector shows each event's canonical fields.
-3. Click **Run C0–C3**. The run is synchronous; wait for the result. The **Pipeline** lens then shows seven recorded stages for each condition.
+3. Click **Run C0–C3**. Progress reports completed conditions while the **Pipeline** lens stays available. **Cancel run** stops before the next condition. The completed run records seven stages for each condition.
 4. Choose a C3 branch in the left sidebar. In **Latest Run**, open **Read generated passage**. Read the final paragraphs about the chair and bowl.
 5. Switch to C1 and read its passage. Use **Compare branches** for the shared prefix and first diverging sequence.
 
@@ -27,7 +27,7 @@ These are experimental **design conditions**, not evidence that one passage is b
 
 | Lens | Main question | Current use |
 |---|---|---|
-| Fixture | Who and what are present? | Inspect actors and objects |
+| Fixture | Who and what are present? | Inspect actors and objects; edit fixture and contract JSON |
 | Story | What happened? | Draft, seal, fork, inspect causal and retrospective edges |
 | Discourse | In what order is it told? | Draft telling acts and connect them to story events |
 | Mind | What does an actor believe or consider possible? | Inspect basic belief, scenario, model, and interpretation nodes |

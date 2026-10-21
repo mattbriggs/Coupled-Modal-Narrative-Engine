@@ -622,6 +622,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../manual/evaluate-study.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prepare a blinded evaluation — S-07 to S-09
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../manual/constructs.html" class="md-nav__link">
         
   
@@ -885,6 +913,34 @@
     
   
     Current limits and roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design/code-review.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software code review
   
 
     
@@ -1186,6 +1242,34 @@
   
   
     <li class="md-nav__item">
+      <a href="error-catalog.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="tauri.html" class="md-nav__link">
         
   
@@ -1374,7 +1458,12 @@
 <tr>
 <td><code>compare(left, right)</code></td>
 <td>Two branch IDs</td>
-<td>Shared/diverging counts and hashes</td>
+<td>Shared prefix, transition histories, changed interpretations, hashes</td>
+</tr>
+<tr>
+<td><code>motif_ledger(branch)</code></td>
+<td>Branch ID</td>
+<td>Discourse appearances, salience, interpretation links</td>
 </tr>
 </tbody>
 </table>
@@ -1409,22 +1498,54 @@
 <td>Lens graph envelope</td>
 </tr>
 <tr>
-<td><code>trace(branch, node_id)</code></td>
-<td>Causal/disclosure/interpretation details</td>
+<td><code>trace(branch, node_id, query="event", **params)</code></td>
+<td>Event/proposal, actor-belief, reader-inference, model, or prose-access trace</td>
 </tr>
 <tr>
-<td><code>run(branch, conditions=None)</code></td>
-<td>Synchronous run and persisted packet/result</td>
+<td><code>run(branch, conditions=None, variant_index=0)</code></td>
+<td>Synchronous offline run and persisted candidate/findings</td>
 </tr>
 <tr>
 <td><code>list_runs()</code></td>
 <td>Saved run records in sequence order</td>
 </tr>
+<tr>
+<td><code>save_analysis_plan(plan)</code> / <code>analysis_plan()</code></td>
+<td>Freeze or read the study plan; amendments cite a prior hash</td>
+</tr>
+<tr>
+<td><code>generate_matched_realizations()</code></td>
+<td>Save three deterministic composition variants for each condition</td>
+</tr>
+<tr>
+<td><code>study_metrics(branch)</code> / <code>study_ablations(branch)</code></td>
+<td>Layer A/B diagnostics and seven analysis-only variants</td>
+</tr>
+<tr>
+<td><code>realize_ablations(branch)</code></td>
+<td>Save seven controlled comparison passages, lineage hashes, and checker findings without changing canon</td>
+</tr>
+<tr>
+<td><code>export_evaluation_set(seed=33)</code></td>
+<td>Randomized public set and separate private key</td>
+</tr>
+<tr>
+<td><code>import_responses(study_id, source)</code></td>
+<td>Atomically validate and save a response batch</td>
+</tr>
+<tr>
+<td><code>analysis_report(study_id)</code></td>
+<td>Descriptive report with intervals, agreement, contrary/null sections</td>
+</tr>
+<tr>
+<td><code>decision_packet(study_id)</code></td>
+<td>Hashed structural/study/ablation evidence for later human review</td>
+</tr>
 </tbody>
 </table>
 <p><code>draft_seal</code> returns <code>accepted</code>, <code>errors</code>, <code>emitted_events</code>, and <code>id_map</code>. A rejected preview does not append events. <code>run</code> returns <code>status</code>, <code>prose</code>, <code>findings</code>, <code>stages</code>, packet/projection hashes, and IDs; a failed run is still saved.</p>
 <h2 id="pure-functions">Pure functions<a class="headerlink" href="#pure-functions" title="Permanent link">&para;</a></h2>
-<p><code>cmne.core</code> provides <code>validate_fixture</code>, <code>validate_contract</code>, <code>validate_story_event</code>, <code>validate_discourse_act</code>, <code>replay</code>, <code>build_packet</code>, <code>template_realize</code>, <code>check_realization</code>, <code>canonical</code>, <code>digest</code>, and <code>stable_id</code>. <code>cmne.formula</code> provides <code>validate</code>, <code>evaluate</code>, and <code>EvaluationContext</code>. They accept JSON-compatible dictionaries/lists and return JSON-compatible values, except formula evaluation returns <code>True</code>, <code>False</code>, or <code>None</code>. Validation raises <code>CmneError</code> with <code>code</code>, <code>field_path</code>, and <code>next_action</code>; the sidecar serializes it as RPC error data.</p>
+<p><code>cmne.core</code> provides <code>validate_fixture</code>, <code>validate_contract</code>, <code>validate_story_event</code>, <code>validate_discourse_act</code>, <code>replay</code>, <code>build_packet</code>, <code>template_realize</code>, <code>check_realization</code>, <code>canonical</code>, <code>digest</code>, and <code>stable_id</code>. <code>cmne.machines</code> provides weighted strain, crisis assessment, modal revision, and epiphany-candidate functions. <code>cmne.prose</code> provides the <code>ProseRealizer</code> protocol and sentence checker. <code>cmne.study</code> provides analysis-plan, blind-set, response, and report functions. <code>cmne.formula</code> provides <code>validate</code>, <code>evaluate</code>, and <code>EvaluationContext</code>. Validation raises <code>CmneError</code> with <code>code</code>, <code>field_path</code>, and <code>next_action</code>; the sidecar serializes it as RPC error data.</p>
 <p>These functions are the current Python interfaces, not a separate network service. For the exact field shapes, see <a href="contracts.html">Data contracts</a>.</p>
 
 

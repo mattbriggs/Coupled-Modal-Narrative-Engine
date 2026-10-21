@@ -726,6 +726,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../manual/evaluate-study.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prepare a blinded evaluation — S-07 to S-09
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../manual/constructs.html" class="md-nav__link">
         
   
@@ -1002,6 +1030,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design/code-review.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software code review
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1208,6 +1264,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../api/error-catalog.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api/tauri.html" class="md-nav__link">
         
   
@@ -1356,12 +1440,12 @@
 <td>Markdown <strong>source</strong> for the documentation</td>
 </tr>
 <tr>
-<td><code>doc/</code></td>
-<td>Generated HTML <strong>output</strong>; ignored by Git</td>
+<td><code>docs/</code></td>
+<td>Generated HTML <strong>output</strong> for GitHub Pages</td>
 </tr>
 </tbody>
 </table>
-<p>MkDocs normally uses <code>docs/</code> as its input and <code>site/</code> as its output. This project deliberately reverses those roles: <code>docs_dir: site</code> and <code>site_dir: doc</code>.</p>
+<p>MkDocs normally uses <code>docs/</code> as its input and <code>site/</code> as its output. This project uses <code>docs_dir: site</code> and <code>site_dir: docs</code> so the HTML can be published from <code>docs/</code>.</p>
 <h2 id="procedure-install-and-preview">Procedure: install and preview<a class="headerlink" href="#procedure-install-and-preview" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv<span class="w">                 </span><span class="c1"># skip if it already exists</span>
 <span class="nb">source</span><span class="w"> </span>.venv/bin/activate
@@ -1373,9 +1457,9 @@ mkdocs<span class="w"> </span>serve
 <div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
 mkdocs<span class="w"> </span>build<span class="w"> </span>--strict
 </code></pre></div>
-<p>Open <code>doc/index.html</code> or serve the <code>doc/</code> directory with any static-file server. <code>use_directory_urls: false</code> gives pages explicit <code>.html</code> paths for local builds. <code>--strict</code> treats broken relative links and navigation problems as build failures.</p>
+<p>Open <code>docs/index.html</code> or serve the <code>docs/</code> directory with any static-file server. <code>use_directory_urls: false</code> gives pages explicit <code>.html</code> paths for local builds. <code>--strict</code> treats broken relative links and navigation problems as build failures.</p>
 <h2 id="principle-keep-source-and-output-separate">Principle: keep source and output separate<a class="headerlink" href="#principle-keep-source-and-output-separate" title="Permanent link">&para;</a></h2>
-<p>Edit pages under <code>site/</code>, then rebuild. Do not edit generated files under <code>doc/</code>. The generated directory is ignored so changes to the manual remain reviewable as Markdown.</p>
+<p>Edit pages under <code>site/</code>, then rebuild. Do not edit generated files under <code>docs/</code> by hand. The generated HTML is committed for GitHub Pages; review source changes under <code>site/</code> first.</p>
 <h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://www.mkdocs.org/user-guide/configuration/">MkDocs configuration</a> describes <code>docs_dir</code> and <code>site_dir</code>.</li>

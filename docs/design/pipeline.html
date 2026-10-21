@@ -622,6 +622,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../manual/evaluate-study.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prepare a blinded evaluation — S-07 to S-09
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../manual/constructs.html" class="md-nav__link">
         
   
@@ -991,6 +1019,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="code-review.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software code review
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1197,6 +1253,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../api/error-catalog.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api/tauri.html" class="md-nav__link">
         
   
@@ -1325,9 +1409,9 @@
   PK --&gt; Z[Realize]
   Z --&gt; C[Check]
   C --&gt; Saved[(Run JSON and packet JSON)]</code></pre>
-<p>These seven names are recorded in each run's <code>stages</code>. In this release, <code>Project.run</code> performs packet construction, deterministic realization, and checks synchronously; the stage entries are a report of that process, not seven independent worker services. If findings exist, the run marks an applicable stage failed and later stages skipped. The pipeline lens shows latest stage status for C0–C3.</p>
+<p>These seven names are recorded in each run's <code>stages</code>. <code>Project.run</code> performs packet construction, deterministic realization, and checks in one operation; stage entries report the outcome, not seven independent worker services. The sidecar can run conditions in a background worker, report completed conditions, and cancel before the next condition. If findings exist, the run marks the responsible stage failed and later stages skipped.</p>
 <h2 id="packet-content">Packet content<a class="headerlink" href="#packet-content" title="Permanent link">&para;</a></h2>
-<p><code>build_packet</code> replays the branch and combines ordered discourse acts with referenced story payloads, grounded story facts, prose style, simulated reader state, forbidden assertions, unresolved questions, and word bounds. A canonical hash identifies the packet. The packet is saved at <code>packets/&lt;packet-hash&gt;.json</code> when running.</p>
+<p><code>build_packet</code> replays the branch and combines ordered acts with discourse time, focal access, reader state before/after each act, licensed claims, style, forbidden assertions, unresolved questions, voice rules, and word bounds. Story references outside focal access have their descriptions/facts removed from the realizer view. A canonical hash identifies the packet, saved at <code>packets/&lt;packet-hash&gt;.json</code> when running.</p>
 <h2 id="realization">Realization<a class="headerlink" href="#realization" title="Permanent link">&para;</a></h2>
 <p><code>template_realize</code> joins authored discourse <code>text</code> with blank lines. If an act has no text, it uses referenced story descriptions/titles. The unchanged seeded Mara and Len story can use authored expanded paragraphs; custom projects and edited cues use their actual authored text. No network or model API is used.</p>
 <h2 id="checks-and-limits">Checks and limits<a class="headerlink" href="#checks-and-limits" title="Permanent link">&para;</a></h2>
@@ -1348,6 +1432,14 @@
 <td>Case-insensitive literal substring search in realized prose</td>
 </tr>
 <tr>
+<td>Focal access and prose</td>
+<td>Sentence annotations flag selected unsupported claims, private cognition, named entities, causal assertions, early literal reveals, and explicit open-question resolution</td>
+</tr>
+<tr>
+<td>Voice</td>
+<td>Forbidden phrases and sentence-length bounds are deterministic checks</td>
+</tr>
+<tr>
 <td>Required story conditions</td>
 <td>Confirms each required condition occurs in grounded story facts</td>
 </tr>
@@ -1361,7 +1453,7 @@
 </tr>
 </tbody>
 </table>
-<p><code>facts_that_must_be_clear</code>, <code>questions_that_must_remain_open</code>, and <code>strain_threshold_bp</code> are stored contract fields but are not fully evaluated by the current run checker. There is no general semantic grounding proof, private-cognition leak detector, or model adapter. The manual explains how to <a href="../manual/read-output.html">read a finding</a>.</p>
+<p>The checker uses deterministic language rules and optional structured sentence annotations. It is not a general semantic proof: paraphrases can be missed, and figurative language can be ambiguous. The sample's care/avoidance question has an explicit resolution pattern; arbitrary open questions need their own rule or review. There is no model adapter. The manual explains how to <a href="../manual/read-output.html">read a finding</a>.</p>
 
 
 

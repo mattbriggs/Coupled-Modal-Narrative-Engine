@@ -622,6 +622,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../manual/evaluate-study.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prepare a blinded evaluation — S-07 to S-09
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../manual/constructs.html" class="md-nav__link">
         
   
@@ -991,6 +1019,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="code-review.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software code review
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1197,6 +1253,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../api/error-catalog.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api/tauri.html" class="md-nav__link">
         
   
@@ -1324,6 +1408,7 @@ contracts/active.json
 branches/&lt;branch-id&gt;/story.ndjson
 branches/&lt;branch-id&gt;/discourse.ndjson
 branches/&lt;branch-id&gt;/evaluation.ndjson
+snapshots/&lt;branch-id&gt;.json
 drafts/&lt;draft-id&gt;.json
 packets/&lt;packet-hash&gt;.json
 runs/&lt;run-id&gt;.json
@@ -1331,7 +1416,9 @@ exports/&lt;run-id&gt;.md
 </code></pre></div>
 <p>The metadata file records the name, active branch, parent, fork sequence, and condition labels where present. Fixture and contract are current JSON documents with content hashes. Story and discourse streams contain one event per line. Drafts are mutable JSON; packets, runs, and exports are generated from sealed data.</p>
 <h2 id="event-integrity">Event integrity<a class="headerlink" href="#event-integrity" title="Permanent link">&para;</a></h2>
-<p>An event contains <code>stream</code>, <code>branch_id</code>, one-based <code>sequence</code>, <code>schema_version</code>, <code>payload</code>, <code>event_id</code>, and <code>integrity_hash</code>. IDs and hashes come from canonical JSON with sorted keys and SHA-256. On read, the kernel verifies sequence, schema, ID, hash, and duplicate IDs. Stream writes replace a complete file atomically. A project lock prevents a second writer; normal close removes the lock. Never edit a sealed stream directly.</p>
+<p>An event contains <code>stream</code>, <code>branch_id</code>, one-based <code>sequence</code>, <code>schema_version</code>, <code>payload</code>, <code>event_id</code>, and <code>integrity_hash</code>. IDs and hashes come from canonical JSON with sorted keys and SHA-256. On read, the kernel verifies sequence, schema, ID, hash, and duplicate IDs. A same-stream command validates its full event batch before one atomic file replacement; existing sealed lines retain their original bytes. Never edit a sealed stream directly.</p>
+<p>The lock records PID, host, and start time. One writer owns it, while a read-only project instance can inspect committed streams. A stale lock is reported and must be cleared explicitly after confirming that its writer stopped. Full replay checks a snapshot against fixture, contract, reducer, event heads, projection data, and content hash; an invalid snapshot is rebuilt by a writer. Snapshot files are caches, not canon. The shipped event schema and reducer are version 2; version-1 story/discourse events gain <code>source_kind: authored</code> in memory while their sealed bytes and IDs remain unchanged. Project metadata remains format version 1.</p>
+<p>Fixture and contract edits revalidate sealed events and preconditions before replacing their JSON files. A proposed contract that makes an existing crisis invalid is refused and leaves the old contract bytes intact. A failed switch to another project keeps the current project's lock and state.</p>
 <h2 id="fork-semantics">Fork semantics<a class="headerlink" href="#fork-semantics" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>flowchart TD
   M[Main: S01 to S07] --&gt; F[Fork at sequence 7]

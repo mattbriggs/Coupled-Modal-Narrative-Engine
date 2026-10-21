@@ -6,9 +6,9 @@
 |---|---|
 | `mkdocs.yml` | Navigation, Material theme, Mermaid support, and build paths |
 | `site/` | Markdown **source** for the documentation |
-| `doc/` | Generated HTML **output**; ignored by Git |
+| `docs/` | Generated HTML **output** for GitHub Pages |
 
-MkDocs normally uses `docs/` as its input and `site/` as its output. This project deliberately reverses those roles: `docs_dir: site` and `site_dir: doc`.
+MkDocs normally uses `docs/` as its input and `site/` as its output. This project uses `docs_dir: site` and `site_dir: docs` so the HTML can be published from `docs/`.
 
 ## Procedure: install and preview
 
@@ -28,11 +28,11 @@ source .venv/bin/activate
 mkdocs build --strict
 ```
 
-Open `doc/index.html` or serve the `doc/` directory with any static-file server. `use_directory_urls: false` gives pages explicit `.html` paths for local builds. `--strict` treats broken relative links and navigation problems as build failures.
+Open `docs/index.html` or serve the `docs/` directory with any static-file server. `use_directory_urls: false` gives pages explicit `.html` paths for local builds. `--strict` treats broken relative links and navigation problems as build failures.
 
 ## Principle: keep source and output separate
 
-Edit pages under `site/`, then rebuild. Do not edit generated files under `doc/`. The generated directory is ignored so changes to the manual remain reviewable as Markdown.
+Edit pages under `site/`, then rebuild. Do not edit generated files under `docs/` by hand. The generated HTML is committed for GitHub Pages; review source changes under `site/` first.
 
 ## References
 

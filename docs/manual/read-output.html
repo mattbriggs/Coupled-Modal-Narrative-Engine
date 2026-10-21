@@ -14,7 +14,7 @@
         <link rel="prev" href="generate-export.html">
       
       
-        <link rel="next" href="constructs.html">
+        <link rel="next" href="evaluate-study.html">
       
       
         
@@ -726,6 +726,34 @@
   
   
     <li class="md-nav__item">
+      <a href="evaluate-study.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prepare a blinded evaluation — S-07 to S-09
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="constructs.html" class="md-nav__link">
         
   
@@ -1002,6 +1030,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../design/code-review.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software code review
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1208,6 +1264,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../api/error-catalog.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api/tauri.html" class="md-nav__link">
         
   
@@ -1393,11 +1477,11 @@
 <span class="w">  </span><span class="nt">&quot;realizer&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;deterministic-template-v2&quot;</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>The actual run also contains <code>run_sequence</code> and all seven stage entries. Hashes identify packet and projection content; they are useful for comparing repeatable runs, not for interpreting the prose.</p>
+<p>The actual run also contains <code>run_sequence</code>, <code>matched_variant_index</code>, <code>candidate</code> sentence annotations, <code>repair_first</code>, and all seven stage entries. Hashes identify packet and projection content; they are useful for comparing repeatable runs, not for interpreting the prose.</p>
 <h2 id="principle-a-finding-is-a-diagnostic">Principle — a finding is a diagnostic<a class="headerlink" href="#principle-a-finding-is-a-diagnostic" title="Permanent link">&para;</a></h2>
-<p><code>E-PROSE-WORDS</code> means the generated word count is outside the contract's bounds. <code>E-PROSE-FORBIDDEN</code> means a forbidden string appears in the prose. <code>E-RUN-CONTRACT</code> means a required story condition is absent from the grounded story facts. <code>E-RUN-EMPTY</code> and <code>E-RUN-PLAN</code> mean story or discourse is missing. A failed stage indicates the layer where the current implementation classifies the problem. <a href="troubleshooting.html">Troubleshooting</a> gives recovery steps.</p>
+<p><code>E-PROSE-WORDS</code> means the generated word count is outside the contract's bounds. <code>E-PROSE-PRIVATE</code> flags a close-focalized assertion about another actor's private cognition; <code>E-PROSE-RESOLUTION</code> flags an explicit answer to the sample's open question. <code>E-VOICE-PHRASE</code> and <code>E-VOICE-LENGTH</code> name style violations. <code>E-RUN-CONTRACT</code> means a required story fact is absent; <code>E-RUN-EMPTY</code> and <code>E-RUN-PLAN</code> mean story or discourse is missing. The finding's <code>layer</code> and optional <code>sentence_index</code> identify where to repair first. <a href="troubleshooting.html">Troubleshooting</a> gives recovery steps.</p>
 <h2 id="fact-what-the-strain-chart-shows">Fact — what the strain chart shows<a class="headerlink" href="#fact-what-the-strain-chart-shows" title="Permanent link">&para;</a></h2>
-<p><code>strain_bp</code> is an author supplied value from 0 to 10,000 at each story event. The chart plots that sequence; it is not a measurement of reader emotion. The current telling tension projection is a simple function of the number of withheld claims. Use these numbers to inspect your own design choices, not as an external evaluation.</p>
+<p>For events with <code>strain_components_bp</code>, the chart plots the weighted integer score from contradiction, unexplained evidence, failed prediction, repair complexity, and identity/goal cost. Older sealed events retain their historical <code>strain_bp</code> for replay. This is a modeled value, not a measurement of reader emotion. Telling tension is currently a simple function of withheld claims. Use these numbers to inspect design choices, not as external evaluation.</p>
 
 
 

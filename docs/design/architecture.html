@@ -622,6 +622,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../manual/evaluate-study.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Prepare a blinded evaluation — S-07 to S-09
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../manual/constructs.html" class="md-nav__link">
         
   
@@ -969,6 +997,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="code-review.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software code review
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1175,6 +1231,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../api/error-catalog.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error catalog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api/tauri.html" class="md-nav__link">
         
   
@@ -1286,7 +1370,7 @@
   Kernel--&gt;&gt;RPC: result or CmneError
   RPC--&gt;&gt;Shell: one JSON-RPC response line
   Shell--&gt;&gt;UI: result or error string</code></pre>
-<p>The React UI owns editing interaction and graph presentation. The Rust command <code>rpc_call</code> restricts method names and serializes access to one child process. It starts the Python sidecar from the development virtual environment or bundled executable, performs <code>app.hello</code>, and restarts once after a broken pipe. The sidecar speaks line-delimited JSON-RPC 2.0 on standard input/output; logs go to standard error. The Python kernel owns narrative validation, storage, replay, packet construction, realization, and checking.</p>
+<p>The React UI owns editing interaction and graph presentation. The Rust command <code>rpc_call</code> restricts method names and serializes access to one child process. It starts the Python sidecar from the development virtual environment or bundled executable and performs <code>app.hello</code>. After a child failure, only stateless validation requests are retried automatically; a project request returns an uncertain-outcome error so no write is sent twice. The sidecar speaks line-delimited JSON-RPC 2.0 on standard input/output; logs go to standard error. The Python kernel owns narrative validation, storage, replay, packet construction, realization, and checking.</p>
 <p>The UI offers seven lenses. <strong>Story</strong> and <strong>Discourse</strong> allow drafts; <strong>Fixture</strong>, <strong>Mind</strong>, <strong>Provenance</strong>, <strong>Motif</strong>, and <strong>Pipeline</strong> visualize current or derived data. The graph envelope includes nodes and edges with IDs, titles, fields, state, and text alternatives. An outline, inspector, scrubber, strain chart, trace pane, and branch comparison provide other routes through the same data.</p>
 <h2 id="runtime-boundaries">Runtime boundaries<a class="headerlink" href="#runtime-boundaries" title="Permanent link">&para;</a></h2>
 <table>

@@ -1,0 +1,146 @@
+{
+  "checked_at": "2026-10-21T19:15:14.073097+00:00",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "checks": [
+    {
+      "name": "python-tests",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-q"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "output_tail": "----------------------------------------------------------------------\nRan 88 tests in 7.401s\n\nOK\n"
+    },
+    {
+      "name": "python-types",
+      "command": [
+        "mypy",
+        "src",
+        "--ignore-missing-imports",
+        "--no-incremental"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "output_tail": "Success: no issues found in 15 source files\n"
+    },
+    {
+      "name": "python-lint",
+      "command": [
+        "ruff",
+        "check",
+        "src",
+        "scripts",
+        "tests",
+        "--select",
+        "F,B,UP,SIM"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "output_tail": "All checks passed!\n"
+    },
+    {
+      "name": "acceptance-inventory",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "scripts/check_acceptance.py"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "output_tail": "Mapped 272 IDs: 32 passed, 8 partial, 232 planned\n"
+    },
+    {
+      "name": "schema-artifacts",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "scripts/export_schemas.py",
+        "--check"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "output_tail": ""
+    },
+    {
+      "name": "error-catalog",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "scripts/check_error_catalog.py"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "output_tail": "Catalog covers 49 source codes (49 entries).\n"
+    },
+    {
+      "name": "error-catalog-page",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "scripts/export_error_catalog.py",
+        "--check"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "output_tail": ""
+    },
+    {
+      "name": "frontend",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "output_tail": "\n> cmne-workbench@0.1.0 build\n> tsc --noEmit && vite build\n\nvite v7.3.6 building client environment for production...\ntransforming...\n\u2713 34 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.46 kB \u2502 gzip:  0.30 kB\ndist/assets/index-DxYlOXli.css   20.88 kB \u2502 gzip:  5.61 kB\ndist/assets/index-e7xX5Oja.js   240.75 kB \u2502 gzip: 75.09 kB\n\u2713 built in 457ms\n"
+    },
+    {
+      "name": "documentation",
+      "command": [
+        "mkdocs",
+        "build",
+        "--strict"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "output_tail": "\n\u001b[31m \u2502  \u26a0  WARNING \u2013 MkDocs 2.0 is incompatible with Material for MkDocs\u001b[0m\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502\u001b[0m  MkDocs 2.0 introduces backward-incompatible changes:\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502  \u00d7 \u001b[0mAll plugins will stop working \u2013 the plugin system has been removed\n\u001b[31m \u2502  \u00d7 \u001b[0mAll theme overrides will break \u2013 the theming system has been rewritten\n\u001b[31m \u2502  \u00d7 \u001b[0mNo migration path exists \u2013 existing projects cannot be upgraded\n\u001b[31m \u2502  \u00d7 \u001b[0mClosed contribution model \u2013 community members can't report bugs\n\u001b[31m \u2502  \u00d7 \u001b[0mCurrently unlicensed \u2013 unsuitable for production use\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502\u001b[0m  Our full analysis:\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502\u001b[0m  \u001b[4mhttps://squidfunk.github.io/mkdocs-material/blog/2026/02/18/mkdocs-2.0/\u001b[0m\n\u001b[0m\nINFO    -  Cleaning site directory\nINFO    -  Building documentation to directory: /Users/mattbriggs/Git/Coupled-Modal-Narrative-Engine/docs\nINFO    -  Documentation built in 0.31 seconds\n"
+    },
+    {
+      "name": "kernel-benchmark",
+      "command": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "scripts/benchmark_kernel.py"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "output_tail": "{\n  \"replay\": {\n    \"median_seconds\": 0.0003,\n    \"max_seconds\": 0.0003,\n    \"samples\": 5,\n    \"budget_seconds\": 1.0,\n    \"passed\": true\n  },\n  \"packet\": {\n    \"median_seconds\": 0.0013,\n    \"max_seconds\": 0.0013,\n    \"samples\": 5,\n    \"budget_seconds\": 2.0,\n    \"passed\": true\n  },\n  \"sidecar_ready\": {\n    \"median_seconds\": 0.0461,\n    \"max_seconds\": 0.0498,\n    \"samples\": 3,\n    \"budget_seconds\": 3.0,\n    \"passed\": true\n  }\n}\n"
+    },
+    {
+      "name": "rust-shell",
+      "command": [
+        "/Users/mattbriggs/.cargo/bin/cargo",
+        "+stable",
+        "clippy",
+        "--locked",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "output_tail": "   Compiling cmne-workbench v0.1.0 (/Users/mattbriggs/Git/Coupled-Modal-Narrative-Engine/app/src-tauri)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.69s\n"
+    }
+  ],
+  "local_preflight_passed": true,
+  "outstanding_evidence": [
+    "clean-checkout CI on supported operating systems",
+    "packaged GUI end-to-end journey",
+    "automated accessibility and keyboard checks",
+    "reference-machine graph and latency measurements",
+    "full AC/GAC trace and mutation threshold"
+  ]
+}
