@@ -21,7 +21,7 @@ These seven names are recorded in each run's `stages`. `Project.run` performs pa
 
 ## Realization
 
-`template_realize` joins authored discourse `text` with blank lines. If an act has no text, it uses referenced story descriptions/titles. The unchanged seeded Mara and Len story can use authored expanded paragraphs; custom projects and edited cues use their actual authored text. No network or model API is used.
+`template_realize` joins authored discourse `text` with blank lines. If an act has no text, it uses referenced story descriptions/titles. The unchanged seeded Mara and Len story can use authored expanded paragraphs; custom projects and edited cues use their actual authored text. This is the default offline path. A researcher-supplied [JSON adapter](../api/model-adapters.md) can realize a candidate in record mode with explicit data-transfer permission, or replay a saved response offline.
 
 ## Checks and limits
 
@@ -35,4 +35,4 @@ These seven names are recorded in each run's `stages`. `Project.run` performs pa
 | Missing content | Flags empty story or discourse |
 | Disclosure grounding | Validated when sealing discourse acts |
 
-The checker uses deterministic language rules and optional structured sentence annotations. It is not a general semantic proof: paraphrases can be missed, and figurative language can be ambiguous. The sample's care/avoidance question has an explicit resolution pattern; arbitrary open questions need their own rule or review. There is no model adapter. The manual explains how to [read a finding](../manual/read-output.md).
+The checker uses deterministic language rules and optional structured sentence annotations. It is not a general semantic proof: paraphrases can be missed, and figurative language can be ambiguous. The sample's care/avoidance question has an explicit resolution pattern; arbitrary open questions need their own rule or review. Model outputs pass through the same checker; adapter annotations cannot downgrade an unhedged assertion. The manual explains how to [read a finding](../manual/read-output.md).

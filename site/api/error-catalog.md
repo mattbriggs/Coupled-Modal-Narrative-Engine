@@ -5,9 +5,12 @@ Each domain error has a stable code, cause, and corrective action. The JSON-RPC 
 | Code | Message | Cause | Next action |
 |---|---|---|---|
 | `E-ACCESS-001` | The observer cannot access this evidence. | An observer lacks a declared route to evidence. | Name the observer, access path, and accessible source event. |
+| `E-ADAPTER-001` | The model adapter is unavailable or invalid. | A model adapter is unavailable or returned an invalid response. | Use the offline template or check the adapter manifest and response contract. |
 | `E-APPEND-001` | The branch sequence is stale. | The branch head changed since the caller read it. | Reload the branch and submit against its current sequence. |
 | `E-BELIEF-001` | The belief revision is invalid. | A belief revision is incomplete or out of range. | Supply an observer, claim, status, confidence, and accessible evidence. |
 | `E-BRANCH-001` | The branch or fork point is invalid. | The branch or fork point is invalid. | Choose an existing branch and a sequence within its story history. |
+| `E-BUDGET-001` | The model budget is exhausted. | A model run reached its call, token, or cost limit. | Inspect the recorded spend and set a new explicit budget before retrying. |
+| `E-CASSETTE-001` | The model response cassette is missing or invalid. | A recorded model response is missing or fails integrity validation. | Record the canonical request first or restore its verified cassette. |
 | `E-COMMAND-001` | The command batch is invalid. | The command has no supported event batch. | Submit nonempty story or discourse payloads. |
 | `E-CONCEPT-001` | The conceptual revision is invalid. | A conceptual revision lacks a model transition. | Supply the observer, new concepts, and migration map. |
 | `E-CONTRACT-001` | The narrative contract is invalid. | The narrative contract has a malformed or conflicting field. | Correct the reported contract field and validate again. |
@@ -26,6 +29,7 @@ Each domain error has a stable code, cause, and corrective action. The JSON-RPC 
 | `E-MODEL-001` | The modal model is inconsistent. | Active modal constraints conflict or a ranked scenario lacks a revision basis. | Remove the contradiction or cite a contradiction or revision event. |
 | `E-PLAN-001` | The analysis plan is missing or invalid. | The analysis plan is absent or incomplete. | Save a complete plan before exporting a blinded evaluation set. |
 | `E-PRECOND-001` | A command precondition does not hold. | A command precondition is not true before the event. | Inspect the preceding projection and revise the command or its evidence. |
+| `E-PRIVACY-001` | Model data transfer has not been enabled. | Model data transfer was not enabled for this run. | Enable transfer explicitly after reviewing the fixture and evaluator data. |
 | `E-PROJECT-001` | The project cannot be opened. | The project path is invalid or no project is open. | Open or create a valid project folder. |
 | `E-PROSE-CAUSAL` | The prose contains an unsupported causal assertion. | A causal sentence lacks accessible story evidence. | Cite the story event that supports the cause or revise the sentence. |
 | `E-PROSE-CLAIM` | The prose asserts a claim outside focal access. | An asserted claim is outside focal access. | Ground the claim in accessible evidence or mark it as hypothesis. |

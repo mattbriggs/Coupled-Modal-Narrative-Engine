@@ -105,6 +105,25 @@ class RpcError(TypedDict):
     data: ErrorData
 
 
+class ModelManifest(TypedDict):
+    model_name: str
+    model_version: str
+    prompt_version: str
+    seed: int
+    decoding: dict[str, int]
+
+
+class ModelUsage(TypedDict):
+    input_tokens: int
+    output_tokens: int
+    cost_micros: int
+
+
+class ModelResponse(TypedDict):
+    output: str | dict[str, Any]
+    usage: ModelUsage
+
+
 STRING = {"type": "string"}
 INTEGER_BP = {"type": "integer", "minimum": 0, "maximum": 10000}
 STRING_LIST = {"type": "array", "items": STRING}
@@ -186,6 +205,19 @@ SCHEMAS: dict[str, dict[str, Any]] = {
     "RpcError": {"type": "object", "required": ["code", "message", "data"],
         "properties": {"code": {"type": "integer"}, "message": STRING,
                        "data": {"$ref": "#/$defs/ErrorData"}}},
+    "ModelManifest": {"type": "object", "required": ["model_name", "model_version",
+        "prompt_version", "seed", "decoding"], "properties": {
+        "model_name": STRING, "model_version": STRING, "prompt_version": STRING,
+        "seed": {"type": "integer"}, "decoding": {"type": "object", "properties": {
+            "temperature_bp": INTEGER_BP, "top_p_bp": INTEGER_BP,
+            "max_output_tokens": {"type": "integer", "minimum": 0}}}}},
+    "ModelUsage": {"type": "object", "required": ["input_tokens", "output_tokens", "cost_micros"],
+        "properties": {"input_tokens": {"type": "integer", "minimum": 0},
+                       "output_tokens": {"type": "integer", "minimum": 0},
+                       "cost_micros": {"type": "integer", "minimum": 0}}},
+    "ModelResponse": {"type": "object", "required": ["output", "usage"],
+        "properties": {"output": {"anyOf": [STRING, {"type": "object"}]},
+                       "usage": {"$ref": "#/$defs/ModelUsage"}}},
     "ProjectionResult": {"type": "object", "required": ["projections", "hashes"],
         "properties": {"projections": {"type": "object"}, "hashes": {"type": "object"}}},
     "RunResult": {"type": "object", "required": ["run_id", "branch_id", "conditions", "prose",

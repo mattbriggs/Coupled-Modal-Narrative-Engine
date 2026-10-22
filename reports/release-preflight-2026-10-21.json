@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-21T19:15:14.073097+00:00",
+  "checked_at": "2026-10-22T00:05:50.838341+00:00",
   "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
   "checks": [
     {
@@ -15,7 +15,7 @@
       ],
       "status": "passed",
       "exit_code": 0,
-      "output_tail": "----------------------------------------------------------------------\nRan 88 tests in 7.401s\n\nOK\n"
+      "output_tail": "----------------------------------------------------------------------\nRan 103 tests in 8.351s\n\nOK\n"
     },
     {
       "name": "python-types",
@@ -27,7 +27,7 @@
       ],
       "status": "passed",
       "exit_code": 0,
-      "output_tail": "Success: no issues found in 15 source files\n"
+      "output_tail": "Success: no issues found in 16 source files\n"
     },
     {
       "name": "python-lint",
@@ -52,7 +52,7 @@
       ],
       "status": "passed",
       "exit_code": 0,
-      "output_tail": "Mapped 272 IDs: 32 passed, 8 partial, 232 planned\n"
+      "output_tail": "Mapped 272 IDs: 43 passed, 11 partial, 218 planned\n"
     },
     {
       "name": "schema-artifacts",
@@ -73,7 +73,7 @@
       ],
       "status": "passed",
       "exit_code": 0,
-      "output_tail": "Catalog covers 49 source codes (49 entries).\n"
+      "output_tail": "Catalog covers 53 source codes (53 entries).\n"
     },
     {
       "name": "error-catalog-page",
@@ -95,7 +95,7 @@
       ],
       "status": "passed",
       "exit_code": 0,
-      "output_tail": "\n> cmne-workbench@0.1.0 build\n> tsc --noEmit && vite build\n\nvite v7.3.6 building client environment for production...\ntransforming...\n\u2713 34 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.46 kB \u2502 gzip:  0.30 kB\ndist/assets/index-DxYlOXli.css   20.88 kB \u2502 gzip:  5.61 kB\ndist/assets/index-e7xX5Oja.js   240.75 kB \u2502 gzip: 75.09 kB\n\u2713 built in 457ms\n"
+      "output_tail": "\n> cmne-workbench@0.1.0 build\n> tsc --noEmit && vite build\n\nvite v7.3.6 building client environment for production...\ntransforming...\n\u2713 34 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.46 kB \u2502 gzip:  0.30 kB\ndist/assets/index-DxYlOXli.css   20.88 kB \u2502 gzip:  5.61 kB\ndist/assets/index-e7xX5Oja.js   240.75 kB \u2502 gzip: 75.09 kB\n\u2713 built in 529ms\n"
     },
     {
       "name": "documentation",
@@ -106,7 +106,7 @@
       ],
       "status": "passed",
       "exit_code": 0,
-      "output_tail": "\n\u001b[31m \u2502  \u26a0  WARNING \u2013 MkDocs 2.0 is incompatible with Material for MkDocs\u001b[0m\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502\u001b[0m  MkDocs 2.0 introduces backward-incompatible changes:\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502  \u00d7 \u001b[0mAll plugins will stop working \u2013 the plugin system has been removed\n\u001b[31m \u2502  \u00d7 \u001b[0mAll theme overrides will break \u2013 the theming system has been rewritten\n\u001b[31m \u2502  \u00d7 \u001b[0mNo migration path exists \u2013 existing projects cannot be upgraded\n\u001b[31m \u2502  \u00d7 \u001b[0mClosed contribution model \u2013 community members can't report bugs\n\u001b[31m \u2502  \u00d7 \u001b[0mCurrently unlicensed \u2013 unsuitable for production use\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502\u001b[0m  Our full analysis:\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502\u001b[0m  \u001b[4mhttps://squidfunk.github.io/mkdocs-material/blog/2026/02/18/mkdocs-2.0/\u001b[0m\n\u001b[0m\nINFO    -  Cleaning site directory\nINFO    -  Building documentation to directory: /Users/mattbriggs/Git/Coupled-Modal-Narrative-Engine/docs\nINFO    -  Documentation built in 0.31 seconds\n"
+      "output_tail": "\n\u001b[31m \u2502  \u26a0  WARNING \u2013 MkDocs 2.0 is incompatible with Material for MkDocs\u001b[0m\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502\u001b[0m  MkDocs 2.0 introduces backward-incompatible changes:\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502  \u00d7 \u001b[0mAll plugins will stop working \u2013 the plugin system has been removed\n\u001b[31m \u2502  \u00d7 \u001b[0mAll theme overrides will break \u2013 the theming system has been rewritten\n\u001b[31m \u2502  \u00d7 \u001b[0mNo migration path exists \u2013 existing projects cannot be upgraded\n\u001b[31m \u2502  \u00d7 \u001b[0mClosed contribution model \u2013 community members can't report bugs\n\u001b[31m \u2502  \u00d7 \u001b[0mCurrently unlicensed \u2013 unsuitable for production use\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502\u001b[0m  Our full analysis:\n\u001b[31m \u2502\u001b[0m\n\u001b[31m \u2502\u001b[0m  \u001b[4mhttps://squidfunk.github.io/mkdocs-material/blog/2026/02/18/mkdocs-2.0/\u001b[0m\n\u001b[0m\nINFO    -  Cleaning site directory\nINFO    -  Building documentation to directory: /Users/mattbriggs/Git/Coupled-Modal-Narrative-Engine/docs\nINFO    -  Documentation built in 0.39 seconds\n"
     },
     {
       "name": "kernel-benchmark",
@@ -116,7 +116,7 @@
       ],
       "status": "passed",
       "exit_code": 0,
-      "output_tail": "{\n  \"replay\": {\n    \"median_seconds\": 0.0003,\n    \"max_seconds\": 0.0003,\n    \"samples\": 5,\n    \"budget_seconds\": 1.0,\n    \"passed\": true\n  },\n  \"packet\": {\n    \"median_seconds\": 0.0013,\n    \"max_seconds\": 0.0013,\n    \"samples\": 5,\n    \"budget_seconds\": 2.0,\n    \"passed\": true\n  },\n  \"sidecar_ready\": {\n    \"median_seconds\": 0.0461,\n    \"max_seconds\": 0.0498,\n    \"samples\": 3,\n    \"budget_seconds\": 3.0,\n    \"passed\": true\n  }\n}\n"
+      "output_tail": "{\n  \"replay\": {\n    \"median_seconds\": 0.0009,\n    \"max_seconds\": 0.0009,\n    \"samples\": 5,\n    \"budget_seconds\": 1.0,\n    \"passed\": true\n  },\n  \"packet\": {\n    \"median_seconds\": 0.0021,\n    \"max_seconds\": 0.0023,\n    \"samples\": 5,\n    \"budget_seconds\": 2.0,\n    \"passed\": true\n  },\n  \"sidecar_ready\": {\n    \"median_seconds\": 0.0484,\n    \"max_seconds\": 0.0524,\n    \"samples\": 3,\n    \"budget_seconds\": 3.0,\n    \"passed\": true\n  }\n}\n"
     },
     {
       "name": "rust-shell",
@@ -132,7 +132,7 @@
       ],
       "status": "passed",
       "exit_code": 0,
-      "output_tail": "   Compiling cmne-workbench v0.1.0 (/Users/mattbriggs/Git/Coupled-Modal-Narrative-Engine/app/src-tauri)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.69s\n"
+      "output_tail": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.48s\n"
     }
   ],
   "local_preflight_passed": true,

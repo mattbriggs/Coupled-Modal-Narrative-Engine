@@ -11,7 +11,7 @@
       
       
       
-        <link rel="prev" href="cli.html">
+        <link rel="prev" href="model-adapters.html">
       
       
         <link rel="next" href="contracts.html">
@@ -1103,6 +1103,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="model-adapters.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -1646,6 +1674,16 @@
 <td>Saved run(s), or <code>{job_id, status, total}</code> for a background run</td>
 </tr>
 <tr>
+<td><code>proposal.generate</code></td>
+<td><code>model_manifest</code>; optional <code>adapter_command</code>, <code>adapter_mode</code>, <code>budget</code>, <code>allow_data_transfer</code></td>
+<td>Diagnostic candidates and spend; canon unchanged</td>
+</tr>
+<tr>
+<td><code>proposal.accept</code></td>
+<td><code>proposal_id</code>; optional <code>branch_id</code></td>
+<td>Story event after ordinary validation</td>
+</tr>
+<tr>
 <td><code>run.status</code></td>
 <td>Optional <code>branch_id</code> or <code>job_id</code></td>
 <td>Latest saved run, or background progress and completed runs</td>
@@ -1663,6 +1701,7 @@
 </tbody>
 </table>
 <p>For a single run, the condition must match the selected branch's condition. To run all four sample branches, pass <code>conditions: ["C0","C1","C2","C3"]</code> in that order. <code>export.report</code> requires a saved run for that branch.</p>
+<p><code>run.start</code> also accepts <code>adapter_mode: "template"|"record"|"replay"</code>, <code>model_manifest</code>, <code>adapter_command</code>, <code>budget</code> (<code>max_calls</code>, <code>max_tokens</code>, optional <code>max_cost_micros</code>), and <code>allow_data_transfer: true</code>. A multi-condition call shares one budget. Record mode needs explicit transfer permission; replay uses the local cassette and no executable. See the <a href="model-adapters.html">adapter contract</a>.</p>
 <p><code>async: true</code> returns promptly. Poll <code>run.status</code> with the returned <code>job_id</code>; its <code>completed</code> and <code>total</code> fields show condition progress. Each status result is a snapshot, so its run list will not change after the response is returned. <code>run.cancel</code> stops before the next condition, without changing sealed story or discourse. Read-only graph/event queries and draft editing remain available while a run is active; canon, fixture, contract, study, and export mutations are refused until it finishes.</p>
 <h2 id="blinded-study">Blinded study<a class="headerlink" href="#blinded-study" title="Permanent link">&para;</a></h2>
 <table>

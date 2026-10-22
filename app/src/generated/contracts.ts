@@ -172,6 +172,35 @@ export type RpcError = {
   [key: string]: unknown;
 };
 
+export type ModelManifest = {
+  model_name: string;
+  model_version: string;
+  prompt_version: string;
+  seed: number;
+  decoding: {
+    temperature_bp?: number;
+    top_p_bp?: number;
+    max_output_tokens?: number;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+};
+
+export type ModelUsage = {
+  input_tokens: number;
+  output_tokens: number;
+  cost_micros: number;
+  [key: string]: unknown;
+};
+
+export type ModelResponse = {
+  output: string | {
+    [key: string]: unknown;
+  };
+  usage: ModelUsage;
+  [key: string]: unknown;
+};
+
 export type ProjectionResult = {
   projections: {
     [key: string]: unknown;

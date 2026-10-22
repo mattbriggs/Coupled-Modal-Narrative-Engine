@@ -4,9 +4,12 @@ from __future__ import annotations
 
 _CAUSE_AND_ACTION: dict[str, tuple[str, str]] = {
     "E-ACCESS-001": ("An observer lacks a declared route to evidence.", "Name the observer, access path, and accessible source event."),
+    "E-ADAPTER-001": ("A model adapter is unavailable or returned an invalid response.", "Use the offline template or check the adapter manifest and response contract."),
     "E-APPEND-001": ("The branch head changed since the caller read it.", "Reload the branch and submit against its current sequence."),
+    "E-BUDGET-001": ("A model run reached its call, token, or cost limit.", "Inspect the recorded spend and set a new explicit budget before retrying."),
     "E-BELIEF-001": ("A belief revision is incomplete or out of range.", "Supply an observer, claim, status, confidence, and accessible evidence."),
     "E-BRANCH-001": ("The branch or fork point is invalid.", "Choose an existing branch and a sequence within its story history."),
+    "E-CASSETTE-001": ("A recorded model response is missing or fails integrity validation.", "Record the canonical request first or restore its verified cassette."),
     "E-COMMAND-001": ("The command has no supported event batch.", "Submit nonempty story or discourse payloads."),
     "E-CONCEPT-001": ("A conceptual revision lacks a model transition.", "Supply the observer, new concepts, and migration map."),
     "E-CONTRACT-001": ("The narrative contract has a malformed or conflicting field.", "Correct the reported contract field and validate again."),
@@ -24,6 +27,7 @@ _CAUSE_AND_ACTION: dict[str, tuple[str, str]] = {
     "E-MODAL-001": ("A modal revision has invalid observer or scenarios.", "Supply a known observer and a scenario list."),
     "E-MODEL-001": ("Active modal constraints conflict or a ranked scenario lacks a revision basis.", "Remove the contradiction or cite a contradiction or revision event."),
     "E-PRECOND-001": ("A command precondition is not true before the event.", "Inspect the preceding projection and revise the command or its evidence."),
+    "E-PRIVACY-001": ("Model data transfer was not enabled for this run.", "Enable transfer explicitly after reviewing the fixture and evaluator data."),
     "E-PLAN-001": ("The analysis plan is absent or incomplete.", "Save a complete plan before exporting a blinded evaluation set."),
     "E-PROJECT-001": ("The project path is invalid or no project is open.", "Open or create a valid project folder."),
     "E-PROSE-FORBIDDEN": ("A forbidden literal assertion appears in prose.", "Revise the authored text and run again."),
@@ -57,9 +61,12 @@ _CAUSE_AND_ACTION: dict[str, tuple[str, str]] = {
 
 ERROR_MESSAGES = {
     "E-ACCESS-001": "The observer cannot access this evidence.",
+    "E-ADAPTER-001": "The model adapter is unavailable or invalid.",
     "E-APPEND-001": "The branch sequence is stale.",
+    "E-BUDGET-001": "The model budget is exhausted.",
     "E-BELIEF-001": "The belief revision is invalid.",
     "E-BRANCH-001": "The branch or fork point is invalid.",
+    "E-CASSETTE-001": "The model response cassette is missing or invalid.",
     "E-COMMAND-001": "The command batch is invalid.",
     "E-CONCEPT-001": "The conceptual revision is invalid.",
     "E-CONTRACT-001": "The narrative contract is invalid.",
@@ -77,6 +84,7 @@ ERROR_MESSAGES = {
     "E-MODAL-001": "The modal revision is invalid.",
     "E-MODEL-001": "The modal model is inconsistent.",
     "E-PRECOND-001": "A command precondition does not hold.",
+    "E-PRIVACY-001": "Model data transfer has not been enabled.",
     "E-PLAN-001": "The analysis plan is missing or invalid.",
     "E-PROJECT-001": "The project cannot be opened.",
     "E-PROSE-FORBIDDEN": "The prose contains a forbidden assertion.",

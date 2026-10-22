@@ -833,6 +833,8 @@ class Project:
         if query == "reader_inference":
             claim = params.get("claim", node_id)
             return {"query": query, "claim": claim, "simulated": True,
+                    "provenance": [record for record in projection["reader"]["provenance"]
+                                   if record["claim"] == claim],
                     "disclosures": [{"discourse_act_id": act["event_id"], "index": act["sequence"],
                                      "role": field, "story_refs": act["payload"].get("story_refs", [])}
                                     for act in self.events(branch, "discourse")
@@ -872,8 +874,68 @@ class Project:
         runs = [read_json(path) for path in folder.glob("*.json")] if folder.exists() else []
         return sorted(runs, key=lambda run: run.get("run_sequence", 0))
 
+    def propose(self, branch: str, adapter: Any, manifest: dict, budget: dict,
+                *, mode: str = "record", allow_data_transfer: bool = False) -> dict:
+        """Store suggestions separately from canon; only accept_proposal can seal one."""
+        from .adapters import ModelGateway
+        self._ensure_writable()
+        story = self.events(branch, "story")
+        request = {"projections": self.projection(branch)["projections"],
+                   "allowed_command_types": ["story"], "contract": self.contract,
+                   "unresolved_goals": [goal for actor in self.fixture["actors"]
+                                        for goal in actor.get("goals", [])],
+                   "contradictions": [], "entities": [{"id": entity["id"], "name": entity["name"]}
+                                                   for entity in self.fixture["entities"]],
+                   "predicates": ["world_fact", "observed_by", "causal_parent"],
+                   "branch_id": branch, "expected_sequence": len(story)}
+        gateway = ModelGateway(self.root, manifest, mode, budget, allow_data_transfer)
+        result = gateway.call("proposal", request, adapter)
+        proposals = result["output"].get("candidates")
+        require(type(proposals) is list and len(proposals) <= 16,
+                "E-ADAPTER-001", "Proposal adapter must return at most 16 candidates.")
+        saved = []
+        for index, item in enumerate(proposals):
+            require(type(item) is dict and set(item) == {"payload", "rationale", "expected_effects"}
+                    and type(item["payload"]) is dict and type(item["rationale"]) is str
+                    and type(item["expected_effects"]) is list,
+                    "E-ADAPTER-001", "Proposal candidate needs payload, rationale, and expected effects.")
+            proposal_id = stable_id("proposal", {"request_hash": result["request_hash"],
+                                               "index": index, "candidate": item})
+            record = {"proposal_id": proposal_id, "branch_id": branch,
+                      "expected_sequence": len(story), "candidate_index": index,
+                      "payload": item["payload"],
+                      "rationale": item["rationale"], "expected_effects": item["expected_effects"],
+                      "request_hash": result["request_hash"]}
+            saved.append(record)
+        # Validate every candidate before writing any diagnostic record. A bad
+        # later candidate must not leave a misleading partial proposal set.
+        for record in saved:
+            write_json(contained(self.root, "proposals", f"{record['proposal_id']}.json"), record)
+        return {"proposals": saved, "spend": result["spend"], "request_hash": result["request_hash"]}
+
+    def accept_proposal(self, branch: str, proposal_id: str) -> dict:
+        """Send a stored suggestion through the ordinary validated command bus."""
+        self._ensure_writable()
+        require(bool(re.fullmatch(r"proposal_[a-f0-9]{16}", proposal_id)),
+                "E-ADAPTER-001", "Invalid proposal ID.")
+        record = read_json(contained(self.root, "proposals", f"{proposal_id}.json"))
+        require(record.get("branch_id") == branch and record.get("proposal_id") == proposal_id,
+                "E-ADAPTER-001", "Proposal does not belong to this branch.")
+        candidate = {"payload": record["payload"], "rationale": record["rationale"],
+                     "expected_effects": record["expected_effects"]}
+        require(stable_id("proposal", {"request_hash": record["request_hash"],
+                                       "index": record["candidate_index"],
+                                       "candidate": candidate}) == proposal_id,
+                "E-ADAPTER-001", "Proposal diagnostic record failed integrity validation.")
+        payload = {**record["payload"], "source_kind": "generated", "proposal_id": proposal_id,
+                   "validator_id": "cmne-command-validator-v2"}
+        return self.append_story(branch, payload, record["expected_sequence"])
+
     def run(self, branch: str, conditions: list[str] | None = None,
-            variant_index: int = 0) -> dict:
+            variant_index: int = 0, *, adapter: Any = None,
+            adapter_mode: str = "template", adapter_manifest: dict | None = None,
+            adapter_budget: dict | None = None, allow_data_transfer: bool = False,
+            adapter_gateway: Any = None) -> dict:
         self._ensure_writable()
         require(type(variant_index) is int and variant_index in (0, 1, 2), "E-RUN-001",
                 "Matched template variant must be 0, 1, or 2.")
@@ -884,13 +946,38 @@ class Project:
         story, discourse = self.events(branch, "story"), self.events(branch, "discourse")
         packet = build_packet(self.fixture, self.contract, story, discourse)
         prose = template_realize(packet, variant_index)
+        adapter_failure = None
+        request_hash = None
+        spend = {"calls": 0, "tokens": 0, "cost_micros": 0}
+        require(adapter_mode in ("template", "record", "replay"),
+                "E-ADAPTER-001", "Run adapter mode must be template, record, or replay.")
+        from .adapters import OFFLINE_MANIFEST, ModelGateway, validate_manifest
+        manifest = adapter_manifest if adapter_manifest is not None else OFFLINE_MANIFEST
+        manifest = validate_manifest(manifest)
+        if adapter_mode != "template":
+            gateway = adapter_gateway or ModelGateway(self.root, manifest, adapter_mode,
+                adapter_budget if adapter_budget is not None else {"max_calls": 1, "max_tokens": 100000},
+                allow_data_transfer)
+            require(gateway.manifest == manifest and gateway.mode == adapter_mode,
+                    "E-ADAPTER-001", "Shared adapter gateway differs from this run's manifest or mode.")
+            try:
+                generated = gateway.call("prose", {"packet": packet, "variant_index": variant_index}, adapter)
+                prose = generated["output"]
+                request_hash = generated["request_hash"]
+            except CmneError as exc:
+                if exc.code not in ("E-ADAPTER-001", "E-PRIVACY-001"):
+                    raise
+                adapter_failure = {"code": exc.code, "message": "Offline template used after adapter failure."}
+            spend = gateway.spend
         from .prose import check_candidate
         sentence_records, findings = check_candidate(prose, packet)
         if not story:
             findings.append({"code": "E-RUN-EMPTY", "layer": "story", "message": "Seal at least one story event before running."})
         if not discourse:
             findings.append({"code": "E-RUN-PLAN", "layer": "discourse", "message": "Seal a discourse act before running."})
-        story_facts = set(packet["grounded_story_facts"])
+        story_facts = set(self.fixture.get("initial_facts", []))
+        story_facts.update(fact for event in story for fact in event["payload"].get("world_facts", [])
+                           if isinstance(fact, str))
         for condition in self.contract["required_story_conditions"]:
             if condition not in story_facts:
                 findings.append({"code": "E-RUN-CONTRACT", "layer": "story",
@@ -911,7 +998,20 @@ class Project:
                              "accepted": not findings, "findings": findings},
                "repair_first": failed_stage if findings else None,
                "projection_hashes": self.projection(branch)["hashes"],
-               "status": "failed" if findings else "passed", "realizer": "deterministic-template-v2"}
+               "status": "failed" if findings else "passed",
+               "realizer": "model-adapter" if request_hash else "deterministic-template-v2",
+               "adapter_failure": adapter_failure, "adapter_request_hash": request_hash,
+               "adapter_spend": spend,
+               "reproducibility": {"event_schema_version": SCHEMA_VERSION,
+                                   "reducer_version": REDUCER_VERSION,
+                                   "fixture": self.fixture, "contract": self.contract,
+                                   "fixture_hash": self.fixture["content_hash"],
+                                   "contract_hash": self.contract["content_hash"],
+                                   "conceptual_vocabulary": [a.get("conceptual_model", {})
+                                                            for a in self.fixture["actors"]],
+                                   "evaluation_plan": self.analysis_plan() if
+                                   contained(self.root, "study", "current_plan.json").exists() else None,
+                                   "adapter_mode": adapter_mode, "model_manifest": manifest}}
         write_json(contained(self.root, "runs", f"{run['run_id']}.json"), run)
         write_json(contained(self.root, "packets", f"{packet['packet_hash']}.json"), packet)
         return run

@@ -53,7 +53,9 @@ Use `expected_sequence` for optimistic concurrency on append. Sealed history is 
 | `validate_connection(branch, lens, source, target, kind, draft=None)` | Check a draft edge |
 | `graph(lens, branch, draft_id=None, sequence=None, discourse_index=None)` | Lens graph envelope |
 | `trace(branch, node_id, query="event", **params)` | Event/proposal, actor-belief, reader-inference, model, or prose-access trace |
-| `run(branch, conditions=None, variant_index=0)` | Synchronous offline run and persisted candidate/findings |
+| `run(branch, conditions=None, variant_index=0, *, adapter=None, adapter_mode="template", adapter_manifest=None, adapter_budget=None, allow_data_transfer=False)` | Synchronous template or recorded/replayed adapter run with persisted candidate/findings |
+| `propose(branch, adapter, manifest, budget, *, mode="record", allow_data_transfer=False)` | Save diagnostic proposals without changing canon |
+| `accept_proposal(branch, proposal_id)` | Validate and seal one stored proposal through the command bus |
 | `list_runs()` | Saved run records in sequence order |
 | `save_analysis_plan(plan)` / `analysis_plan()` | Freeze or read the study plan; amendments cite a prior hash |
 | `generate_matched_realizations()` | Save three deterministic composition variants for each condition |
@@ -71,3 +73,5 @@ Use `expected_sequence` for optimistic concurrency on append. Sealed history is 
 `cmne.core` provides `validate_fixture`, `validate_contract`, `validate_story_event`, `validate_discourse_act`, `replay`, `build_packet`, `template_realize`, `check_realization`, `canonical`, `digest`, and `stable_id`. `cmne.machines` provides weighted strain, crisis assessment, modal revision, and epiphany-candidate functions. `cmne.prose` provides the `ProseRealizer` protocol and sentence checker. `cmne.study` provides analysis-plan, blind-set, response, and report functions. `cmne.formula` provides `validate`, `evaluate`, and `EvaluationContext`. Validation raises `CmneError` with `code`, `field_path`, and `next_action`; the sidecar serializes it as RPC error data.
 
 These functions are the current Python interfaces, not a separate network service. For the exact field shapes, see [Data contracts](contracts.md).
+
+`cmne.adapters` provides the `ProposalAdapter` and `ProseAdapter` protocols, `CommandAdapter`, `ModelGateway`, and manifest validator. The [adapter contract](model-adapters.md) describes the executable JSON protocol, privacy opt-in, budget, and cassette replay.

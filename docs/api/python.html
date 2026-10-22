@@ -1186,6 +1186,34 @@
   
   
     <li class="md-nav__item">
+      <a href="model-adapters.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="json-rpc.html" class="md-nav__link">
         
   
@@ -1502,8 +1530,16 @@
 <td>Event/proposal, actor-belief, reader-inference, model, or prose-access trace</td>
 </tr>
 <tr>
-<td><code>run(branch, conditions=None, variant_index=0)</code></td>
-<td>Synchronous offline run and persisted candidate/findings</td>
+<td><code>run(branch, conditions=None, variant_index=0, *, adapter=None, adapter_mode="template", adapter_manifest=None, adapter_budget=None, allow_data_transfer=False)</code></td>
+<td>Synchronous template or recorded/replayed adapter run with persisted candidate/findings</td>
+</tr>
+<tr>
+<td><code>propose(branch, adapter, manifest, budget, *, mode="record", allow_data_transfer=False)</code></td>
+<td>Save diagnostic proposals without changing canon</td>
+</tr>
+<tr>
+<td><code>accept_proposal(branch, proposal_id)</code></td>
+<td>Validate and seal one stored proposal through the command bus</td>
 </tr>
 <tr>
 <td><code>list_runs()</code></td>
@@ -1547,6 +1583,7 @@
 <h2 id="pure-functions">Pure functions<a class="headerlink" href="#pure-functions" title="Permanent link">&para;</a></h2>
 <p><code>cmne.core</code> provides <code>validate_fixture</code>, <code>validate_contract</code>, <code>validate_story_event</code>, <code>validate_discourse_act</code>, <code>replay</code>, <code>build_packet</code>, <code>template_realize</code>, <code>check_realization</code>, <code>canonical</code>, <code>digest</code>, and <code>stable_id</code>. <code>cmne.machines</code> provides weighted strain, crisis assessment, modal revision, and epiphany-candidate functions. <code>cmne.prose</code> provides the <code>ProseRealizer</code> protocol and sentence checker. <code>cmne.study</code> provides analysis-plan, blind-set, response, and report functions. <code>cmne.formula</code> provides <code>validate</code>, <code>evaluate</code>, and <code>EvaluationContext</code>. Validation raises <code>CmneError</code> with <code>code</code>, <code>field_path</code>, and <code>next_action</code>; the sidecar serializes it as RPC error data.</p>
 <p>These functions are the current Python interfaces, not a separate network service. For the exact field shapes, see <a href="contracts.html">Data contracts</a>.</p>
+<p><code>cmne.adapters</code> provides the <code>ProposalAdapter</code> and <code>ProseAdapter</code> protocols, <code>CommandAdapter</code>, <code>ModelGateway</code>, and manifest validator. The <a href="model-adapters.html">adapter contract</a> describes the executable JSON protocol, privacy opt-in, budget, and cassette replay.</p>
 
 
 

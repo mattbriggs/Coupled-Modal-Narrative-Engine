@@ -122,14 +122,23 @@ def epiphany_candidate(actor: dict, story: list[dict], contract: dict) -> dict:
     crises = actor.get("crises", [])
     latest = crises[-1] if crises else None
     interpretations = actor.get("interpretations", [])
-    retrospective = [i for i in interpretations if i.get("supersedes_interpretations")]
+    by_id = {item["id"]: item for item in interpretations}
+    retrospective = [item for item in interpretations
+                     if latest and item.get("creating_event_id") == latest["event_id"]
+                     and any(old_id in by_id and (
+                         by_id[old_id]["claim"] != item["claim"]
+                         or by_id[old_id].get("status", "accepted") != item.get("status", "accepted"))
+                         and set(by_id[old_id].get("target_event_ids", []))
+                         & set(item.get("target_event_ids", []))
+                         for old_id in item.get("supersedes_interpretations", []))]
     checks = {
         "operative_model_before_trigger": bool(latest and latest.get("model_version_before", 0) >= 1),
         "material_strain": bool(latest and latest["assessment"]["checks"]["material_strain"]),
         "registered_inadequacy": bool(latest and latest.get("registered_inadequacy")),
         "earlier_event_reinterpreted": bool(retrospective),
         "consequential_change": bool(latest and latest.get("consequence")),
-        "projected_result": bool(latest and actor["conceptual_model"].get("version", 1) > 1),
+        "projected_result": bool(latest and actor["conceptual_model"].get("version", 1) >
+                                 latest.get("model_version_before", 1)),
         "no_abstract_lesson_required": not contract.get("require_abstract_lesson", False),
     }
     return {"label": "epiphany candidate", "candidate": all(checks.values()),

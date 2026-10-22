@@ -12,7 +12,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from cmne.core import CmneError, digest, make_event, stable_id
-from cmne.project import Project, read_import_json
+from cmne.project import Project
 from cmne.quantities import basis_points
 from cmne.upcast import upcast_event, v1_to_v2
 from cmne_sidecar.server import Dispatcher, handle
@@ -436,24 +436,28 @@ write_atomic(path, path.read_bytes() + json.dumps(event, sort_keys=True, separat
         folder = Path(self.temp.name)
         yaml = folder / "fixture.yaml"
         yaml.write_text("!!python/object/apply:os.system ['echo bad']", encoding="utf-8")
-        with self.assertRaises(CmneError):
-            read_import_json(yaml)
+        with self.assertRaises(CmneError) as tagged:
+            self.project.import_document("fixture", yaml)
+        self.assertEqual(tagged.exception.code, "E-INPUT-001")
         valid = folder / "contract.json"
         valid.write_text('{"id":"imported"}', encoding="utf-8")
-        with self.assertRaises(CmneError):
-            read_import_json(folder / "sub" / ".." / "contract.json")
-        linked = folder / "linked.json"
+        with self.assertRaises(CmneError) as traversal:
+            self.project.import_document("contract", folder / "sub" / ".." / "contract.json")
+        self.assertEqual(traversal.exception.code, "E-INPUT-001")
+        linked = self.root / "linked.json"
         try:
             linked.symlink_to(valid)
         except OSError:
             pass  # Windows runners may lack symlink creation rights.
         else:
-            with self.assertRaises(CmneError):
-                read_import_json(linked)
+            with self.assertRaises(CmneError) as symlink:
+                self.project.import_document("contract", linked)
+            self.assertEqual(symlink.exception.code, "E-INPUT-001")
         large = folder / "large.json"
         large.write_bytes(b" " * (6 * 1024 * 1024))
-        with self.assertRaises(CmneError):
-            read_import_json(large)
+        with self.assertRaises(CmneError) as oversized:
+            self.project.import_document("contract", large)
+        self.assertEqual(oversized.exception.code, "E-INPUT-001")
         self.assertEqual(self.project.import_document("contract", valid)["id"], "imported")
 
     def test_import_rejects_mismatched_claimed_hash(self):

@@ -9,7 +9,7 @@ from pathlib import Path
 from cmne.core import (CmneError, build_packet, check_realization, digest,
                        validate_fixture)
 from cmne.machines import (REVISION_OPTIONS, apply_modal_revision, crisis_assessment,
-                           strain, validate_modal_model)
+                           epiphany_candidate, strain, validate_modal_model)
 from cmne.project import Project
 from cmne.prose import check_candidate
 
@@ -109,6 +109,20 @@ class MachineGateTests(unittest.TestCase):
         self.assertTrue(all(candidate["checks"].values()))
         self.assertGreaterEqual(len(candidate["retrospective_interpretation_ids"]), 2)
 
+    def test_epiphany_requires_a_material_change_linked_to_its_trigger(self):
+        branch = self.branches["C3"]
+        actor = deepcopy(self.project.projection(branch)["projections"]["actor_a"])
+        old_by_id = {item["id"]: item for item in actor["interpretations"]}
+        for item in actor["interpretations"]:
+            if item.get("supersedes_interpretations"):
+                old = old_by_id[item["supersedes_interpretations"][-1]]
+                item["supersedes_interpretations"] = [old["id"]]
+                item["claim"] = old["claim"]
+                item["status"] = old.get("status", "accepted")
+        candidate = epiphany_candidate(actor, self.project.events(branch, "story"), self.project.contract)
+        self.assertFalse(candidate["candidate"])
+        self.assertFalse(candidate["checks"]["earlier_event_reinterpreted"])
+
     def test_ac39_motif_ledger_links_appearances_and_interpretations(self):
         ledger = self.project.motif_ledger(self.branches["C3"])["entities"]
         self.assertEqual({entry["discourse_index"] for entry in ledger["chair"]["appearances"]}, {1, 4, 6})
@@ -132,6 +146,21 @@ class MachineGateTests(unittest.TestCase):
         self.assertEqual(exposed["exposures"], [])
         event = self.project.events(branch, "story")[0]
         self.assertEqual(self.project.trace(branch, event["event_id"])["kind"], "story_event")
+
+    def test_observer_and_reader_claims_have_integrity_checked_source_paths(self):
+        branch = self.branches["C3"]
+        projection = self.project.projection(branch)["projections"]
+        observed = [record for record in projection["actor_a"]["provenance"]
+                    if record.get("claim") == "Mara finds the note"]
+        self.assertEqual(len(observed), 1)
+        self.assertEqual(observed[0]["holder"], "mara")
+        self.assertEqual(observed[0]["integrity_hash"],
+                         digest({key: value for key, value in observed[0].items()
+                                 if key != "integrity_hash"}))
+        reader = self.project.trace(branch, "something has changed", "reader_inference")
+        self.assertEqual(reader["provenance"][0]["origin_type"], "cue")
+        self.assertEqual(reader["provenance"][0]["transformation_chain"],
+                         [reader["disclosures"][0]["discourse_act_id"]])
 
     def test_nine_sample_history_observations(self):
         """Check nine outcomes in the bundled sample; independent goldens remain a gate."""
@@ -216,10 +245,43 @@ class DiscourseGateTests(unittest.TestCase):
         self.assertEqual(first["acts"][0]["reader_before"]["revealed"], [])
         self.assertTrue(first["acts"][0]["reader_after"]["cued"])
 
+    def test_packet_and_checker_scope_claims_to_each_focalizer(self):
+        with tempfile.TemporaryDirectory() as folder:
+            project = Project.create(Path(folder) / "private", "Private")
+            try:
+                private = project.append_story("main", {"title": "B decides", "actor_ids": ["actor_b"],
+                    "observed_by": ["actor_b"], "world_facts": ["B decided to leave"]})
+                project.append_discourse("main", {"title": "A tells", "focalizer": "actor_a",
+                    "story_refs": [private["event_id"]]})
+                project.append_discourse("main", {"title": "B tells", "focalizer": "actor_b",
+                    "story_refs": [private["event_id"]]})
+                packet = build_packet(project.fixture, project.contract,
+                                      project.events("main", "story"), project.events("main", "discourse"))
+                self.assertNotIn("B decided to leave", packet["acts"][0]["licensed_claims"])
+                self.assertEqual(packet["acts"][0]["story"][0]["world_facts"], [])
+                self.assertIn("B decided to leave", packet["acts"][1]["licensed_claims"])
+                _, findings = check_candidate("The choice stood.\n\nThe choice stood.", packet,
+                    [{"claims": ["B decided to leave"]}, {"claims": ["B decided to leave"]}])
+                violations = [item for item in findings if item["code"] == "E-PROSE-CLAIM"]
+                self.assertEqual([item["sentence_index"] for item in violations], [0])
+                _, inferred = check_candidate("B decided to leave.\n\nB decided to leave.", packet)
+                self.assertEqual([item["sentence_index"] for item in inferred
+                                  if item["code"] == "E-PROSE-CLAIM"], [0])
+            finally:
+                project.close()
+
     def test_ac16_private_motive_rejected(self):
         packet = self._packet()
         findings = check_realization("Len knew he wanted to leave Mara.", packet)
         self.assertIn("E-PROSE-PRIVATE", {item["code"] for item in findings})
+
+    def test_adapter_annotation_cannot_hide_unhedged_private_assertion(self):
+        packet = self._packet()
+        _, findings = check_candidate("Len had secretly planned to leave Mara.", packet,
+                                      [{"claim_type": "metaphor", "claims": []}])
+        self.assertIn("E-PROSE-PRIVATE", {item["code"] for item in findings})
+        self.assertIn("E-PROSE-PRIVATE", {item["code"] for item in
+                      check_realization("Len knew he could leave Mara.", packet)})
 
     def test_ac17_open_question_resolution_rejected(self):
         findings = check_realization("Len's acts were care, not avoidance.", self._packet())

@@ -78,6 +78,7 @@ nav:
       - API overview: api/index.md
       - Python kernel: api/python.md
       - Command line: api/cli.md
+      - Model adapters: api/model-adapters.md
       - JSON-RPC sidecar: api/json-rpc.md
       - Data contracts and errors: api/contracts.md
       - Error catalog: api/error-catalog.md

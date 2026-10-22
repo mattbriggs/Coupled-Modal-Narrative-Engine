@@ -29,7 +29,8 @@ class Dispatcher:
         self._run_thread: threading.Thread | None = None
         self._run_cancel = threading.Event()
 
-    def _start_async_run(self, project: Project, branches: list[tuple[str, str]], variant: int) -> dict:
+    def _start_async_run(self, project: Project, branches: list[tuple[str, str]], variant: int,
+                         run_options: dict | None = None) -> dict:
         require(not self._run_thread or not self._run_thread.is_alive(), "E-RUN-001",
                 "A run is already active.")
         self._run_cancel.clear()
@@ -50,7 +51,7 @@ class Dispatcher:
                         break
                     with self._run_state_lock:
                         state["current_condition"] = condition
-                    result = project.run(branch_id, [condition], variant)
+                    result = project.run(branch_id, [condition], variant, **(run_options or {}))
                     with self._run_state_lock:
                         state["runs"].append(result)
                         state["stages"].extend(result["stages"])
@@ -81,7 +82,7 @@ class Dispatcher:
                 "branch.fork", "command.submit", "draft.seal", "run.start", "export.report",
                 "study.plan.save", "study.generate", "study.ablations.realize",
                 "study.export", "study.responses.import", "study.report",
-                "study.decision_packet"):
+                "study.decision_packet", "proposal.generate", "proposal.accept"):
             raise CmneError("E-RUN-001", "A run is active; wait or cancel before changing the project.")
         if method == "app.hello":
             requested = str(p.get("protocol_version", PROTOCOL_VERSION))
@@ -232,7 +233,28 @@ class Dispatcher:
             return project.analysis_report(p["study_id"])
         if method == "study.decision_packet":
             return project.decision_packet(p["study_id"])
+        if method == "proposal.generate":
+            from cmne.adapters import CommandAdapter
+            command = p.get("adapter_command")
+            adapter = CommandAdapter([command]) if command else None
+            return project.propose(branch, adapter, p["model_manifest"],
+                                   p.get("budget", {"max_calls": 5, "max_tokens": 100000}),
+                                   mode=p.get("adapter_mode", "record"),
+                                   allow_data_transfer=p.get("allow_data_transfer") is True)
+        if method == "proposal.accept":
+            return project.accept_proposal(branch, p["proposal_id"])
         if method == "run.start":
+            from cmne.adapters import OFFLINE_MANIFEST, CommandAdapter, ModelGateway
+            command = p.get("adapter_command")
+            mode = p.get("adapter_mode", "template")
+            manifest = p.get("model_manifest") or OFFLINE_MANIFEST
+            budget = p.get("budget") or {"max_calls": 5, "max_tokens": 100000}
+            run_options = {"adapter": CommandAdapter([command]) if command else None,
+                           "adapter_mode": mode, "adapter_manifest": manifest,
+                           "adapter_budget": budget,
+                           "allow_data_transfer": p.get("allow_data_transfer") is True,
+                           "adapter_gateway": ModelGateway(project.root, manifest, mode, budget,
+                               p.get("allow_data_transfer") is True) if mode != "template" else None}
             requested_conditions = p.get("conditions")
             require(requested_conditions is None or isinstance(requested_conditions, list), "E-RUN-001",
                     "Conditions must be an array.")
@@ -246,15 +268,16 @@ class Dispatcher:
                 if p.get("async"):
                     return self._start_async_run(project,
                         [(condition, by_condition[condition]) for condition in requested_conditions],
-                        p.get("variant_index", 0))
-                runs = [project.run(by_condition[condition], [condition], p.get("variant_index", 0))
+                        p.get("variant_index", 0), run_options)
+                runs = [project.run(by_condition[condition], [condition], p.get("variant_index", 0),
+                                    **run_options)
                         for condition in requested_conditions]
                 return {"runs": runs, "status": "failed" if any(run["status"] != "passed" for run in runs)
                         else "passed"}
             if p.get("async"):
                 condition = project.meta["branches"][branch].get("condition", "C3")
-                return self._start_async_run(project, [(condition, branch)], p.get("variant_index", 0))
-            return project.run(branch, p.get("conditions"), p.get("variant_index", 0))
+                return self._start_async_run(project, [(condition, branch)], p.get("variant_index", 0), run_options)
+            return project.run(branch, p.get("conditions"), p.get("variant_index", 0), **run_options)
         if method == "run.status":
             if p.get("job_id"):
                 with self._run_state_lock:

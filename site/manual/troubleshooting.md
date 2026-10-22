@@ -30,4 +30,4 @@ If the app reports a **stale lock**, confirm the former writer has stopped, then
 
 ## Fact — current recovery scope
 
-Saved drafts and sealed streams survive a normal process interruption. There is no model service or cost budget in the current release, so the model outage flow from scenario S-10 is future work. Background runs can be cancelled before the next condition; a currently executing condition finishes first and sealed events remain intact. The [roadmap](../design/roadmap.md) identifies further recovery work.
+Saved drafts and sealed streams survive a normal process interruption. The optional [JSON adapter](../api/model-adapters.md) records failure without vendor exception text and falls back to the template on an unavailable prose adapter. Its call, token, and optional cost limits stop additional calls with `E-BUDGET-001`; cassette replay works offline. The desktop still defaults to the template and has no bundled model vendor. Background runs can be cancelled before the next condition; a currently executing condition finishes first and sealed events remain intact. The [roadmap](../design/roadmap.md) identifies further recovery work.

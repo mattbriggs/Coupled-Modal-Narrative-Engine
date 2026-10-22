@@ -51,6 +51,17 @@ def parser() -> argparse.ArgumentParser:
     trace.add_argument("--model-version", type=int)
     run = project_command("run", "Run and save a deterministic realization")
     run.add_argument("--variant", type=int, choices=(0, 1, 2), default=0)
+    for command in (run, project_command("propose", "Request diagnostic story proposals")):
+        command.add_argument("--adapter-mode", choices=("template", "record", "replay"),
+                             default="template" if command is run else "record")
+        command.add_argument("--adapter-command", help="JSON adapter executable for record mode")
+        command.add_argument("--model-manifest", help="JSON model and prompt manifest")
+        command.add_argument("--max-calls", type=int, default=5)
+        command.add_argument("--max-tokens", type=int, default=100000)
+        command.add_argument("--max-cost-micros", type=int)
+        command.add_argument("--allow-data-transfer", action="store_true")
+    accept = project_command("accept-proposal", "Validate and seal a stored story proposal")
+    accept.add_argument("proposal_id")
     plan = project_command("analysis-plan", "Save or amend a fixed JSON study plan", False)
     plan.add_argument("file")
     project_command("study-generate", "Create three matched candidates for each sample condition", False)
@@ -116,7 +127,28 @@ def execute(args: argparse.Namespace):
             return project.trace(args.branch, args.target, args.query,
                                  actor_id=args.actor_id, model_version=args.model_version)
         if action == "run":
-            return project.run(args.branch, variant_index=args.variant)
+            from .adapters import CommandAdapter
+            manifest = read_import_json(args.model_manifest) if args.model_manifest else None
+            budget = {"max_calls": args.max_calls, "max_tokens": args.max_tokens}
+            if args.max_cost_micros is not None:
+                budget["max_cost_micros"] = args.max_cost_micros
+            return project.run(args.branch, variant_index=args.variant,
+                               adapter=CommandAdapter([args.adapter_command]) if args.adapter_command else None,
+                               adapter_mode=args.adapter_mode, adapter_manifest=manifest,
+                               adapter_budget=budget, allow_data_transfer=args.allow_data_transfer)
+        if action == "propose":
+            from .adapters import CommandAdapter
+            if not args.model_manifest:
+                raise CmneError("E-ADAPTER-001", "A model manifest is required for proposals.")
+            budget = {"max_calls": args.max_calls, "max_tokens": args.max_tokens}
+            if args.max_cost_micros is not None:
+                budget["max_cost_micros"] = args.max_cost_micros
+            return project.propose(args.branch,
+                                   CommandAdapter([args.adapter_command]) if args.adapter_command else None,
+                                   read_import_json(args.model_manifest), budget,
+                                   mode=args.adapter_mode, allow_data_transfer=args.allow_data_transfer)
+        if action == "accept-proposal":
+            return project.accept_proposal(args.branch, args.proposal_id)
         if action == "analysis-plan":
             return project.save_analysis_plan(read_import_json(args.file))
         if action == "study-generate":

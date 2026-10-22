@@ -1106,6 +1106,34 @@
   
   
     <li class="md-nav__item">
+      <a href="model-adapters.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="json-rpc.html" class="md-nav__link">
         
   
@@ -1285,6 +1313,12 @@
 <td>Name the observer, access path, and accessible source event.</td>
 </tr>
 <tr>
+<td><code>E-ADAPTER-001</code></td>
+<td>The model adapter is unavailable or invalid.</td>
+<td>A model adapter is unavailable or returned an invalid response.</td>
+<td>Use the offline template or check the adapter manifest and response contract.</td>
+</tr>
+<tr>
 <td><code>E-APPEND-001</code></td>
 <td>The branch sequence is stale.</td>
 <td>The branch head changed since the caller read it.</td>
@@ -1301,6 +1335,18 @@
 <td>The branch or fork point is invalid.</td>
 <td>The branch or fork point is invalid.</td>
 <td>Choose an existing branch and a sequence within its story history.</td>
+</tr>
+<tr>
+<td><code>E-BUDGET-001</code></td>
+<td>The model budget is exhausted.</td>
+<td>A model run reached its call, token, or cost limit.</td>
+<td>Inspect the recorded spend and set a new explicit budget before retrying.</td>
+</tr>
+<tr>
+<td><code>E-CASSETTE-001</code></td>
+<td>The model response cassette is missing or invalid.</td>
+<td>A recorded model response is missing or fails integrity validation.</td>
+<td>Record the canonical request first or restore its verified cassette.</td>
 </tr>
 <tr>
 <td><code>E-COMMAND-001</code></td>
@@ -1409,6 +1455,12 @@
 <td>A command precondition does not hold.</td>
 <td>A command precondition is not true before the event.</td>
 <td>Inspect the preceding projection and revise the command or its evidence.</td>
+</tr>
+<tr>
+<td><code>E-PRIVACY-001</code></td>
+<td>Model data transfer has not been enabled.</td>
+<td>Model data transfer was not enabled for this run.</td>
+<td>Enable transfer explicitly after reviewing the fixture and evaluator data.</td>
 </tr>
 <tr>
 <td><code>E-PROJECT-001</code></td>

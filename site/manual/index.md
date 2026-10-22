@@ -23,7 +23,7 @@ This manual starts with a task, shows the action, and then explains the construc
 | S-07–S-09 | How do I prepare a blinded study dry run and read responses? | [Prepare a blinded evaluation](evaluate-study.md) |
 | S-10, S-13 | What happens when a process stops or a draft remains? | [Troubleshooting](troubleshooting.md) |
 
-S-07–S-09 have a file-based study dry run; seven controlled ablation passages are saved; recruited human evaluation is still open. S-11 and S-12 depend on adapter and published-run replication work; see the [roadmap](../design/roadmap.md).
+S-07–S-09 have a file-based study dry run; seven controlled ablation passages are saved; recruited human evaluation is still open. S-11 and S-12 have a [record/replay adapter API](../api/model-adapters.md), while a release vendor and published-run replication work remain open; see the [roadmap](../design/roadmap.md).
 
 ## Principle: separate evidence from interpretation
 

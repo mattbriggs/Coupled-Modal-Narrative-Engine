@@ -1197,6 +1197,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../api/model-adapters.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api/json-rpc.html" class="md-nav__link">
         
   
@@ -1428,7 +1456,7 @@ exports/&lt;run-id&gt;.md
   B --&gt; RB[Run B]</code></pre>
 <p>Forking copies a verified story prefix and the initial contiguous discourse acts whose references remain in that prefix into a new branch. It stops copying discourse at the first act that refers beyond the prefix. The old story suffix becomes editable draft nodes on the new branch. When sealed, those nodes receive new event IDs. <code>branch.compare</code> reports common payload prefix, first divergence, counts unique to each branch, and projection hashes. It does not generate a prose diff.</p>
 <h2 id="reproducibility-boundary">Reproducibility boundary<a class="headerlink" href="#reproducibility-boundary" title="Permanent link">&para;</a></h2>
-<p>Replay reduces fixture, contract, and selected event prefixes into six projections and content hashes. Integer basis points avoid floating-point state in strain and confidence fields. The run saves the packet hash, projection hashes, realizer ID, stages, prose, and findings. This supports local repeatability; published replication, adapter cassettes, and full evaluation provenance remain future work.</p>
+<p>Replay reduces fixture, contract, and selected event prefixes into six projections and content hashes. Integer basis points avoid floating-point state in strain and confidence fields. The run saves the packet hash, projection hashes, realizer ID, stages, prose, findings, adapter spend, and a reproducibility record. Canonical model requests and responses live under <code>cassettes/</code>; replay checks request and response hashes without a network call. This supports local repeatability; published replication and full evaluation provenance remain future work.</p>
 
 
 

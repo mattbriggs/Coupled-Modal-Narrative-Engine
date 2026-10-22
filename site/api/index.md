@@ -19,4 +19,4 @@ flowchart LR
 | [Data contracts](contracts.md) | Event fields, formula syntax, validation, errors |
 | [Tauri bridge](tauri.md) | Frontend to sidecar command boundary |
 
-Protocol version is `1.0`; project/event schema version is `1`. Methods returning errors do not mutate sealed history unless explicitly described. See the [storage design](../design/storage.md) for the on-disk model.
+Protocol version is `1.0`; event schema and reducer version are `2`, while project metadata format remains version `1`. Methods returning errors do not mutate sealed history unless explicitly described. See the [storage design](../design/storage.md) for the on-disk model.

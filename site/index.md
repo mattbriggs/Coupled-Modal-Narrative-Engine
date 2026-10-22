@@ -3,7 +3,7 @@
 CMNE Workbench is a local desktop instrument for drafting a bounded fictional scene, tracking what characters and readers can know, and producing an offline prose passage from a discourse plan. It separates **story** (what happens) from **discourse** (the order and form in which a reader encounters it). Its Mara and Len sample compares four kinds of change in Mara's understanding.
 
 !!! info "Implementation scope"
-    This site documents the 2026-10-21 local implementation checkpoint. The workbench has a Tauri/React interface and a Python sidecar. The seeded sample produces four deterministic passages of about 800 words and three matched offline composition variants per condition for a blinded study dry run. There is no language-model adapter or completed human study. Pages mark remaining gate work explicitly.
+    This site documents the 2026-10-21 local implementation checkpoint. The workbench has a Tauri/React interface and a Python sidecar. The seeded sample produces four deterministic passages of about 800 words and three matched offline composition variants per condition for a blinded study dry run. An optional JSON adapter bridge supports recorded and replayed model calls; no external vendor is bundled or human study completed. Pages mark remaining gate work explicitly.
 
 ## Choose a route
 

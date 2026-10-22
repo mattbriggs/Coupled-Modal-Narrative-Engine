@@ -68,11 +68,15 @@ A draft contains `id`, `branch_id`, `lens`, `nodes`, and `edges`. Node entries h
 |---|---|---|
 | `packet.build` / `packet.get` | Optional `branch_id` | Current computed packet; these do not read an archived packet by hash |
 | `run.start` | Optional `branch_id`, `conditions`, `variant_index`, `async: true` | Saved run(s), or `{job_id, status, total}` for a background run |
+| `proposal.generate` | `model_manifest`; optional `adapter_command`, `adapter_mode`, `budget`, `allow_data_transfer` | Diagnostic candidates and spend; canon unchanged |
+| `proposal.accept` | `proposal_id`; optional `branch_id` | Story event after ordinary validation |
 | `run.status` | Optional `branch_id` or `job_id` | Latest saved run, or background progress and completed runs |
 | `run.cancel` | — | Requests cancellation at the next condition boundary |
 | `export.report` | Optional `branch_id` | `{path}` for latest run's Markdown report |
 
 For a single run, the condition must match the selected branch's condition. To run all four sample branches, pass `conditions: ["C0","C1","C2","C3"]` in that order. `export.report` requires a saved run for that branch.
+
+`run.start` also accepts `adapter_mode: "template"|"record"|"replay"`, `model_manifest`, `adapter_command`, `budget` (`max_calls`, `max_tokens`, optional `max_cost_micros`), and `allow_data_transfer: true`. A multi-condition call shares one budget. Record mode needs explicit transfer permission; replay uses the local cassette and no executable. See the [adapter contract](model-adapters.md).
 
 `async: true` returns promptly. Poll `run.status` with the returned `job_id`; its `completed` and `total` fields show condition progress. Each status result is a snapshot, so its run list will not change after the response is returned. `run.cancel` stops before the next condition, without changing sealed story or discourse. Read-only graph/event queries and draft editing remain available while a run is active; canon, fixture, contract, study, and export mutations are refused until it finishes.
 

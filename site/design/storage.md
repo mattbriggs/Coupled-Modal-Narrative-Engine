@@ -42,4 +42,4 @@ Forking copies a verified story prefix and the initial contiguous discourse acts
 
 ## Reproducibility boundary
 
-Replay reduces fixture, contract, and selected event prefixes into six projections and content hashes. Integer basis points avoid floating-point state in strain and confidence fields. The run saves the packet hash, projection hashes, realizer ID, stages, prose, and findings. This supports local repeatability; published replication, adapter cassettes, and full evaluation provenance remain future work.
+Replay reduces fixture, contract, and selected event prefixes into six projections and content hashes. Integer basis points avoid floating-point state in strain and confidence fields. The run saves the packet hash, projection hashes, realizer ID, stages, prose, findings, adapter spend, and a reproducibility record. Canonical model requests and responses live under `cassettes/`; replay checks request and response hashes without a network call. This supports local repeatability; published replication and full evaluation provenance remain future work.

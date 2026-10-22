@@ -15,6 +15,8 @@ Install the package in a virtual environment, then run `cmne --help`. Add `--jso
 | `check PATH FILE [--branch ID]` | Check a UTF-8 prose file against the packet |
 | `trace PATH TARGET [--query TYPE]` | Trace an event, actor belief, reader inference, model change, or run exposure |
 | `run PATH [--branch ID] [--variant 0\|1\|2]` | Save a run and rejected-candidate findings |
+| `propose PATH [--branch ID] --model-manifest FILE` | Save diagnostic model proposals outside canon |
+| `accept-proposal PATH PROPOSAL_ID [--branch ID]` | Validate and seal a stored proposal |
 | `graph PATH [--branch ID] [--lens LENS]` | Read a lens graph |
 | `analysis-plan PATH FILE` | Save or amend the fixed study plan |
 | `study-generate PATH` | Save three matched template variants for C0–C3 |
@@ -38,3 +40,5 @@ cmne export-evaluation /tmp/cmne-example --seed 33
 ```
 
 `analysis-plan` must precede export. The CLI accepts only JSON imports; it does not execute YAML tags. See [Prepare a blinded evaluation](../manual/evaluate-study.md) for the plan and response fields. Long CLI runs are synchronous; the desktop sidecar offers background run polling and cancellation between conditions.
+
+`run` and `propose` also accept `--adapter-mode record|replay`, `--adapter-command EXECUTABLE`, `--model-manifest FILE`, `--max-calls`, `--max-tokens`, optional `--max-cost-micros`, and `--allow-data-transfer`. The default `run` mode remains `template`. The [model adapter contract](model-adapters.md) explains the JSON protocol, privacy gate, cassette, and budget behavior.

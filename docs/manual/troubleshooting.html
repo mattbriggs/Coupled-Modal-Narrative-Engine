@@ -1208,6 +1208,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../api/model-adapters.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api/json-rpc.html" class="md-nav__link">
         
   
@@ -1448,7 +1476,7 @@
 <li>Repeat only work that is absent from the saved project. The shell automatically retries only stateless validation calls.</li>
 </ol>
 <h2 id="fact-current-recovery-scope">Fact — current recovery scope<a class="headerlink" href="#fact-current-recovery-scope" title="Permanent link">&para;</a></h2>
-<p>Saved drafts and sealed streams survive a normal process interruption. There is no model service or cost budget in the current release, so the model outage flow from scenario S-10 is future work. Background runs can be cancelled before the next condition; a currently executing condition finishes first and sealed events remain intact. The <a href="../design/roadmap.html">roadmap</a> identifies further recovery work.</p>
+<p>Saved drafts and sealed streams survive a normal process interruption. The optional <a href="../api/model-adapters.html">JSON adapter</a> records failure without vendor exception text and falls back to the template on an unavailable prose adapter. Its call, token, and optional cost limits stop additional calls with <code>E-BUDGET-001</code>; cassette replay works offline. The desktop still defaults to the template and has no bundled model vendor. Background runs can be cancelled before the next condition; a currently executing condition finishes first and sealed events remain intact. The <a href="../design/roadmap.html">roadmap</a> identifies further recovery work.</p>
 
 
 

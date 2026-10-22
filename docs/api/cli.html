@@ -14,7 +14,7 @@
         <link rel="prev" href="python.html">
       
       
-        <link rel="next" href="json-rpc.html">
+        <link rel="next" href="model-adapters.html">
       
       
         
@@ -1116,6 +1116,34 @@
   
   
     <li class="md-nav__item">
+      <a href="model-adapters.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="json-rpc.html" class="md-nav__link">
         
   
@@ -1321,6 +1349,14 @@
 <td>Save a run and rejected-candidate findings</td>
 </tr>
 <tr>
+<td><code>propose PATH [--branch ID] --model-manifest FILE</code></td>
+<td>Save diagnostic model proposals outside canon</td>
+</tr>
+<tr>
+<td><code>accept-proposal PATH PROPOSAL_ID [--branch ID]</code></td>
+<td>Validate and seal a stored proposal</td>
+</tr>
+<tr>
 <td><code>graph PATH [--branch ID] [--lens LENS]</code></td>
 <td>Read a lens graph</td>
 </tr>
@@ -1371,6 +1407,7 @@ cmne<span class="w"> </span>analysis-plan<span class="w"> </span>/tmp/cmne-examp
 cmne<span class="w"> </span>export-evaluation<span class="w"> </span>/tmp/cmne-example<span class="w"> </span>--seed<span class="w"> </span><span class="m">33</span>
 </code></pre></div>
 <p><code>analysis-plan</code> must precede export. The CLI accepts only JSON imports; it does not execute YAML tags. See <a href="../manual/evaluate-study.html">Prepare a blinded evaluation</a> for the plan and response fields. Long CLI runs are synchronous; the desktop sidecar offers background run polling and cancellation between conditions.</p>
+<p><code>run</code> and <code>propose</code> also accept <code>--adapter-mode record|replay</code>, <code>--adapter-command EXECUTABLE</code>, <code>--model-manifest FILE</code>, <code>--max-calls</code>, <code>--max-tokens</code>, optional <code>--max-cost-micros</code>, and <code>--allow-data-transfer</code>. The default <code>run</code> mode remains <code>template</code>. The <a href="model-adapters.html">model adapter contract</a> explains the JSON protocol, privacy gate, cassette, and budget behavior.</p>
 
 
 

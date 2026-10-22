@@ -319,7 +319,8 @@ def replay(fixture: dict, contract: dict, story: list[dict], discourse: list[dic
         validate_modal_model(actor["modal_model"])
     world: dict[str, Any] = {"facts": list(fixture.get("initial_facts", [])), "events": []}
     tension: dict[str, Any] = {"world_instability_bp": 0, "telling_tension_bp": 0, "series": []}
-    reader: dict[str, Any] = {"simulated": True, "revealed": [], "cued": [], "withheld": []}
+    reader: dict[str, Any] = {"simulated": True, "revealed": [], "cued": [], "withheld": [],
+                              "provenance": []}
     style = deepcopy(fixture.get("style", {"focalizer": fixture["actors"][0]["id"], "distance": "close"}))
     for event in selected_story:
         p = event["payload"]
@@ -330,6 +331,20 @@ def replay(fixture: dict, contract: dict, story: list[dict], discourse: list[dic
             actors[actor_id]["event_horizon"] = event["sequence"]
             for entity_id in p.get("entity_ids", []):
                 actors[actor_id]["physical_state"][entity_id] = event["event_id"]
+            remembered = [selected_story[seq - 1]["event_id"]
+                          for seq in p.get("remembered_story_sequences", [])
+                          if type(seq) is int and 1 <= seq <= len(selected_story)]
+            for claim in p.get("world_facts", []):
+                source_ids = [event["event_id"], *remembered]
+                provenance = {"holder": actor_id, "claim": claim,
+                              "origin_type": "recollection" if p.get("kind") == "recollection" else
+                                             p.get("access_path", "observation"),
+                              "source_event_ids": source_ids,
+                              "transformation_chain": [event["event_id"]],
+                              "availability_story_sequence": event["sequence"],
+                              "confidence_bp": 10000}
+                actors[actor_id]["provenance"].append({**provenance,
+                                                         "integrity_hash": digest(provenance)})
         if p.get("belief_revision"):
             revision = p["belief_revision"]
             actor = actors[revision["observer_id"]]
@@ -392,6 +407,15 @@ def replay(fixture: dict, contract: dict, story: list[dict], discourse: list[dic
         reader["revealed"].extend(p.get("reveal", []))
         reader["cued"].extend(p.get("cue", []))
         reader["withheld"].extend(p.get("withhold", []))
+        for role in ("reveal", "cue", "withhold"):
+            for claim in p.get(role, []):
+                provenance = {"holder": "simulated_reader", "claim": claim,
+                              "origin_type": role, "source_event_ids": list(p.get("story_refs", [])),
+                              "transformation_chain": [act["event_id"]],
+                              "availability_discourse_index": act["sequence"],
+                              "confidence_bp": 10000 if role == "reveal" else 5000}
+                reader["provenance"].append({**provenance,
+                                              "integrity_hash": digest(provenance)})
         if p.get("focalizer"):
             style["focalizer"] = p["focalizer"]
     tension["telling_tension_bp"] = min(10000, len(reader["withheld"]) * 1200)
@@ -414,16 +438,18 @@ def build_packet(fixture: dict, contract: dict, story: list[dict], discourse: li
     licensed_claims = list(fixture.get("narrator_facts", []))
     named = [a["name"] for a in fixture["actors"]] + [e["name"] for e in fixture.get("entities", [])]
     remembered: dict[str, set[int]] = {actor["id"]: set() for actor in fixture["actors"]}
-    for event in story:
-        p = event["payload"]
-        for observer in p.get("observed_by", []):
-            remembered[observer].update(p.get("remembered_story_sequences", []))
+    for source_event in story:
+        for observer in source_event["payload"].get("observed_by", []):
+            remembered[observer].update(source_event["payload"].get("remembered_story_sequences", []))
     for event in discourse:
         p = event["payload"]
         focalizer = p.get("focalizer") or projection["prose_style"].get("focalizer")
-        accessible = [source for source in story if focalizer in source["payload"].get("observed_by", [])
+        narrative_time = p.get("narrative_time", max(
+            (by_id[ref]["sequence"] for ref in p["story_refs"]), default=0))
+        accessible = [source for source in story if (
+                      focalizer in source["payload"].get("observed_by", [])
                       or focalizer in source["payload"].get("actor_ids", [])
-                      or source["sequence"] in remembered.get(focalizer, set())]
+                      or source["sequence"] in remembered.get(focalizer, set()))]
         accessible_ids = {source["event_id"] for source in accessible}
         focal_facts = [fact for source in accessible for fact in source["payload"].get("world_facts", [])]
         for fact in focal_facts:
@@ -436,12 +462,13 @@ def build_packet(fixture: dict, contract: dict, story: list[dict], discourse: li
                     reader_state[field].append(item)
         acts.append({"id": event["event_id"], "title": p["title"], "mode": p["mode"],
                      "discourse_index": event["sequence"],
-                     "narrative_time": p.get("narrative_time", max(
-                         (by_id[ref]["sequence"] for ref in p["story_refs"]), default=0)),
+                     "narrative_time": narrative_time,
                      "duration_weight_bp": p.get("duration_weight_bp", 5000),
                      "salience_bp": p.get("salience_bp", 5000),
                      "variant": p.get("variant", "authored"),
                      "focalizer": focalizer, "focal_access_event_ids": sorted(accessible_ids),
+                     "licensed_claims": list(fixture.get("narrator_facts", [])) + [
+                         fact for fact in focal_facts if fact not in fixture.get("narrator_facts", [])],
                      "reader_before": before, "reader_after": deepcopy(reader_state),
                      "text": p.get("text", ""), "reveal": p["reveal"], "cue": p["cue"],
                      "withhold": p["withhold"], "story_refs": p["story_refs"],
@@ -459,7 +486,7 @@ def build_packet(fixture: dict, contract: dict, story: list[dict], discourse: li
         resolution_patterns.append(r"\b(?:len's acts|the repairs|the repair|the chair repair|the bowl replacement|it)\s+(?:was|were|meant|proved)\s+(?:only\s+)?(?:care|avoidance)\b")
     packet = {"acts": acts, "fixture_id": fixture.get("id"), "realizer_version": REALIZER_VERSION,
               "sample_expansion": supports_expanded_sample(fixture, story) if fixture.get("id") == "mara-len" else False,
-              "grounded_story_facts": projection["environment"]["facts"],
+              "grounded_story_facts": licensed_claims,
               "style": projection["prose_style"], "reader": projection["reader"],
               "known_names": named, "actor_names": {a["id"]: a["name"] for a in fixture["actors"]},
               "licensed_claims": licensed_claims, "disclosure_schedule": disclosure_schedule,

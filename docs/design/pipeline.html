@@ -1197,6 +1197,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../api/model-adapters.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../api/json-rpc.html" class="md-nav__link">
         
   
@@ -1413,7 +1441,7 @@
 <h2 id="packet-content">Packet content<a class="headerlink" href="#packet-content" title="Permanent link">&para;</a></h2>
 <p><code>build_packet</code> replays the branch and combines ordered acts with discourse time, focal access, reader state before/after each act, licensed claims, style, forbidden assertions, unresolved questions, voice rules, and word bounds. Story references outside focal access have their descriptions/facts removed from the realizer view. A canonical hash identifies the packet, saved at <code>packets/&lt;packet-hash&gt;.json</code> when running.</p>
 <h2 id="realization">Realization<a class="headerlink" href="#realization" title="Permanent link">&para;</a></h2>
-<p><code>template_realize</code> joins authored discourse <code>text</code> with blank lines. If an act has no text, it uses referenced story descriptions/titles. The unchanged seeded Mara and Len story can use authored expanded paragraphs; custom projects and edited cues use their actual authored text. No network or model API is used.</p>
+<p><code>template_realize</code> joins authored discourse <code>text</code> with blank lines. If an act has no text, it uses referenced story descriptions/titles. The unchanged seeded Mara and Len story can use authored expanded paragraphs; custom projects and edited cues use their actual authored text. This is the default offline path. A researcher-supplied <a href="../api/model-adapters.html">JSON adapter</a> can realize a candidate in record mode with explicit data-transfer permission, or replay a saved response offline.</p>
 <h2 id="checks-and-limits">Checks and limits<a class="headerlink" href="#checks-and-limits" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -1453,7 +1481,7 @@
 </tr>
 </tbody>
 </table>
-<p>The checker uses deterministic language rules and optional structured sentence annotations. It is not a general semantic proof: paraphrases can be missed, and figurative language can be ambiguous. The sample's care/avoidance question has an explicit resolution pattern; arbitrary open questions need their own rule or review. There is no model adapter. The manual explains how to <a href="../manual/read-output.html">read a finding</a>.</p>
+<p>The checker uses deterministic language rules and optional structured sentence annotations. It is not a general semantic proof: paraphrases can be missed, and figurative language can be ambiguous. The sample's care/avoidance question has an explicit resolution pattern; arbitrary open questions need their own rule or review. Model outputs pass through the same checker; adapter annotations cannot downgrade an unhedged assertion. The manual explains how to <a href="../manual/read-output.html">read a finding</a>.</p>
 
 
 

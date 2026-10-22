@@ -1,8 +1,8 @@
 {
   "counts": {
-    "partial": 8,
-    "passed": 32,
-    "planned": 232
+    "partial": 11,
+    "passed": 43,
+    "planned": 218
   },
   "criteria": {
     "AC-01": {
@@ -135,14 +135,17 @@
     },
     "AC-19": {
       "planned_test": "tests/acceptance/test_ac_19.py",
-      "status": "planned",
-      "tests": []
+      "status": "passed",
+      "tests": [
+        "tests/test_adapters.py::test_no_transfer_opt_in_or_unavailable_adapter_uses_template_without_leaking_error"
+      ]
     },
     "AC-20": {
       "planned_test": "tests/acceptance/test_ac_20.py",
       "status": "passed",
       "tests": [
-        "tests/test_milestones23.py::test_ac20_generated_proposal_trace_cites_validator"
+        "tests/test_milestones23.py::test_ac20_generated_proposal_trace_cites_validator",
+        "tests/test_adapters.py::test_proposals_are_diagnostic_until_user_accepts_validated_command"
       ]
     },
     "AC-21": {
@@ -213,18 +216,24 @@
     },
     "AC-30": {
       "planned_test": "tests/acceptance/test_ac_30.py",
-      "status": "planned",
-      "tests": []
+      "status": "passed",
+      "tests": [
+        "tests/test_adapters.py::test_record_and_socket_blocked_replay_are_byte_identical_and_leave_canon_alone",
+        "tests/test_adapters.py::test_missing_and_tampered_cassettes_fail_without_model_call"
+      ]
     },
     "AC-31": {
       "planned_test": "tests/acceptance/test_ac_31.py",
-      "status": "planned",
-      "tests": []
+      "status": "passed",
+      "tests": [
+        "tests/test_adapters.py::test_sixth_call_is_blocked_with_spend_and_no_adapter_invocation"
+      ]
     },
     "AC-32": {
       "planned_test": "tests/acceptance/test_ac_32.py",
-      "status": "partial",
+      "status": "passed",
       "tests": [
+        "tests/test_milestone1.py::test_import_rejects_unsafe_formats_paths_and_size",
         "tests/test_core.py::test_project_rejects_symlink_that_leaves_root"
       ]
     },
@@ -1092,23 +1101,31 @@
     },
     "REQ-096": {
       "planned_test": "tests/acceptance/test_req_096.py",
-      "status": "planned",
-      "tests": []
+      "status": "passed",
+      "tests": [
+        "tests/test_adapters.py::test_proposals_are_diagnostic_until_user_accepts_validated_command"
+      ]
     },
     "REQ-097": {
       "planned_test": "tests/acceptance/test_req_097.py",
-      "status": "planned",
-      "tests": []
+      "status": "passed",
+      "tests": [
+        "tests/test_adapters.py::test_proposals_are_diagnostic_until_user_accepts_validated_command"
+      ]
     },
     "REQ-098": {
       "planned_test": "tests/acceptance/test_req_098.py",
-      "status": "planned",
-      "tests": []
+      "status": "passed",
+      "tests": [
+        "tests/test_adapters.py::test_record_and_socket_blocked_replay_are_byte_identical_and_leave_canon_alone"
+      ]
     },
     "REQ-099": {
       "planned_test": "tests/acceptance/test_req_099.py",
-      "status": "planned",
-      "tests": []
+      "status": "passed",
+      "tests": [
+        "tests/test_adapters.py::test_no_transfer_opt_in_or_unavailable_adapter_uses_template_without_leaking_error"
+      ]
     },
     "REQ-100": {
       "planned_test": "tests/acceptance/test_req_100.py",
@@ -1217,13 +1234,18 @@
     },
     "REQ-121": {
       "planned_test": "tests/acceptance/test_req_121.py",
-      "status": "planned",
-      "tests": []
+      "status": "partial",
+      "tests": [
+        "tests/test_adapters.py::test_command_adapter_uses_json_protocol_and_discards_vendor_stderr",
+        "tests/test_adapters.py::test_credentials_and_changed_response_cannot_enter_cassette"
+      ]
     },
     "REQ-122": {
       "planned_test": "tests/acceptance/test_req_122.py",
-      "status": "planned",
-      "tests": []
+      "status": "partial",
+      "tests": [
+        "tests/test_adapters.py::test_command_adapter_uses_json_protocol_and_discards_vendor_stderr"
+      ]
     },
     "REQ-123": {
       "planned_test": "tests/acceptance/test_req_123.py",
@@ -1232,8 +1254,10 @@
     },
     "REQ-124": {
       "planned_test": "tests/acceptance/test_req_124.py",
-      "status": "planned",
-      "tests": []
+      "status": "partial",
+      "tests": [
+        "tests/test_adapters.py::test_record_and_socket_blocked_replay_are_byte_identical_and_leave_canon_alone"
+      ]
     },
     "REQ-125": {
       "planned_test": "tests/acceptance/test_req_125.py",
@@ -1267,8 +1291,11 @@
     },
     "REQ-131": {
       "planned_test": "tests/acceptance/test_req_131.py",
-      "status": "planned",
-      "tests": []
+      "status": "partial",
+      "tests": [
+        "tests/test_properties.py::test_replay_append_branch_provenance_and_snapshot_properties",
+        "tests/test_properties.py::test_concept_versions_preserve_each_superseded_model"
+      ]
     },
     "REQ-132": {
       "planned_test": "tests/acceptance/test_req_132.py",
@@ -1284,8 +1311,10 @@
     },
     "REQ-134": {
       "planned_test": "tests/acceptance/test_req_134.py",
-      "status": "planned",
-      "tests": []
+      "status": "passed",
+      "tests": [
+        "tests/test_adapters.py::test_no_transfer_opt_in_or_unavailable_adapter_uses_template_without_leaking_error"
+      ]
     },
     "REQ-135": {
       "planned_test": "tests/acceptance/test_req_135.py",
@@ -1379,13 +1408,18 @@
     },
     "REQ-153": {
       "planned_test": "tests/acceptance/test_req_153.py",
-      "status": "planned",
-      "tests": []
+      "status": "passed",
+      "tests": [
+        "tests/test_adapters.py::test_record_and_socket_blocked_replay_are_byte_identical_and_leave_canon_alone",
+        "tests/test_adapters.py::test_missing_and_tampered_cassettes_fail_without_model_call"
+      ]
     },
     "REQ-154": {
       "planned_test": "tests/acceptance/test_req_154.py",
-      "status": "planned",
-      "tests": []
+      "status": "passed",
+      "tests": [
+        "tests/test_adapters.py::test_sixth_call_is_blocked_with_spend_and_no_adapter_invocation"
+      ]
     },
     "REQ-155": {
       "planned_test": "tests/acceptance/test_req_155.py",

@@ -1,9 +1,9 @@
 {
   "method": "stdlib trace executable-line coverage",
   "tests_passed": true,
-  "covered": 2785,
-  "executable": 3116,
-  "line_coverage_pct": 89.4,
+  "covered": 3153,
+  "executable": 3509,
+  "line_coverage_pct": 89.9,
   "files": [
     {
       "file": "src/cmne/__init__.py",
@@ -12,28 +12,34 @@
       "line_coverage_pct": 50.0
     },
     {
+      "file": "src/cmne/adapters.py",
+      "covered": 144,
+      "executable": 154,
+      "line_coverage_pct": 93.5
+    },
+    {
       "file": "src/cmne/cli.py",
-      "covered": 100,
-      "executable": 143,
-      "line_coverage_pct": 69.9
+      "covered": 121,
+      "executable": 175,
+      "line_coverage_pct": 69.1
     },
     {
       "file": "src/cmne/contracts.py",
-      "covered": 207,
-      "executable": 217,
-      "line_coverage_pct": 95.4
+      "covered": 233,
+      "executable": 243,
+      "line_coverage_pct": 95.9
     },
     {
       "file": "src/cmne/core.py",
-      "covered": 447,
-      "executable": 458,
-      "line_coverage_pct": 97.6
+      "covered": 475,
+      "executable": 485,
+      "line_coverage_pct": 97.9
     },
     {
       "file": "src/cmne/errors.py",
-      "covered": 107,
-      "executable": 109,
-      "line_coverage_pct": 98.2
+      "covered": 115,
+      "executable": 117,
+      "line_coverage_pct": 98.3
     },
     {
       "file": "src/cmne/formula.py",
@@ -43,21 +49,21 @@
     },
     {
       "file": "src/cmne/machines.py",
-      "covered": 108,
-      "executable": 111,
-      "line_coverage_pct": 97.3
+      "covered": 117,
+      "executable": 120,
+      "line_coverage_pct": 97.5
     },
     {
       "file": "src/cmne/project.py",
-      "covered": 909,
-      "executable": 1014,
-      "line_coverage_pct": 89.6
+      "covered": 1004,
+      "executable": 1108,
+      "line_coverage_pct": 90.6
     },
     {
       "file": "src/cmne/prose.py",
-      "covered": 101,
-      "executable": 108,
-      "line_coverage_pct": 93.5
+      "covered": 122,
+      "executable": 128,
+      "line_coverage_pct": 95.3
     },
     {
       "file": "src/cmne/quantities.py",
@@ -85,9 +91,9 @@
     },
     {
       "file": "src/cmne_sidecar/server.py",
-      "covered": 190,
-      "executable": 314,
-      "line_coverage_pct": 60.5
+      "covered": 206,
+      "executable": 337,
+      "line_coverage_pct": 61.1
     }
   ]
 }
